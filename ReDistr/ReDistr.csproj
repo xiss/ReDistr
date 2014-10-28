@@ -103,9 +103,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="IStockFactory.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleStockFactory.cs" />
     <Compile Include="Stock.cs" />
     <Compile Include="ThisWorkbook.cs">
       <DependentUpon>ReDistr.xlsx</DependentUpon>
@@ -192,7 +194,7 @@
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
-        <ProjectProperties HostName="ReDistr.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files (x86)\Microsoft Office\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]ReDistr.xlsx&quot;" />
+        <ProjectProperties HostName="ReDistr.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files\Microsoft Office\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]ReDistr.xlsx&quot;" />
         <Host Name="Excel Document" Path=".\ReDistr.xlsx" GeneratedCodeNamespace="ReDistr">
           <HostItem Name="Лист1" Code="Control.cs" CanonicalName="Лист1" DisplayName="Управление" Blueprint="Control.Designer.xml" GeneratedCode="Control.Designer.cs" />
           <HostItem Name="Лист3" Code="Movings.cs" CanonicalName="Лист3" DisplayName="Перемещения" Blueprint="Movings.Designer.xml" GeneratedCode="Movings.Designer.cs" />
