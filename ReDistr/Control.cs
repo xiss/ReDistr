@@ -44,8 +44,9 @@ namespace ReDistr
             // this.Application.Workbooks.Open(this.Application.ActiveWorkbook.Path + "/" + Range["B9"].Value);
 
             var parser = new Parser();
+            var config = new Config();
 
-            parser.GetConfig(this);
+            config = parser.GetConfig(this);
 
 
 

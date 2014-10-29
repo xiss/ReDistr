@@ -9,34 +9,35 @@ namespace ReDistr
     public class Item
     {
         // Код 1С, уникален
-        public string id1c;
+        public string Id1C;
 
         // Артикул
-        public string article;
+        public string Article;
 
         // Категория хранения
-        public string storageCat;
+        public string StorageCategory;
 
         // Название 
-        public string name;
+        public string Name;
 
         // Производитель 
-        public string manufacturer;
+        public string Manufacturer;
 
         // Количество товара в комплекте, не может быть равен 0, больше 0.
-        public uint inKit;
+        private uint inKit;
 
         // Количество товара в упаковке
-        public uint inBundle;
+        private uint inBundle;
 
         // Конструктор
+        // TODO Конструктор вроде как не нужен, нужна пропертисы
         public Item(string id1c, string article, string storageCat, string name, string manufacturer, uint inKit, uint inBundle)
         {
-            id1c = this.id1c;
-            article = this.article;
-            storageCat = this.storageCat;
-            name = this.name;
-            manufacturer = this.manufacturer;
+            id1c = this.Id1C;
+            article = this.Article;
+            storageCat = this.StorageCategory;
+            name = this.Name;
+            manufacturer = this.Manufacturer;
             inKit = this.inKit;
             inBundle = this.inBundle;
 
