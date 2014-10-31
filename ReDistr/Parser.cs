@@ -14,6 +14,13 @@ namespace ReDistr
 {
     class Parser
     {
+        // Указываем ячейки с настройками для парсера
+        private const string RangeNameOfSealingsWb = "B14";
+        private const string RangeNameOfStocksWb = "B13";
+        private const string RangePuthToThisWb = "B15";
+        private const uint RowNumberStockConfig = 4;
+        private const uint RowNumberStocks = 7;
+
         // Получаем параметры с листа настроек
         // TODO надобы все методы кроме parse сделать приватными, но тогда ошибка в фабрике
         public Config GetConfig(Control control)
@@ -22,16 +29,14 @@ namespace ReDistr
             Globals.Control.Activate();
             
             // Создаем экземпляр класса Config для возврата из метода
-            Config config = new Config();
+            var config = new Config
+            {
+                NameOfSealingsWB = control.Range[RangeNameOfSealingsWb].Value2,
+                NameOfStocksWB = control.Range[RangeNameOfStocksWb].Value2,
+                PuthToThisWB = control.Range[RangePuthToThisWb].Value2
+            };
 
-            // TODO Тут надо как то константами сделать
-            config.NameOfSealingsWB = control.Range["B14"].Value2;
-            config.NameOfStocksWB = control.Range["B13"].Value2;
-            config.PuthToThisWB = control.Range["B15"].Value2;
-            
-            
-
-            uint curentRow = 4;
+            var curentRow = RowNumberStockConfig;
             do
             {
                 // TODO Тут както надо заюзать фабрику
@@ -44,7 +49,7 @@ namespace ReDistr
             //control.Application.Workbooks.Open(control.Application.ActiveWorkbook.Path + "/" + control.Range["B9"].Value);
         }
 
-        // Получаем остатки по складам
+       // Получаем остатки по складам
        public Item[] GetStocks(Control control, Config config)
 
        {
@@ -52,11 +57,12 @@ namespace ReDistr
            control.Application.Workbooks.Open(config.PuthToThisWB + config.NameOfStocksWB);
 
            //Item = new Item();
-           uint curentRow = 7;
+           var curentRow = RowNumberStocks;
 
            do
            {
 
+               curentRow++;
            } while (control.Range["B" + curentRow].Value.ToString() == "");
 
         
