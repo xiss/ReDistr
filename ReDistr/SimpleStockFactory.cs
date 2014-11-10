@@ -48,6 +48,8 @@ namespace ReDistr
             
         }
 
+
+
         public Stock TryGetStock(string inputString)
         {
             Stock foundStock = null;
@@ -67,6 +69,11 @@ namespace ReDistr
             if(_paramsList.Exists(s => s.Signature == signature)) return false;
             _paramsList.Add(new StockParams() { Maximum = maximum, Minimum = minimum, Name = stockName, Signature = signature, Priority = priority });
             return true;
+        }
+
+        public IEnumerable<Stock> GetAllStocks()
+        {
+            return _paramsList.Select(stockParam => GetStock(stockParam.Signature));
         }
 
         private readonly  List<StockParams> _paramsList;

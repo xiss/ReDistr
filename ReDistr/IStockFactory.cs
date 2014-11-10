@@ -12,5 +12,6 @@ namespace ReDistr
         Stock TryGetStock(string inputString); //ищет в аргументе известные сигнатуры и создает соотвествующий экземпляр Stock для первого вхождения
         bool SetStockParams(string stockName, uint minimum, uint maximum, string signature, uint priority); //устанавливает параметры для создаваемых экземляров
                                                                                            //возвращает false если такая сигнатура уже существует
+        IEnumerable<Stock> GetAllStocks();
     }
 }
