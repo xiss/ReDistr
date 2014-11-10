@@ -5,28 +5,34 @@ using System.Text;
 
 namespace ReDistr
 {
-    class Config
+    static class  Config
     {
         // Дата снятия отчета с остатками
-        public DateTime StockDate;
+        public static DateTime StockDate;
 
         // Дата начала периода продаж
-        public DateTime periodSellingFrom;
+        public static DateTime periodSellingFrom;
 
         // Дата окончания периода продаж
-        public DateTime periodSellingTo;
+        public static DateTime periodSellingTo;
 
         // Количество дней в периоде продаж
-        public uint sellingPeriod;
+        public static int sellingPeriod;
 
         // Имя книги с остатками
-        public string NameOfStocksWB;
+        public static string NameOfStocksWB;
 
         // Имя книги с продажами
-        public string NameOfSealingsWB;
+        public static string NameOfSealingsWB;
 
         // Полный путь к текущей книге
-        public string PuthToThisWB;
+        public static string PuthToThisWB;
+
+		// Имя книги с параметрами
+	    public static string NameOfParametersWb;
+
+		// Количество складов
+	    public static uint StockCount;
 
     }
 }

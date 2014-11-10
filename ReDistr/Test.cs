@@ -14,7 +14,7 @@ namespace ReDistr
 {
     public partial class Test
     {
-        private void Лист2_Startup(object sender, System.EventArgs e)
+	    private void Лист2_Startup(object sender, System.EventArgs e)
         {
         }
 
@@ -36,5 +36,5 @@ namespace ReDistr
 
         #endregion
 
-    }
+	}
 }

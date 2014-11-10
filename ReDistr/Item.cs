@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace ReDistr
@@ -24,23 +25,18 @@ namespace ReDistr
         public string Manufacturer;
 
         // Количество товара в комплекте, не может быть равен 0, больше 0.
-        private uint inKit;
+        public double inKit = 1;
 
         // Количество товара в упаковке
-        private uint inBundle;
+        public double inBundle = 1;
 
-        // Конструктор
-        // TODO Конструктор вроде как не нужен, нужна пропертисы
-        public Item(string id1c, string article, string storageCat, string name, string manufacturer, uint inKit, uint inBundle)
+        // Остатки на складах 
+        public List<Stock> Stocks = new List<Stock>();
+
+        // Проверяет существование такого склада, и если находит возвращает ссылку
+        public Stock getStock()
         {
-            id1c = this.Id1C;
-            article = this.Article;
-            storageCat = this.StorageCategory;
-            name = this.Name;
-            manufacturer = this.Manufacturer;
-            inKit = this.inKit;
-            inBundle = this.inBundle;
-
+            return null;
         }
 
         // индексатор

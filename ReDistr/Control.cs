@@ -40,28 +40,10 @@ namespace ReDistr
 
         private void buttonGetMoving_Click(object sender, EventArgs e)
         {
-
-            // this.Application.Workbooks.Open(this.Application.ActiveWorkbook.Path + "/" + Range["B9"].Value);
-
-            var parser = new Parser();
-            var config = new Config();
-
-            config = parser.GetConfig(this);
-
-
-
-
-
-
-
-
-
-
-
+            var parser = new Parser(this);
+            var items = parser.Parse();
+	        ReDistr.Control = this;
+			ReDistr.FillTestList(items);
         }
-
-
-
-
     }
 }

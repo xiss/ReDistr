@@ -12,7 +12,10 @@ namespace ReDistr
         public string Name;
 
         // Остаток  до выполнения перемещений
-        public uint InStock;
+        public double Count;
+
+		// Количество продаж из отчета
+	    public double SelingsCount;
 
         // Остаток после выполнения перемещений
         public uint InStockBefore;
@@ -33,7 +36,7 @@ namespace ReDistr
         private double sailPersent;
 
         // Резерв, количество товара в резерве
-        private uint inReserve;
+        public double InReserve;
 
         // Приоритет, в спорных ситуациях используется для определения реципиента. 
         public uint Priority;
@@ -49,6 +52,10 @@ namespace ReDistr
 
         // Исключить данный склад из распределения
         // Выставляет свободный остатко равным реальному остатку за вычетом резервов
-        private bool excludeFromMoovings;
+        public bool ExcludeFromMoovings;
+
+        // Сигнатура склада
+        public string Signature;
+
     }
 }
