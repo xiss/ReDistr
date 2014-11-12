@@ -20,7 +20,9 @@ namespace ReDistr
 
         private void ThisWorkbook_Shutdown(object sender, System.EventArgs e)
         {
+			
         }
+		
 
         #region Код, созданный конструктором VSTO
 

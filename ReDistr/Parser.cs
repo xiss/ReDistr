@@ -32,7 +32,8 @@ namespace ReDistr
 		private const uint RowNumberStocks = 7;
 		private const uint RowNumberSelings = 7;
 		private const uint RowNumberParameters = 2;
-		private const string MesegeBoxQuestion = "Дата снятия отчета с остатком не соответствует сегодняшней, продолжить?";
+		private const string MessegeBoxQuestion = "Дата снятия отчета с остатком не соответствует сегодняшней, продолжить?";
+		private const string MessegeBoxCaption = "Предупреждение";
 
 		// Получаем параметры с листа настроек
 		private void MakeConfig()
@@ -83,9 +84,7 @@ namespace ReDistr
 			// Если дата снятия отчета не равна сегодняшней, предлагаем не продолжать
 			if (Config.StockDate != new DateTime().Date)
 			{
-
-				// TODO второй параметр меседж бокса
-				var result = MessageBox.Show(MesegeBoxQuestion, "Form Closing", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+				var result = MessageBox.Show(MessegeBoxQuestion, MessegeBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 				if (result == DialogResult.No)
 				{
 					_continue = false;
@@ -145,6 +144,13 @@ namespace ReDistr
 						Manufacturer = stocksWb.Worksheets[1].Application.Range["AA" + curentRow].Value,
 					};
 
+					// Создаем склады для ЗЧ
+					var newStocks = SimpleStockFactory.CurrentFactory.GetAllStocks();
+					foreach (var newStock in newStocks)
+					{
+						item.Stocks.Add(newStock);
+					}
+
 					items.Add(item.Id1C, item);
 				}
 
@@ -159,14 +165,13 @@ namespace ReDistr
 				}
 
 				// Если склада нет, создаем его
-				// TODO Видимо здесь нужно создавать все склады сразу, как это сделать?
-				else
-				{
-					stock = SimpleStockFactory.CurrentFactory.TryGetStock(curentStockSignature);
-					stock.Count = itemCount;
-					stock.InReserve = reserveCount;
-					item.Stocks.Add(stock);
-				}
+				//else
+				//{
+				//	stock = SimpleStockFactory.CurrentFactory.TryGetStock(curentStockSignature);
+				//	stock.Count = itemCount;
+				//	stock.InReserve = reserveCount;
+				//	item.Stocks.Add(stock);
+				//}
 
 				curentRow++;
 			}
@@ -177,7 +182,7 @@ namespace ReDistr
 		}
 
 		// Получаем данные по продажам
-		private Dictionary<string, Item> GetSellings(Dictionary<String, Item> items)
+		private void GetSellings(Dictionary<string, Item> items)
 		{
 
 			// Открываем  книгу с продажами
@@ -188,7 +193,7 @@ namespace ReDistr
 			Config.periodSellingFrom = DateTime.Parse(dateString.Substring(12, 8));
 			Config.periodSellingTo = DateTime.Parse(dateString.Substring(23, 8));
 			Config.sellingPeriod = (Config.periodSellingTo - Config.periodSellingFrom).Days;
-			
+
 			var curentRow = RowNumberSelings;
 			var curentStockSignature = String.Empty;
 
@@ -243,11 +248,10 @@ namespace ReDistr
 			}
 
 			sellingsWb.Close();
-			return items;
 		}
 
 		// Получаем дополнительные параметры (исключение из перемещений, кратность, в упаковке)
-		private Dictionary<string, Item> GetAdditionalParameters(Dictionary<String, Item> items)
+		private void GetAdditionalParameters(Dictionary<string, Item> items)
 		{
 			// Открываем  книгу с параметрами
 			var parametersWb = _control.Application.Workbooks.Open(Config.PuthToThisWB + Config.NameOfParametersWb);
@@ -265,30 +269,24 @@ namespace ReDistr
 			while (parametersWb.Worksheets[1].Range["A" + curentRow].Value != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
-				Item item = null;
+				// Если не находим переходим к следующей строке
 				if (items.ContainsKey(parametersWb.Worksheets[1].Application.Range["A" + curentRow].Value))
 				{
-					item = items[parametersWb.Worksheets[1].Application.Range["A" + curentRow].Value];
-				}
-				// Если не находим переходим к следующей строке
-				else
-				{
-					curentRow++;
-					continue;
-				}
+					Item item = items[parametersWb.Worksheets[1].Application.Range["A" + curentRow].Value];
 
-				// Проставляем исключения у найденной ЗЧ
-				foreach (string curentStock in stockList)
-				{
-					// Проверим, есть ли у текущей ЗЧ текущей склад
-					var stock = item.Stocks.Find(s => s.Signature.Contains(curentStock));
-					// Если такой склад уже есть, работаем с ним, если нет переходим к следующему складу
-					if (stock != null && parametersWb.Worksheets[1].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value == 1)
+					// Проставляем исключения у найденной ЗЧ
+					foreach (var curentStock in stockList)
 					{
-						stock.ExcludeFromMoovings = true;
+						// Проверим, есть ли у текущей ЗЧ текущей склад
+						var stock = item.Stocks.Find(s => s.Signature.Contains(curentStock));
+						// Если такой склад уже есть, работаем с ним, если нет переходим к следующему складу
+						if (stock != null && parametersWb.Worksheets[1].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value == 1)
+						{
+							stock.ExcludeFromMoovings = true;
+						}
 					}
 				}
-				
+
 				curentRow++;
 			}
 
@@ -322,7 +320,6 @@ namespace ReDistr
 				curentRow++;
 			}
 			parametersWb.Close();
-			return items;
 		}
 
 		// Основной метод парсера, из него вызываются все остальные
@@ -338,10 +335,10 @@ namespace ReDistr
 			if (!_continue) return null;
 
 			// Добавляем информацию по продажам
-			items = GetSellings(items);
+			GetSellings(items);
 
 			// Добавляем Кратность и исключения
-			items = GetAdditionalParameters(items);
+			GetAdditionalParameters(items);
 
 			return items;
 		}

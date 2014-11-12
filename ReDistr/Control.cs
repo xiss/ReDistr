@@ -42,8 +42,8 @@ namespace ReDistr
         {
             var parser = new Parser(this);
             var items = parser.Parse();
-	        ReDistr.Control = this;
-			ReDistr.FillTestList(items);
+			Test.Control = this;
+			Test.FillTestList(items);
         }
     }
 }
