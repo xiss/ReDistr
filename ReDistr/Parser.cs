@@ -299,7 +299,7 @@ namespace ReDistr
 				{
 					// Если нашли, проставляем кратность
 					Item item = items[parametersWb.Worksheets[2].Range["A" + curentRow].Value];
-					item.inKit = parametersWb.Worksheets[2].Range["E" + curentRow].Value;
+					item.InKit = parametersWb.Worksheets[2].Range["E" + curentRow].Value;
 				}
 
 				curentRow++;
@@ -314,7 +314,7 @@ namespace ReDistr
 				{
 					// Если нашли, проставляем количество в упаковке
 					Item item = items[parametersWb.Worksheets[3].Range["A" + curentRow].Value];
-					item.inBundle = parametersWb.Worksheets[3].Range["E" + curentRow].Value;
+					item.InBundle = parametersWb.Worksheets[3].Range["E" + curentRow].Value;
 				}
 
 				curentRow++;

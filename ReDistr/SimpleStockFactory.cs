@@ -35,8 +35,8 @@ namespace ReDistr
                 {
                     Signature =  curentParams.Signature,
                     Name = curentParams.Name,
-                    defaultPeriodMaxStock = curentParams.Maximum,
-                    defaultPeriodMinStock = curentParams.Minimum,
+                    DefaultPeriodMaxStock = curentParams.Maximum,
+                    DefaultPeriodMinStock = curentParams.Minimum,
                     Priority = curentParams.Priority
                 };
                 return stock;

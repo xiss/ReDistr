@@ -21,19 +21,19 @@ namespace ReDistr
         public uint InStockBefore;
 
         // Минимальный остаток, кратен inKit
-        public uint MinStock;
+        public double MinStock;
 
         // Период для расчета мин остатка по умолчанию
-        public uint defaultPeriodMinStock;
+        public uint DefaultPeriodMinStock;
 
         // Период для расчета макс остатка по умолчанию
-        public uint defaultPeriodMaxStock;
+        public uint DefaultPeriodMaxStock;
 
         // Максимальный остаток, кратен inKit
-        public uint MaxStock;
+        public double MaxStock;
 
         // Процент продаж
-        private double sailPersent;
+        public double SailPersent;
 
         // Резерв, количество товара в резерве
         public double InReserve;
@@ -44,11 +44,11 @@ namespace ReDistr
         // Свободный остаток, который можно перемещать с данного склада, 
         // если свободный остаток отличен от 0, склад может быть донором. 
         // Не может быть меньше 0, если minStock отличен от нуля
-        public uint FreeStock;
+        public double FreeStock;
 
         // Потребность данного склада в товаре, всегда положительна, 
         // если need отличен от 0, склад нуждается в товаре и может быть реципиентом. 
-        public uint Need;
+        public double Need;
 
         // Исключить данный склад из распределения
         // Выставляет свободный остатко равным реальному остатку за вычетом резервов
