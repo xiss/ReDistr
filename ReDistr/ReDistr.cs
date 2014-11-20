@@ -86,6 +86,7 @@ namespace ReDistr
 		// Возвращает потребность для указанного склада, расчитывать после вычисления процента продаж
 		private static double GetNeed(Item item, Stock curentStock, bool ceilingToKit = true)
 		{
+			//TODO нужно учитывать резервы при подсчете процентного количества
 			var allCount = item.Stocks.Sum(curentItem => curentItem.Count);
 			// Если потребность в процентах меньше макс остатка используем его
 			double realMaxStock;

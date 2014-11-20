@@ -40,16 +40,16 @@ namespace ReDistr
 
         private void buttonGetMoving_Click(object sender, EventArgs e)
         {
+
 			// Парсим данные из файлов
             var parser = new Parser(this);
             var items = parser.Parse();
 
 			// Подготавливаем данные
 			ReDistr.PrepareData(items);
-
+			
 			// Выводим таблицу для наглядности
-			Test.Control = this;
-			Test.FillTestList(items);
+			Globals.Test.FillTestList(items);
         }
     }
 }

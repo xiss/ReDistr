@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -37,90 +39,76 @@ namespace ReDistr
 
 		#endregion
 
-		private const int RowFirstFillNumber = 3;
-		private const int ColumnFirstFillNumber = 8;
-		public static Control Control { get; set; }
-
-
+		private const int ArrayRowFirstFillNumber = 2;
+		private const int ArrayColumnFirstFillNumber = 7;
 
 		// Метод заполняет лист Test данными из словоря запчастей
-		// TODO Тупой метод, переделать
-		public static void FillTestList(Dictionary<string, Item> items)
+		public void FillTestList(Dictionary<string, Item> items)
 		{
-			var curentRow = RowFirstFillNumber;
-			var curentColumn = ColumnFirstFillNumber;
-			
-			Control.Application.Worksheets[3].Cells.ClearContents();
+			var curentRow = ArrayRowFirstFillNumber;
+			var curentColumn = ArrayColumnFirstFillNumber;
+			// 7 колонок под описание товара 10 колонок под склад
+			var resultRange = new dynamic[items.Count + 2, 7 + Config.StockCount * 10];
+			Cells.ClearContents();
 
 			// Заполняем заголовки
-			Control.Application.Worksheets[3].Range["A1"].Value = "Id1C";
-			Control.Application.Worksheets[3].Range["B1"].Value = "Name";
-			Control.Application.Worksheets[3].Range["C1"].Value = "Article";
-			Control.Application.Worksheets[3].Range["D1"].Value = "Manufacturer";
-			Control.Application.Worksheets[3].Range["E1"].Value = "StorageCategory";
-			Control.Application.Worksheets[3].Range["F1"].Value = "inBundle";
-			Control.Application.Worksheets[3].Range["G1"].Value = "inKit";
+			resultRange[0, 0] = "Id1C";
+			resultRange[0, 1] = "Name";
+			resultRange[0, 2] = "Article";
+			resultRange[0, 3] = "Manufacturer";
+			resultRange[0, 4] = "StorageCategory";
+			resultRange[0, 5] = "inBundle";
+			resultRange[0, 6] = "inKit";
 
-			foreach (var item in items)
+			// Выводим заголовки для складов
+			foreach (var stock in items.Values.First().Stocks)
 			{
-				foreach (var stock in item.Value.Stocks)
-				{
-					Control.Application.Worksheets[3].Cells[1, curentColumn] = stock.Name;
-					Control.Application.Worksheets[3].Cells[2, curentColumn] = "Count";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "InReserve";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "SelingsCount";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "SailPersent";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "MinStock";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "MaxStock";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "FreeStock";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "Need";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "Priority";
-					Control.Application.Worksheets[3].Cells[2, curentColumn += 1] = "ExcludeFromMoovings";
-					curentColumn++;
-				}
-				curentColumn = ColumnFirstFillNumber;
-				break;
+				resultRange[0, curentColumn] = stock.Name;
+				resultRange[1, curentColumn] = "Count";
+				resultRange[1, curentColumn += 1] = "InReserve";
+				resultRange[1, curentColumn += 1] = "SelingsCount";
+				resultRange[1, curentColumn += 1] = "SailPersent";
+				resultRange[1, curentColumn += 1] = "MinStock";
+				resultRange[1, curentColumn += 1] = "MaxStock";
+				resultRange[1, curentColumn += 1] = "FreeStock";
+				resultRange[1, curentColumn += 1] = "Need";
+				resultRange[1, curentColumn += 1] = "Priority";
+				resultRange[1, curentColumn += 1] = "Exclude";
+				curentColumn++;
 			}
 
 			foreach (KeyValuePair<string, Item> item in items)
 			{
-				// TODO Очень медленно все выводить по отдельности...
-				//var stopwatch = new Stopwatch();
-				//stopwatch.Start();
 				// Выводим информацию по ЗЧ
-				// TODO нужно както по другому к листу обращаться
-				Control.Application.Worksheets[3].Range["A" + curentRow].Value = item.Value.Id1C;
-				Control.Application.Worksheets[3].Range["B" + curentRow].Value = item.Value.Name;
-				Control.Application.Worksheets[3].Range["C" + curentRow].Value = item.Value.Article;
-				Control.Application.Worksheets[3].Range["D" + curentRow].Value = item.Value.Manufacturer;
-				Control.Application.Worksheets[3].Range["E" + curentRow].Value = item.Value.StorageCategory;
-				Control.Application.Worksheets[3].Range["F" + curentRow].Value = item.Value.InBundle;
-				Control.Application.Worksheets[3].Range["G" + curentRow].Value = item.Value.InKit;
-				//stopwatch.Stop();
-				//Debug.WriteLine(stopwatch.ElapsedMilliseconds);
-				
-				
+				resultRange[curentRow, 0] = item.Value.Id1C;
+				resultRange[curentRow, 1] = item.Value.Name;
+				resultRange[curentRow, 2] = item.Value.Article;
+				resultRange[curentRow, 3] = item.Value.Manufacturer;
+				resultRange[curentRow, 4] = item.Value.StorageCategory;
+				resultRange[curentRow, 5] = item.Value.InBundle;
+				resultRange[curentRow, 6] = item.Value.InKit;
+
 				// Выводим информацию по складам
+				curentColumn = ArrayColumnFirstFillNumber;
 				foreach (var stock in item.Value.Stocks)
 				{
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn] = stock.Count;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.InReserve;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.SelingsCount;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.SailPersent;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.MinStock;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.MaxStock;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.FreeStock;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.Need;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.Priority;
-					Control.Application.Worksheets[3].Cells[curentRow, curentColumn += 1] = stock.ExcludeFromMoovings;
+					resultRange[curentRow, curentColumn] = stock.Count;
+					resultRange[curentRow, curentColumn += 1] = stock.InReserve;
+					resultRange[curentRow, curentColumn += 1] = stock.SelingsCount;
+					resultRange[curentRow, curentColumn += 1] = stock.SailPersent;
+					resultRange[curentRow, curentColumn += 1] = stock.MinStock;
+					resultRange[curentRow, curentColumn += 1] = stock.MaxStock;
+					resultRange[curentRow, curentColumn += 1] = stock.FreeStock;
+					resultRange[curentRow, curentColumn += 1] = stock.Need;
+					resultRange[curentRow, curentColumn += 1] = stock.Priority;
+					resultRange[curentRow, curentColumn += 1] = stock.ExcludeFromMoovings;
 					curentColumn++;
 				}
 
-				
-
-				curentColumn = ColumnFirstFillNumber;
 				curentRow++;
 			}
+			// TODO В место букв использовать цифры и предусмотреть разное количество складов
+			Range["A1:AA" + (items.Count + 2)].Value2 = resultRange;
 		}
 	}
 }
