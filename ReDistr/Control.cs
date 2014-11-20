@@ -12,44 +12,61 @@ using Office = Microsoft.Office.Core;
 
 namespace ReDistr
 {
-    public partial class Control
-    {
-        private void Лист1_Startup(object sender, System.EventArgs e)
-        {
-        }
+	public partial class Control
+	{
+		private void Лист1_Startup(object sender, System.EventArgs e)
+		{
+		}
 
-        private void Лист1_Shutdown(object sender, System.EventArgs e)
-        {
-        }
+		private void Лист1_Shutdown(object sender, System.EventArgs e)
+		{
+		}
 
-        #region Код, созданный конструктором VSTO
+		#region Код, созданный конструктором VSTO
 
-        /// <summary>
-        /// Обязательный метод для поддержки конструктора - не изменяйте
-        /// содержимое этого метода с помощью редактора кода.
-        /// </summary>
-        private void InternalStartup()
-        {
-            this.buttonGetMoving.Click += new System.EventHandler(this.buttonGetMoving_Click);
-            this.Startup += new System.EventHandler(this.Лист1_Startup);
-            this.Shutdown += new System.EventHandler(this.Лист1_Shutdown);
+		/// <summary>
+		/// Обязательный метод для поддержки конструктора - не изменяйте
+		/// содержимое этого метода с помощью редактора кода.
+		/// </summary>
+		private void InternalStartup()
+		{
+			this.buttonGetMoving.Click += new System.EventHandler(this.buttonGetMoving_Click);
+			this.Startup += new System.EventHandler(this.Лист1_Startup);
+			this.Shutdown += new System.EventHandler(this.Лист1_Shutdown);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private void buttonGetMoving_Click(object sender, EventArgs e)
-        {
+		private void buttonGetMoving_Click(object sender, EventArgs e)
+		{
 
 			// Парсим данные из файлов
-            var parser = new Parser(this);
-            var items = parser.Parse();
+			var parser = new Parser(this);
+			var items = parser.Parse();
 
 			// Подготавливаем данные
 			ReDistr.PrepareData(items);
-			
+
 			// Выводим таблицу для наглядности
 			Globals.Test.FillTestList(items);
-        }
-    }
+
+			// Выводим параметры отчетов
+			Globals.Control.FillReportsParameters();
+		}
+
+		// Выводит параметры отчетов на страницу управления
+		public void FillReportsParameters()
+		{
+			// TODO одномерный массиввыводит в строку, переделать
+			var resultRange = new dynamic[4, 1];
+
+			resultRange[0, 0] = Config.periodSellingFrom;
+			resultRange[1, 0] = Config.periodSellingTo;
+			resultRange[2, 0] = Config.sellingPeriod;
+			resultRange[3, 0] = Config.StockDate;
+
+			Range["G3:G6"].Value = resultRange;
+		}
+	}
 }
