@@ -43,7 +43,7 @@ namespace ReDistr
 		// Возвращает минимальный остаток для указанного склада
 		private static double GetMinStock(Item item, Stock curentStock)
 		{
-			var sailsPerDay = curentStock.SelingsCount / Config.sellingPeriod;
+			var sailsPerDay = curentStock.SelingsCount / Config.SellingPeriod;
 			var minStock = Math.Ceiling((sailsPerDay * curentStock.DefaultPeriodMinStock) / item.InKit) * item.InKit;
 
 			return minStock;
@@ -52,7 +52,7 @@ namespace ReDistr
 		// Возвращает максимальный остаток для указанного склада
 		private static double GetMaxStock(Item item, Stock curentStock)
 		{
-			var sailsPerDay = curentStock.SelingsCount / Config.sellingPeriod;
+			var sailsPerDay = curentStock.SelingsCount / Config.SellingPeriod;
 			var maxStock = Math.Ceiling((sailsPerDay * curentStock.DefaultPeriodMaxStock) / item.InKit) * item.InKit;
 
 			return maxStock;
@@ -90,14 +90,14 @@ namespace ReDistr
 			var allCount = item.Stocks.Sum(curentItem => curentItem.Count);
 			// Если потребность в процентах меньше макс остатка используем его
 			double realMaxStock;
-			if ((allCount*curentStock.SailPersent) > curentStock.MaxStock)
+			if ((allCount * curentStock.SailPersent) > curentStock.MaxStock)
 			{
 				realMaxStock = curentStock.MaxStock;
 			}
 			// иначе берем проценты
 			else
 			{
-				realMaxStock = allCount*curentStock.SailPersent;
+				realMaxStock = allCount * curentStock.SailPersent;
 			}
 
 			// Расчитываем потребность
@@ -116,6 +116,27 @@ namespace ReDistr
 			}
 
 			return need;
+		}
+
+		// Дает список возможных перемещений
+		public static List<Moving> GetPossibleMovings(IEnumerable<Stock> stocks)
+		{
+			var movings = new List<Moving>();
+
+			//Составляем список возможный перемещений
+			foreach (var stockFrom in stocks)
+			{
+				foreach (var stockTo in stocks)
+				{
+					// Не составляем пару с одтнаковыми складами
+					if (stockFrom.Signature != stockTo.Signature)
+					{
+						var moving = new Moving {StockFrom = stockFrom, StockTo = stockTo};
+						movings.Add(moving);
+					}
+				}
+			}
+			return movings;
 		}
 
 	}

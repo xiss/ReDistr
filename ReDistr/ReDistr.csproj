@@ -102,6 +102,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Moving.cs" />
     <Compile Include="ReDistr.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="IStockFactory.cs" />

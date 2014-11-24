@@ -53,6 +53,9 @@ namespace ReDistr
 
 			// Выводим параметры отчетов
 			Globals.Control.FillReportsParameters();
+
+			// Создаем список возможных перемещений
+			var movings = ReDistr.GetPossibleMovings(SimpleStockFactory.CurrentFactory.GetAllStocks());
 		}
 
 		// Выводит параметры отчетов на страницу управления
@@ -61,9 +64,9 @@ namespace ReDistr
 			// TODO одномерный массиввыводит в строку, переделать
 			var resultRange = new dynamic[4, 1];
 
-			resultRange[0, 0] = Config.periodSellingFrom;
-			resultRange[1, 0] = Config.periodSellingTo;
-			resultRange[2, 0] = Config.sellingPeriod;
+			resultRange[0, 0] = Config.PeriodSellingFrom;
+			resultRange[1, 0] = Config.PeriodSellingTo;
+			resultRange[2, 0] = Config.SellingPeriod;
 			resultRange[3, 0] = Config.StockDate;
 
 			Range["G3:G6"].Value = resultRange;

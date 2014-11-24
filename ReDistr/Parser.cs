@@ -41,10 +41,10 @@ namespace ReDistr
 			// Выбираем лист с настройками
 			Globals.Control.Activate();
 
-			// Прописываем в конфик пути и названия файло виз настроечного листа
-			Config.NameOfSealingsWB = _control.Range[RangeNameOfSealingsWb].Value2;
-			Config.NameOfStocksWB = _control.Range[RangeNameOfStocksWb].Value2;
-			Config.PuthToThisWB = _control.Range[RangePuthToThisWb].Value2;
+			// Прописываем в конфиг пути и названия файло виз настроечного листа
+			Config.NameOfSealingsWb = _control.Range[RangeNameOfSealingsWb].Value2;
+			Config.NameOfStocksWb = _control.Range[RangeNameOfStocksWb].Value2;
+			Config.PuthToThisWb = _control.Range[RangePuthToThisWb].Value2;
 			Config.NameOfParametersWb = _control.Range[RangeNameOfParametersWb].Value2;
 
 			// Настраиваем фабрику
@@ -75,7 +75,7 @@ namespace ReDistr
 			var items = new Dictionary<string, Item>();
 
 			// Открываем  книгу с остатками
-			var stocksWb = _control.Application.Workbooks.Open(Config.PuthToThisWB + Config.NameOfStocksWB);
+			var stocksWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfStocksWb);
 
 			// Вычисляем дату снятия отчета с остатками
 			string dateString = stocksWb.Worksheets[1].Range["B3"].Value;
@@ -186,13 +186,13 @@ namespace ReDistr
 		{
 
 			// Открываем  книгу с продажами
-			var sellingsWb = _control.Application.Workbooks.Open(Config.PuthToThisWB + Config.NameOfSealingsWB);
+			var sellingsWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfSealingsWb);
 
 			// Вычисляем начальную и конечную дату периода продаж
 			string dateString = sellingsWb.Worksheets[1].Range["B3"].Value;
-			Config.periodSellingFrom = DateTime.Parse(dateString.Substring(12, 8));
-			Config.periodSellingTo = DateTime.Parse(dateString.Substring(23, 8));
-			Config.sellingPeriod = (Config.periodSellingTo - Config.periodSellingFrom).Days;
+			Config.PeriodSellingFrom = DateTime.Parse(dateString.Substring(12, 8));
+			Config.PeriodSellingTo = DateTime.Parse(dateString.Substring(23, 8));
+			Config.SellingPeriod = (Config.PeriodSellingTo - Config.PeriodSellingFrom).Days;
 
 			var curentRow = RowNumberSelings;
 			var curentStockSignature = String.Empty;
@@ -254,7 +254,7 @@ namespace ReDistr
 		private void GetAdditionalParameters(Dictionary<string, Item> items)
 		{
 			// Открываем  книгу с параметрами
-			var parametersWb = _control.Application.Workbooks.Open(Config.PuthToThisWB + Config.NameOfParametersWb);
+			var parametersWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfParametersWb);
 
 			// Исключения из перемещений
 			//Определяем список известных складов
