@@ -15,6 +15,7 @@ namespace ReDistr
 		public Stock StockTo;
 
 		// Список ЗЧ
+		// TODO Как указывать количество ЗЧ?
 		public Dictionary<string, Item> Items;
 	}
 }

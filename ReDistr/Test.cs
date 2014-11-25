@@ -108,7 +108,8 @@ namespace ReDistr
 				curentRow++;
 			}
 			// TODO В место букв использовать цифры и предусмотреть разное количество складов
-			Range["A1:AA" + (items.Count + 2)].Value2 = resultRange;
+			//Range["A1:AA" + (items.Count + 2)].Value2 = resultRange;
+			Range[Cells[1, 1], Cells[items.Count + 2, 7 + 10 * Config.StockCount]].Value2 = resultRange;
 		}
 	}
 }
