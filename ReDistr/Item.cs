@@ -36,17 +36,8 @@ namespace ReDistr
 		// Возвращает список всех возможных доноров
 		public List<Stock> GetListOfPossibleDonors()
 		{
-			var possybleDonors = new List<Stock>();
-
-			foreach (var stock in Stocks)
-			{
-				if (stock.FreeStock > 0)
-				{
-					possybleDonors.Add(stock);
-				}
-			}
-
-			return possybleDonors;
+			// Если свободный осток отличен от нуля, то склад донор
+			return Stocks.Where(stock => stock.FreeStock > 0).ToList();
 		}
 	}
 }
