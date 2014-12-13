@@ -15,7 +15,7 @@ namespace ReDistr
 			{
 				foreach (var stock in item.Value.Stocks)
 				{
-					// TODO Проверить расчеты
+					// TODO Проверить расчеты - вроде все верно
 					stock.SailPersent = GetSailPersent(item.Value, stock);
 					stock.MinStock = GetMinStock(item.Value, stock);
 					stock.MaxStock = GetMaxStock(item.Value, stock);
@@ -122,11 +122,12 @@ namespace ReDistr
 		public static List<Moving> GetPossibleMovings(IEnumerable<Stock> stocks)
 		{
 			var movings = new List<Moving>();
+			var stocksArray = stocks.ToArray();
 
 			//Составляем список возможный перемещений
-			foreach (var stockFrom in stocks)
+			foreach (var stockFrom in stocksArray)
 			{
-				foreach (var stockTo in stocks)
+				foreach (var stockTo in stocksArray)
 				{
 					// Не составляем пару с одтнаковыми складами
 					if (stockFrom.Signature != stockTo.Signature)

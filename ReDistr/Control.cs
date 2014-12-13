@@ -40,7 +40,6 @@ namespace ReDistr
 
 		private void buttonGetMoving_Click(object sender, EventArgs e)
 		{
-
 			// Парсим данные из файлов
 			var parser = new Parser(this);
 			var items = parser.Parse();
@@ -61,7 +60,6 @@ namespace ReDistr
 		// Выводит параметры отчетов на страницу управления
 		public void FillReportsParameters()
 		{
-			// TODO одномерный массиввыводит в строку, переделать
 			var resultRange = new dynamic[4, 1];
 
 			resultRange[0, 0] = Config.PeriodSellingFrom;

@@ -16,6 +16,12 @@ namespace ReDistr
 
 		// Список ЗЧ
 		// TODO Как указывать количество ЗЧ?
+		// не словарь
+		public Item Item;
 		public Dictionary<string, Item> Items;
+
+
+
+
 	}
 }
