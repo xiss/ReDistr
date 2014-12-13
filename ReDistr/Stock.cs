@@ -82,5 +82,98 @@ namespace ReDistr
 
 			return false;
 		}
+
+		// Расчитывает процент продаж для склада
+		public void UpdateSailPersent(Item item)
+		{
+			var stockSails = SelingsCount;
+			var allSails = item.Stocks.Sum(stock => stock.SelingsCount);
+
+			// Проверка на нулевые продажи
+			if (allSails == 0)
+			{
+				SailPersent = 0;
+				return;
+			}
+
+			SailPersent = (stockSails / allSails);
+		}
+
+		// Расчитывает минимальный остаток для склада
+		public void UpdateMinStock(Item item)
+		{
+			var sailsPerDay = SelingsCount / Config.SellingPeriod;
+			var minStock = Math.Ceiling((sailsPerDay * DefaultPeriodMinStock) / item.InKit) * item.InKit;
+
+			MinStock = minStock;
+		}
+
+		// Расчитывает максимальный остаток для указанного склада
+		public void UpdateMaxStock(Item item)
+		{
+			var sailsPerDay = SelingsCount / Config.SellingPeriod;
+			var maxStock = Math.Ceiling((sailsPerDay * DefaultPeriodMaxStock) / item.InKit) * item.InKit;
+
+			MaxStock = maxStock;
+		}
+
+		// Расчитывает свободный остаток для указанного склада, вычислять после расчета мин остатка
+		public void UpdateFreeStock(Item item)
+		{
+			double freeStock;
+			// Если мин остаток отличен от нуля
+			if (MinStock > 0)
+			{
+				freeStock = Count - item.InKit - InReserve;
+			}
+			// Если мин остаток равен 0
+			else
+			{
+				freeStock = Count;
+			}
+
+			// Свободный остаток не может быть меньше нуля
+			if (freeStock < 0)
+			{
+				freeStock = 0;
+			}
+
+			FreeStock = freeStock;
+		}
+
+		// Расчитывает потребность для указанного склада, расчитывать после вычисления процента продаж
+		public void UpdateNeed(Item item, bool ceilingToKit = true)
+		{
+			//TODO нужно учитывать резервы при подсчете процентного количества
+			var allCount = item.Stocks.Sum(curentItem => curentItem.Count);
+			// Если потребность в процентах меньше макс остатка используем его
+			double realMaxStock;
+			if ((allCount * SailPersent) > MaxStock)
+			{
+				realMaxStock = MaxStock;
+			}
+			// иначе берем проценты
+			else
+			{
+				realMaxStock = allCount * SailPersent;
+			}
+
+			// Расчитываем потребность
+			var need = realMaxStock - Count;
+
+			// Если нужно делаем кратным комплекту и округляем в большую сторону
+			if (ceilingToKit)
+			{
+				need = Math.Ceiling(need / item.InKit) * item.InKit;
+			}
+
+			// Потребность не может быть отрицательной
+			if (need < 0)
+			{
+				need = 0;
+			}
+
+			Need = need;
+		}
 	}
 }
