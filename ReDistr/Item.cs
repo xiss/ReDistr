@@ -33,11 +33,17 @@ namespace ReDistr
 		// Остатки на складах 
 		public List<Stock> Stocks = new List<Stock>();
 
-		// Возвращает список всех возможных доноров
+		// Возвращает список всех возможных доноров, отсортированный по убыванию
 		public List<Stock> GetListOfPossibleDonors()
 		{
 			// Если свободный осток отличен от нуля, то склад донор
-			return Stocks.Where(stock => stock.FreeStock > 0).ToList();
+			return Stocks.Where(stock => stock.FreeStock > 0).OrderByDescending(stock => stock.FreeStock).ToList();
+		}
+
+		// Возвращает сумму всех свободных остатков
+		public double GetSumFreeStock()
+		{
+			return Stocks.Sum(stock => stock.FreeStock);
 		}
 	}
 }

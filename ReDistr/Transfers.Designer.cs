@@ -15,7 +15,7 @@ namespace ReDistr {
     /// 
     [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(2)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
-    public sealed partial class Movings : Microsoft.Office.Tools.Excel.WorksheetBase {
+    public sealed partial class Transfers : Microsoft.Office.Tools.Excel.WorksheetBase {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
@@ -23,7 +23,7 @@ namespace ReDistr {
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
-        public Movings(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
+        public Transfers(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
                 base(factory, serviceProvider, "Лист3", "Лист3") {
         }
         
@@ -33,7 +33,7 @@ namespace ReDistr {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         protected override void Initialize() {
             base.Initialize();
-            Globals.Movings = this;
+            Globals.Transfers = this;
             global::System.Windows.Forms.Application.EnableVisualStyles();
             this.InitializeCachedData();
             this.InitializeControls();
@@ -148,15 +148,15 @@ namespace ReDistr {
     
     internal sealed partial class Globals {
         
-        private static Movings _Movings;
+        private static Transfers _Transfers;
         
-        internal static Movings Movings {
+        internal static Transfers Transfers {
             get {
-                return _Movings;
+                return _Transfers;
             }
             set {
-                if ((_Movings == null)) {
-                    _Movings = value;
+                if ((_Transfers == null)) {
+                    _Transfers = value;
                 }
                 else {
                     throw new System.NotSupportedException();

@@ -57,13 +57,13 @@ namespace ReDistr
 		// Сигнатура склада
 		public string Signature;
 
-		// Возвращает требуемое количество ЗЧ для удовлетворения кратности
+		// Возвращает требуемое количество ЗЧ для обеспечения одного комплекта на площадке
 		public double GetNeedToInKit(Item item)
 		{
 			double need = 0;
 
 			// Если мин остаток больше нуля и остаток на складе меньше кратности, возвращаем потребность, иначе возвращаем 0
-			if (MinStock > 0 && Count > item.InKit)
+			if (MinStock > 0 && Count < item.InKit)
 			{
 				need = item.InKit - Count;
 			}
@@ -82,6 +82,21 @@ namespace ReDistr
 
 			return false;
 		}
+
+		// Проверяет есть ли один минимальный комплект на площадке если он нужен
+		//		public bool NeedToOneKit(double inKit)
+		//		{
+		//			if (MinStock > 0)
+		//			{
+		//				if (Count < inKit)
+		//				{
+		//					return true;
+		//				}
+		//			}
+		//			return false;
+		//		}
+
+		// 
 
 		// Расчитывает процент продаж для склада
 		public void UpdateSailPersent(Item item)

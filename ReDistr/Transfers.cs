@@ -12,7 +12,7 @@ using Office = Microsoft.Office.Core;
 
 namespace ReDistr
 {
-    public partial class Movings
+    public partial class Transfers
     {
         private void Лист3_Startup(object sender, System.EventArgs e)
         {

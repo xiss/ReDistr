@@ -39,19 +39,24 @@ namespace ReDistr
 
 		#endregion
 
+		// Строка с которой начинается заполненеие данными
 		private const int ArrayRowFirstFillNumber = 2;
+		// Первая колонка с которой выводятся параметры складов
 		private const int ArrayColumnFirstFillNumber = 7;
+		// Количество параметров для склада
+		private const int ParametrsCount = 10;
 
 		// Метод заполняет лист Test данными из словоря запчастей
-		public void FillTestList(Dictionary<string, Item> items)
+		public void FillListStocks(Dictionary<string, Item> items)
 		{
-			var curentRow = ArrayRowFirstFillNumber;
-			var curentColumn = ArrayColumnFirstFillNumber;
-			// 7 колонок под описание товара 10 колонок под склад
-			var resultRange = new dynamic[items.Count + 2, 7 + Config.StockCount * 10];
+			uint curentRow = ArrayRowFirstFillNumber;
+			uint curentColumn = ArrayColumnFirstFillNumber;
+			uint stockCount = Config.StockCount;
+			// 7 колонок под описание товара 10 колонок под параметры склада
+			var resultRange = new dynamic[items.Count + 2, ArrayColumnFirstFillNumber + Config.StockCount * ParametrsCount];
 			Cells.ClearContents();
 
-			// Заполняем заголовки
+			// Заполняем заголовки ЗЧ
 			resultRange[0, 0] = "Id1C";
 			resultRange[0, 1] = "Name";
 			resultRange[0, 2] = "Article";
@@ -60,24 +65,30 @@ namespace ReDistr
 			resultRange[0, 5] = "inBundle";
 			resultRange[0, 6] = "inKit";
 
-			// Выводим заголовки для складов
-			foreach (var stock in items.Values.First().Stocks)
-			{
-				resultRange[0, curentColumn] = stock.Name;
-				resultRange[1, curentColumn] = "Count";
-				resultRange[1, curentColumn += 1] = "InReserve";
-				resultRange[1, curentColumn += 1] = "SelingsCount";
-				resultRange[1, curentColumn += 1] = "SailPersent";
-				resultRange[1, curentColumn += 1] = "MinStock";
-				resultRange[1, curentColumn += 1] = "MaxStock";
-				resultRange[1, curentColumn += 1] = "FreeStock";
-				resultRange[1, curentColumn += 1] = "Need";
-				resultRange[1, curentColumn += 1] = "Priority";
-				resultRange[1, curentColumn += 1] = "Exclude";
-				curentColumn++;
-			}
+			// Выводим заголовки для параметров
+			resultRange[0, curentColumn] = "Count";
+			resultRange[0, curentColumn += stockCount] = "InReserve";
+			resultRange[0, curentColumn += stockCount] = "SelingsCount";
+			resultRange[0, curentColumn += stockCount] = "SailPersent";
+			resultRange[0, curentColumn += stockCount] = "MinStock";
+			resultRange[0, curentColumn += stockCount] = "MaxStock";
+			resultRange[0, curentColumn += stockCount] = "FreeStock";
+			resultRange[0, curentColumn += stockCount] = "Need";
+			resultRange[0, curentColumn += stockCount] = "Priority";
+			resultRange[0, curentColumn += stockCount] = "Exclude";
 
-			foreach (KeyValuePair<string, Item> item in items)
+			// Выводим заголовки складов
+			curentColumn = ArrayColumnFirstFillNumber;
+			for (int i = 0; i < ParametrsCount; i++)
+			{
+				foreach (var stock in items.First().Value.Stocks)
+				{
+					//TODO добавить короткое имя для склада
+					resultRange[1, curentColumn] = stock.Name.Substring(0, 1);
+					curentColumn++;
+				}
+			}
+			foreach (var item in items)
 			{
 				// Выводим информацию по ЗЧ
 				resultRange[curentRow, 0] = item.Value.Id1C;
@@ -90,26 +101,35 @@ namespace ReDistr
 
 				// Выводим информацию по складам
 				curentColumn = ArrayColumnFirstFillNumber;
+				uint curentStock = 1;
 				foreach (var stock in item.Value.Stocks)
 				{
 					resultRange[curentRow, curentColumn] = stock.Count;
-					resultRange[curentRow, curentColumn += 1] = stock.InReserve;
-					resultRange[curentRow, curentColumn += 1] = stock.SelingsCount;
-					resultRange[curentRow, curentColumn += 1] = stock.SailPersent;
-					resultRange[curentRow, curentColumn += 1] = stock.MinStock;
-					resultRange[curentRow, curentColumn += 1] = stock.MaxStock;
-					resultRange[curentRow, curentColumn += 1] = stock.FreeStock;
-					resultRange[curentRow, curentColumn += 1] = stock.Need;
-					resultRange[curentRow, curentColumn += 1] = stock.Priority;
-					resultRange[curentRow, curentColumn += 1] = stock.ExcludeFromMoovings;
-					curentColumn++;
-				}
+					resultRange[curentRow, curentColumn += stockCount] = stock.InReserve;
+					resultRange[curentRow, curentColumn += stockCount] = stock.SelingsCount;
+					resultRange[curentRow, curentColumn += stockCount] = stock.SailPersent;
+					resultRange[curentRow, curentColumn += stockCount] = stock.MinStock;
+					resultRange[curentRow, curentColumn += stockCount] = stock.MaxStock;
+					resultRange[curentRow, curentColumn += stockCount] = stock.FreeStock;
+					resultRange[curentRow, curentColumn += stockCount] = stock.Need;
+					resultRange[curentRow, curentColumn += stockCount] = stock.Priority;
+					resultRange[curentRow, curentColumn += stockCount] = stock.ExcludeFromMoovings;
 
+					curentColumn = ArrayColumnFirstFillNumber;
+					curentColumn += curentStock;
+					curentStock++;
+				}
 				curentRow++;
 			}
 
 			// Выводим результат на лист
 			Range[Cells[1, 1], Cells[items.Count + 2, 7 + 10 * Config.StockCount]].Value2 = resultRange;
+		}
+
+		// Выводит информацию о перемещениях на лист
+		public void FillListTransfers(List<Transfer> transfers)
+		{
+			
 		}
 	}
 }
