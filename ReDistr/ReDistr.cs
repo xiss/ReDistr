@@ -34,7 +34,7 @@ namespace ReDistr
 			foreach (KeyValuePair<string, Item> item in items)
 			{
 				// TODO Хз работате ли, это сортировка по приоритету
-				item.Value.Stocks.OrderBy(stock => stock.Priority);
+				item.Value.Stocks = item.Value.Stocks.OrderByDescending(stock => stock.Priority).ToList();
 
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)
@@ -93,7 +93,7 @@ namespace ReDistr
 			return transfers;
 		}
 		// Дает список возможных перемещений
-		public static List<Transfer> GetPossibleMovings(IEnumerable<Stock> stocks)
+		public static List<Transfer> GetPossibleTransfers(IEnumerable<Stock> stocks)
 		{
 			var movings = new List<Transfer>();
 			var stocksArray = stocks.ToArray();

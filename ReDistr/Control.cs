@@ -47,17 +47,20 @@ namespace ReDistr
 			// Подготавливаем данные
 			ReDistr.PrepareData(items);
 
-			// Выводим таблицу для наглядности
+			// Выводим таблицу для тестов
 			Globals.Test.FillListStocks(items);
 
-			//Формирвем перемещения для обеспечения одного комплекта
+			// Формируем перемещения для обеспечения одного комплекта
 			var transfers = ReDistr.GetTransfers(items);
+
+			// Выводим перемещения на лист для тестов
+			Globals.Test.FillListTransfers(transfers, items);
 
 			// Выводим параметры отчетов
 			Globals.Control.FillReportsParameters();
 
 			// Создаем список возможных перемещений
-			// var movings = ReDistr.GetPossibleMovings(SimpleStockFactory.CurrentFactory.GetAllStocks());
+			// var movings = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks());
 		}
 
 		// Выводит параметры отчетов на страницу управления

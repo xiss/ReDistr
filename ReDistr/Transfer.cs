@@ -6,7 +6,7 @@ using System.Text;
 namespace ReDistr
 {
 	// Класс перемещение
-	class Transfer
+	public class Transfer
 	{
 		// Откуда перемещение
 		public Stock StockFrom;
@@ -27,7 +27,5 @@ namespace ReDistr
 			StockFrom.FreeStock -= Count;
 			StockTo.Count += Count;
 		}
-
-		//TODO создаить метод формирующий перемещения (на вход итемы на выход список трансферов)
 	}
 }
