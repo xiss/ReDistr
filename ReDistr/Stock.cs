@@ -144,7 +144,7 @@ namespace ReDistr
 			// Если мин остаток равен 0
 			else
 			{
-				freeStock = Count;
+				freeStock = Count - InReserve;
 			}
 
 			// Свободный остаток не может быть меньше нуля

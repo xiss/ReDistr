@@ -33,9 +33,6 @@ namespace ReDistr
 		// Остатки на складах 
 		public List<Stock> Stocks = new List<Stock>();
 
-		// Список всех перемещений с этой ЗЧ
-		public List<Transfer> Transfers = new List<Transfer>(); 
-
 		// Возвращает список всех возможных доноров, отсортированный по убыванию
 		public List<Stock> GetListOfPossibleDonors()
 		{

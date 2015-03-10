@@ -60,7 +60,7 @@ namespace ReDistr
 					foreach (var possibleDonor in possibleDonors)
 					{
 						// Если потребность удовлетворяется одним донором
-						if (need < possibleDonor.FreeStock)
+						if (need <= possibleDonor.FreeStock)
 						{
 							var transfer = new Transfer
 							{
