@@ -50,8 +50,12 @@ namespace ReDistr
 			// Выводим таблицу для тестов
 			Globals.Test.FillListStocks(items);
 
-			// Формируем перемещения для обеспечения одного комплекта
-			var transfers = ReDistr.GetTransfers(items);
+			// Формируем перемещения
+			var transfers = new List<Transfer>();
+			// для обеспечения одного комплекта
+			transfers = ReDistr.GetTransfersFirstLvl(items, transfers);
+			// для обеспечения мин. остатка
+			transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
 
 			// Выводим перемещения на лист для тестов
 			Globals.Test.FillListTransfers(transfers, items);
