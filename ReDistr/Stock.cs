@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms.VisualStyles;
 
 namespace ReDistr
 {
@@ -98,21 +100,6 @@ namespace ReDistr
 			return false;
 		}
 
-		// Проверяет есть ли один минимальный комплект на площадке если он нужен
-		//		public bool NeedToOneKit(double inKit)
-		//		{
-		//			if (MinStock > 0)
-		//			{
-		//				if (Count < inKit)
-		//				{
-		//					return true;
-		//				}
-		//			}
-		//			return false;
-		//		}
-
-		// 
-
 		// Расчитывает процент продаж для склада
 		public void UpdateSailPersent(Item item)
 		{
@@ -148,18 +135,35 @@ namespace ReDistr
 		}
 
 		// Расчитывает свободный остаток для указанного склада, вычислять после расчета мин остатка
-		public void UpdateFreeStock(Item item)
+		public void UpdateFreeStock(Item item, string typeFreeStock)
 		{
-			double freeStock;
-			// Если мин остаток отличен от нуля
-			if (MinStock > 0)
+			double freeStock = 0;
+			switch (typeFreeStock)
 			{
-				freeStock = Count - item.InKit - InReserve;
-			}
-			// Если мин остаток равен 0
-			else
-			{
-				freeStock = Count - InReserve;
+				case "kit":
+					// Если мин остаток отличен от нуля
+					if (MinStock > 0)
+					{
+						freeStock = Count - item.InKit - InReserve;
+					}
+					// Если мин остаток равен 0
+					else
+					{
+						freeStock = Count - InReserve;
+					}
+					break;
+				case "minStock":
+					// Если мин остаток отличен от нуля
+					if (MinStock > 0)
+					{
+						freeStock = Count - MinStock - InReserve;
+					}
+					// Если мин остаток равен 0
+					else
+					{
+						freeStock = Count - InReserve;
+					}
+					break;
 			}
 
 			// Свободный остаток не может быть меньше нуля

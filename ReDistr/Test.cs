@@ -45,7 +45,7 @@ namespace ReDistr
 		// Первая колонка с которой выводятся параметры складов
 		private const uint ArrayColumnFirstFillNumber = 7;
 		// Количество параметров для склада
-		private const uint StockParametrsCount = 10;
+		private const uint StockParametrsCount = 8;
 
 		// Метод заполняет лист Test данными из словоря запчастей
 		public void FillListStocks(Dictionary<string, Item> items)
@@ -53,7 +53,7 @@ namespace ReDistr
 			var curentRow = ArrayRowFirstFillNumber;
 			var curentColumn = ArrayColumnFirstFillNumber;
 			var stockCount = Config.StockCount;
-			// 7 колонок под описание товара 10 колонок под параметры склада
+			// 7 колонок под описание товара 8 колонок под параметры склада
 			var resultRange = new dynamic[items.Count + 2, ArrayColumnFirstFillNumber + Config.StockCount * StockParametrsCount];
 			Cells.ClearContents();
 
@@ -73,8 +73,8 @@ namespace ReDistr
 			resultRange[0, curentColumn += stockCount] = "SailPersent";
 			resultRange[0, curentColumn += stockCount] = "MinStock";
 			resultRange[0, curentColumn += stockCount] = "MaxStock";
-			resultRange[0, curentColumn += stockCount] = "FreeStock";
-			resultRange[0, curentColumn += stockCount] = "Need";
+			//resultRange[0, curentColumn += stockCount] = "FreeStock";
+			//resultRange[0, curentColumn += stockCount] = "Need";
 			resultRange[0, curentColumn += stockCount] = "Priority";
 			resultRange[0, curentColumn += stockCount] = "Exclude";
 
@@ -111,8 +111,8 @@ namespace ReDistr
 					resultRange[curentRow, curentColumn += stockCount] = stock.SailPersent;
 					resultRange[curentRow, curentColumn += stockCount] = stock.MinStock;
 					resultRange[curentRow, curentColumn += stockCount] = stock.MaxStock;
-					resultRange[curentRow, curentColumn += stockCount] = stock.FreeStock;
-					resultRange[curentRow, curentColumn += stockCount] = stock.Need;
+					//resultRange[curentRow, curentColumn += stockCount] = stock.FreeStock;
+					//resultRange[curentRow, curentColumn += stockCount] = stock.Need;
 					resultRange[curentRow, curentColumn += stockCount] = stock.Priority;
 					resultRange[curentRow, curentColumn += stockCount] = stock.ExcludeFromMoovings;
 
@@ -124,7 +124,7 @@ namespace ReDistr
 			}
 
 			// Выводим результат на лист
-			Range[Cells[1, 1], Cells[items.Count + 2, 7 + 10 * Config.StockCount]].Value2 = resultRange;
+			Range[Cells[1, 1], Cells[items.Count + 2, 7 + StockParametrsCount * Config.StockCount]].Value2 = resultRange;
 			//return resultRange;
 		}
 

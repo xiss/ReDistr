@@ -19,7 +19,7 @@ namespace ReDistr
 					stock.UpdateSailPersent(item.Value);
 					stock.UpdateMinStock(item.Value);
 					stock.UpdateMaxStock(item.Value);
-					stock.UpdateFreeStock(item.Value);
+					//stock.UpdateFreeStock(item.Value, "kit");
 					stock.UpdateNeed(item.Value);
 				}
 			}
@@ -33,6 +33,8 @@ namespace ReDistr
 			{
 				// TODO Хз работате ли, это сортировка по приоритету
 				item.Value.Stocks = item.Value.Stocks.OrderByDescending(stock => stock.Priority).ToList();
+				// Расчитываем свободные остатки на складах
+				item.Value.UpdateFreeStocks("kit");
 
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)
@@ -99,6 +101,8 @@ namespace ReDistr
 			{
 				// TODO Хз работате ли, это сортировка по приоритету
 				item.Value.Stocks = item.Value.Stocks.OrderByDescending(stock => stock.Priority).ToList();
+				// Расчитываем свободные остатки на складах
+				item.Value.UpdateFreeStocks("minStock");
 
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)

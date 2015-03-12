@@ -45,5 +45,14 @@ namespace ReDistr
 		{
 			return Stocks.Sum(stock => stock.FreeStock);
 		}
+
+		// Обновляет свободные остатки
+		public void UpdateFreeStocks(string typeFreeStock)
+		{
+			foreach (var stock in Stocks)
+			{
+				stock.UpdateFreeStock(this, typeFreeStock);
+			}
+		}
 	}
 }
