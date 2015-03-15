@@ -15,12 +15,9 @@ namespace ReDistr
 			{
 				foreach (var stock in item.Value.Stocks)
 				{
-					// TODO Проверить расчеты - вроде все верно
 					stock.UpdateSailPersent(item.Value);
 					stock.UpdateMinStock(item.Value);
 					stock.UpdateMaxStock(item.Value);
-					//stock.UpdateFreeStock(item.Value, "kit");
-					stock.UpdateNeed(item.Value);
 				}
 			}
 		}
@@ -31,7 +28,7 @@ namespace ReDistr
 			// Перебираем список ЗЧ
 			foreach (KeyValuePair<string, Item> item in items)
 			{
-				// TODO Хз работате ли, это сортировка по приоритету
+				// Сортируем склады по приоритету, в первую очередб обрабатываем более приоритетные
 				item.Value.Stocks = item.Value.Stocks.OrderByDescending(stock => stock.Priority).ToList();
 				// Расчитываем свободные остатки на складах
 				item.Value.UpdateFreeStocks("kit");
@@ -39,6 +36,7 @@ namespace ReDistr
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)
 				{
+					// TODO во всех 3 этапах нужно проверять нет ли исключения у склада, объединить все проверки в одну функцию
 					// Определяем количество для обеспечения одного комплекта, если потребности нет, переходим к следующему складу
 					var need = stock.GetNeedToInKit(item.Value);
 					var possibleDonors = item.Value.GetListOfPossibleDonors();
@@ -99,7 +97,7 @@ namespace ReDistr
 			// Перебираем список ЗЧ
 			foreach (KeyValuePair<string, Item> item in items)
 			{
-				// TODO Хз работате ли, это сортировка по приоритету
+				// Сортируем склады по приоритету, в первую очередб обрабатываем более приоритетные
 				item.Value.Stocks = item.Value.Stocks.OrderByDescending(stock => stock.Priority).ToList();
 				// Расчитываем свободные остатки на складах
 				item.Value.UpdateFreeStocks("minStock");
@@ -158,6 +156,79 @@ namespace ReDistr
 						}
 					}
 				}
+			}
+			return transfers;
+		}
+
+		// Создает необходимые перемещения для обеспечения необходимого запаса
+		public static List<Transfer> GetTransfersThirdLvl(Dictionary<string, Item> items, List<Transfer> transfers)
+		{
+			// Перебираем список ЗЧ
+			foreach (KeyValuePair<string, Item> item in items)
+			{
+				// Сортируем склады по приоритету, в первую очередь обрабатываем более приоритетные
+				item.Value.Stocks = item.Value.Stocks.OrderByDescending(stock => stock.Priority).ToList();
+				// Расчитываем свободные остатки на складах
+				item.Value.UpdateFreeStocks("minStock");
+
+				// Перебираем список складов у ЗЧ
+				foreach (var stock in item.Value.Stocks)
+				{
+					// Определяем количество для перемещения, если перемещать ничего не нужно переходим к следующему складу
+					var need = stock.GetNeedToSafety(item.Value);
+					// TODO Нужно оставить только уникальные перемещения по донору
+					var existTransfers = transfers.Where(transfer => transfer.Item == item.Value && transfer.StockTo == stock).ToList();
+
+					var possibleDonors = item.Value.GetListOfPossibleDonors(existTransfers);
+					if (need == 0)
+					{
+						continue;
+					}
+					// Определяем есть ли доноры, если доноров нет, переходим к следующей ЗЧ
+					if (possibleDonors == null)
+					{
+						break;
+					}
+					// Определяем, достаточно ли общего свободного остатка для обеспечения потребности, если нет, переходим к следующему складу
+					// TODO Возможно перемещение все же нужно делать если свободного остатка не хватает на покрытие всей потребности, просто нужно уменьшать количество в перемещении до кратности
+					if (need > item.Value.GetSumFreeStock(existTransfers))
+					{
+						continue;
+					}
+					// Создаем необходимые перемещения от доноров
+					foreach (var possibleDonor in possibleDonors)
+					{
+						// Если потребность удовлетворяется одним донором
+						if (need <= possibleDonor.FreeStock)
+						{
+							var transfer = new Transfer
+							{
+								StockFrom = possibleDonor,
+								StockTo = stock,
+								Count = need,
+								Item = item.Value
+							};
+							transfer.Apply();
+							transfers.Add(transfer);
+
+							break;
+						}
+						// Если нужны еще доноры
+						else
+						{
+							var transfer = new Transfer
+							{
+								StockFrom = possibleDonor,
+								StockTo = stock,
+								Count = need,
+								Item = item.Value
+							};
+							transfer.Apply();
+							transfers.Add(transfer);
+						}
+					}
+				}
+
 			}
 			return transfers;
 		}

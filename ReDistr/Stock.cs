@@ -37,7 +37,7 @@ namespace ReDistr
 		// Процент продаж
 		public double SailPersent;
 
-		// Резерв, количество товара в резерве
+		// Резерв, количество товара в резерве, всегда положителен
 		public double InReserve;
 
 		// Приоритет, в спорных ситуациях используется для определения реципиента. 
@@ -46,7 +46,6 @@ namespace ReDistr
 		// Свободный остаток, который можно перемещать с данного склада, 
 		// если свободный остаток отличен от 0, склад может быть донором. 
 		// Не может быть меньше 0, если minStock отличен от нуля
-		//TODO Возможно для каждого этапа перемещений нужно расчитывать свой свободный остаток, иначе товар будет уезжать для покрытия мин остатка опуская остаток ниже минимального на текущем складе
 		public double FreeStock;
 
 		// Потребность данного склада в товаре, всегда положительна, 
@@ -83,6 +82,28 @@ namespace ReDistr
 			if (MinStock > Count)
 			{
 				need = MinStock - Count;
+			}
+
+			return need;
+		}
+
+		// Возвращает требуемое количество ЗЧ для обеспечения запаса
+		public double GetNeedToSafety(Item item)
+		{
+			// Получаем общее колличество ЗЧ без учета резервов
+			var sumStocks = item.GetSumStocks();
+			var need = Math.Ceiling(Math.Abs(sumStocks * SailPersent) / item.InKit) * item.InKit - Count;
+
+			// Итоговое количество не должно быть больше максимального остатка
+			if ((need + Count) > MaxStock)
+			{
+				need = MaxStock - Count;
+			}
+
+			// Если потребность мееньше 0, округляем ее до 0
+			if (need < 0)
+			{
+				need = 0;
 			}
 
 			return need;
@@ -152,6 +173,7 @@ namespace ReDistr
 						freeStock = Count - InReserve;
 					}
 					break;
+
 				case "minStock":
 					// Если мин остаток отличен от нуля
 					if (MinStock > 0)
@@ -173,41 +195,6 @@ namespace ReDistr
 			}
 
 			FreeStock = freeStock;
-		}
-
-		// Расчитывает потребность для указанного склада, расчитывать после вычисления процента продаж
-		public void UpdateNeed(Item item, bool ceilingToKit = true)
-		{
-			//TODO нужно учитывать резервы при подсчете процентного количества
-			var allCount = item.Stocks.Sum(curentItem => curentItem.Count);
-			// Если потребность в процентах меньше макс остатка используем его
-			double realMaxStock;
-			if ((allCount * SailPersent) > MaxStock)
-			{
-				realMaxStock = MaxStock;
-			}
-			// иначе берем проценты
-			else
-			{
-				realMaxStock = allCount * SailPersent;
-			}
-
-			// Расчитываем потребность
-			var need = realMaxStock - Count;
-
-			// Если нужно делаем кратным комплекту и округляем в большую сторону
-			if (ceilingToKit)
-			{
-				need = Math.Ceiling(need / item.InKit) * item.InKit;
-			}
-
-			// Потребность не может быть отрицательной
-			if (need < 0)
-			{
-				need = 0;
-			}
-
-			Need = need;
 		}
 	}
 }

@@ -56,6 +56,8 @@ namespace ReDistr
 			transfers = ReDistr.GetTransfersFirstLvl(items, transfers);
 			// для обеспечения мин. остатка
 			transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
+			// для обеспечения необходимого запаса, перемещения создаются для уже созданных направлений
+			transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
 
 			// Выводим перемещения на лист для тестов
 			Globals.Test.FillListTransfers(transfers, items);

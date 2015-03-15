@@ -33,17 +33,59 @@ namespace ReDistr
 		// Остатки на складах 
 		public List<Stock> Stocks = new List<Stock>();
 
-		// Возвращает список всех возможных доноров, отсортированный по убыванию
-		public List<Stock> GetListOfPossibleDonors()
+		// Возвращает список всех возможных доноров, отсортированный по убыванию. Если задан список перемещений, то доноры выдаются из этого списка
+		public List<Stock> GetListOfPossibleDonors(List<Transfer> existTransfers = null)
 		{
-			// Если свободный осток отличен от нуля, то склад донор
-			return Stocks.Where(stock => stock.FreeStock > 0).OrderByDescending(stock => stock.FreeStock).ToList();
+			// Если список не задан, выдаем всех возможных доноров
+			if (existTransfers == null)
+			{
+				// Если свободный осток отличен от нуля, то склад донор
+				return Stocks.Where(stock => stock.FreeStock > 0).OrderByDescending(stock => stock.FreeStock).ToList();
+			}
+			// Если список задан выдаем доноров из него
+			var listOfPossibleDonors = new List<Stock>();
+			foreach (var stock in Stocks)
+			{
+				foreach (var transfer in existTransfers)
+				{
+					if (stock == transfer.StockFrom)
+					{
+						listOfPossibleDonors.Add(stock);
+					}
+				}
+			}
+			return listOfPossibleDonors;
 		}
 
-		// Возвращает сумму всех свободных остатков
-		public double GetSumFreeStock()
+		// Возвращает сумму всех свободных остатков, если задан список перемещений то остатки берутся из доноров в этих перемещениях
+		public double GetSumFreeStock(List<Transfer> existTransfers = null)
 		{
-			return Stocks.Sum(stock => stock.FreeStock);
+			// Если список не задан, выдаем сумму для всех складов
+			if (existTransfers == null)
+			{
+				return Stocks.Sum(stock => stock.FreeStock);
+			}
+
+			var ExistDonors = new List<Stock>();
+			foreach (var stock in Stocks)
+			{
+				foreach (var transfer in existTransfers)
+				{
+					if (stock == transfer.StockFrom)
+					{
+						ExistDonors.Add(stock);
+					}
+				}
+			}
+
+			return ExistDonors.Sum(stock => stock.FreeStock);
+		}
+
+		// Возвращает общее количество ЗЧ без учета резервов
+		public double GetSumStocks()
+		{
+			double sumStocks = Stocks.Sum(stock => stock.Count - stock.InReserve);
+			return sumStocks;
 		}
 
 		// Обновляет свободные остатки

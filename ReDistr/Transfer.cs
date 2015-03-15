@@ -16,7 +16,7 @@ namespace ReDistr
 
 		// Колличество ЗЧ
 		public double Count;
-		
+
 		// ЗЧ
 		public Item Item;
 
