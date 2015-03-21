@@ -171,7 +171,7 @@ namespace ReDistr
 			}
 
 			// Выводим результат на лист
-			Range[Cells[2, FirstColumn], Cells[items.Count + 1, FirstColumn + possibleTransfers.Count - 1]].Value2 = resultRange;
+			Range[Cells[ArrayRowFirstFillNumber, FirstColumn], Cells[ArrayRowFirstFillNumber + items.Count, FirstColumn + possibleTransfers.Count - 1]].Value2 = resultRange;
 		}
 	}
 }

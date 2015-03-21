@@ -127,9 +127,9 @@ namespace ReDistr
 
 				// Ищем запчасть по 1С коду в массиве запчастей
 				Item item = null;
-				if (items.ContainsKey(stocksWb.Worksheets[1].Range["V" + curentRow].Value) == true)
+				if (items.ContainsKey(stocksWb.Worksheets[1].Range["V" + curentRow].Value.ToString()))
 				{
-					item = items[stocksWb.Worksheets[1].Range["V" + curentRow].Value];
+					item = items[stocksWb.Worksheets[1].Range["V" + curentRow].Value.ToString()];
 				}
 
 				// Если не находим, создаем ее
@@ -137,11 +137,11 @@ namespace ReDistr
 				{
 					item = new Item
 					{
-						Id1C = stocksWb.Worksheets[1].Range["V" + curentRow].Value,
-						Article = stocksWb.Worksheets[1].Range["C" + curentRow].Value,
-						StorageCategory = stocksWb.Worksheets[1].Range["W" + curentRow].Value,
-						Name = stocksWb.Worksheets[1].Range["R" + curentRow].Value,
-						Manufacturer = stocksWb.Worksheets[1].Range["AA" + curentRow].Value,
+						Id1C = stocksWb.Worksheets[1].Range["V" + curentRow].Value.ToString(),
+						Article = stocksWb.Worksheets[1].Range["C" + curentRow].Value.ToString(),
+						StorageCategory = stocksWb.Worksheets[1].Range["W" + curentRow].Value.ToString(),
+						Name = stocksWb.Worksheets[1].Range["R" + curentRow].Value.ToString(),
+						Manufacturer = stocksWb.Worksheets[1].Range["AA" + curentRow].Value.ToString(),
 					};
 
 					// Создаем склады для ЗЧ
@@ -216,9 +216,9 @@ namespace ReDistr
 
 				// Ищем запчасть по 1С коду в массиве запчастей
 				Item item = null;
-				if (items.ContainsKey(sellingsWb.Worksheets[1].Range["S" + curentRow].Value) == true)
+				if (items.ContainsKey(sellingsWb.Worksheets[1].Range["S" + curentRow].Value.ToString()) == true)
 				{
-					item = items[sellingsWb.Worksheets[1].Range["S" + curentRow].Value];
+					item = items[sellingsWb.Worksheets[1].Range["S" + curentRow].Value.ToString()];
 				}
 
 				// Если не находим переходим к следующей строке

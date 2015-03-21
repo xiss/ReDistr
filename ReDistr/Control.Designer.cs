@@ -146,9 +146,10 @@ namespace ReDistr {
             this.buttonGetMoving.ForeColor = System.Drawing.SystemColors.ControlText;
             this.buttonGetMoving.Name = "buttonGetMoving";
             this.buttonGetMoving.Text = "Рассчитать перемещения";
-            this.buttonGetMoving.UseVisualStyleBackColor = false;
+            this.buttonGetMoving.UseCompatibleTextRendering = true;
+            this.buttonGetMoving.UseVisualStyleBackColor = true;
             // 
-            // Config
+            // Control
             // 
             this.buttonGetMoving.BindingContext = this.BindingContext;
         }
