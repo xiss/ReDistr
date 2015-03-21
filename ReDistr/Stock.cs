@@ -143,6 +143,12 @@ namespace ReDistr
 			var sailsPerDay = SelingsCount / Config.SellingPeriod;
 			var minStock = Math.Ceiling((sailsPerDay * DefaultPeriodMinStock) / item.InKit) * item.InKit;
 
+			// Если данный склад исключен из перемещений, то минимальный остаток равен нулю
+			if (ExcludeFromMoovings)
+			{
+				minStock = 0;
+			}
+
 			MinStock = minStock;
 		}
 

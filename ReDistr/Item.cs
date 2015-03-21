@@ -58,7 +58,7 @@ namespace ReDistr
 		}
 
 		// Возвращает сумму всех свободных остатков, если задан список перемещений то остатки берутся из доноров в этих перемещениях
-		public double GetSumFreeStock(List<Transfer> existTransfers = null)
+		public double GetSumFreeStocks(List<Transfer> existTransfers = null)
 		{
 			// Если список не задан, выдаем сумму для всех складов
 			if (existTransfers == null)
@@ -84,7 +84,7 @@ namespace ReDistr
 		// Возвращает общее количество ЗЧ без учета резервов
 		public double GetSumStocks()
 		{
-			double sumStocks = Stocks.Sum(stock => stock.Count - stock.InReserve);
+			var sumStocks = Stocks.Sum(stock => stock.Count - stock.InReserve);
 			return sumStocks;
 		}
 

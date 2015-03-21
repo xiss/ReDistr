@@ -98,25 +98,25 @@ namespace ReDistr
 			while (stocksWb.Worksheets[1].Range["B" + curentRow].Value != null || stocksWb.Worksheets[1].Range["C" + curentRow].Value != null)
 			{
 				// Определяем строку с сигнатурой текущего склада
-				if (stocksWb.Worksheets[1].Application.Range["B" + curentRow].Value != null)
+				if (stocksWb.Worksheets[1].Range["B" + curentRow].Value != null)
 				{
-					curentStockSignature = stocksWb.Worksheets[1].Application.Range["B" + curentRow].Value.ToString();
+					curentStockSignature = stocksWb.Worksheets[1].Range["B" + curentRow].Value.ToString();
 					curentRow++;
 					continue;
 				}
 
 				// Определяем остаток
 				double itemCount = 0;
-				if (stocksWb.Worksheets[1].Application.Range["U" + curentRow].Value is string != true)
+				if (stocksWb.Worksheets[1].Range["U" + curentRow].Value is string != true)
 				{
-					itemCount = stocksWb.Worksheets[1].Application.Range["U" + curentRow].Value;
+					itemCount = stocksWb.Worksheets[1].Range["U" + curentRow].Value;
 				}
 
 				// Определяем резерв
 				double reserveCount = 0;
-				if (stocksWb.Worksheets[1].Application.Range["Y" + curentRow].Value is string != true)
+				if (stocksWb.Worksheets[1].Range["Y" + curentRow].Value is string != true)
 				{
-					reserveCount = stocksWb.Worksheets[1].Application.Range["Y" + curentRow].Value;
+					reserveCount = stocksWb.Worksheets[1].Range["Y" + curentRow].Value;
 				}
 
 				// Если резерв отрицателен, округляем его до 0
@@ -127,9 +127,9 @@ namespace ReDistr
 
 				// Ищем запчасть по 1С коду в массиве запчастей
 				Item item = null;
-				if (items.ContainsKey(stocksWb.Worksheets[1].Application.Range["V" + curentRow].Value) == true)
+				if (items.ContainsKey(stocksWb.Worksheets[1].Range["V" + curentRow].Value) == true)
 				{
-					item = items[stocksWb.Worksheets[1].Application.Range["V" + curentRow].Value];
+					item = items[stocksWb.Worksheets[1].Range["V" + curentRow].Value];
 				}
 
 				// Если не находим, создаем ее
@@ -137,11 +137,11 @@ namespace ReDistr
 				{
 					item = new Item
 					{
-						Id1C = stocksWb.Worksheets[1].Application.Range["V" + curentRow].Value,
-						Article = stocksWb.Worksheets[1].Application.Range["C" + curentRow].Value,
-						StorageCategory = stocksWb.Worksheets[1].Application.Range["W" + curentRow].Value,
-						Name = stocksWb.Worksheets[1].Application.Range["R" + curentRow].Value,
-						Manufacturer = stocksWb.Worksheets[1].Application.Range["AA" + curentRow].Value,
+						Id1C = stocksWb.Worksheets[1].Range["V" + curentRow].Value,
+						Article = stocksWb.Worksheets[1].Range["C" + curentRow].Value,
+						StorageCategory = stocksWb.Worksheets[1].Range["W" + curentRow].Value,
+						Name = stocksWb.Worksheets[1].Range["R" + curentRow].Value,
+						Manufacturer = stocksWb.Worksheets[1].Range["AA" + curentRow].Value,
 					};
 
 					// Создаем склады для ЗЧ
@@ -200,25 +200,25 @@ namespace ReDistr
 			while (sellingsWb.Worksheets[1].Range["B" + curentRow].Value != null || sellingsWb.Worksheets[1].Range["C" + curentRow].Value != null)
 			{
 				// Определяем строку с сигнатурой текущего склада
-				if (sellingsWb.Worksheets[1].Application.Range["B" + curentRow].Value != null)
+				if (sellingsWb.Worksheets[1].Range["B" + curentRow].Value != null)
 				{
-					curentStockSignature = sellingsWb.Worksheets[1].Application.Range["B" + curentRow].Value.ToString();
+					curentStockSignature = sellingsWb.Worksheets[1].Range["B" + curentRow].Value.ToString();
 					curentRow++;
 					continue;
 				}
 
 				// Определяем продажи
 				double selingsCount = 0;
-				if (sellingsWb.Worksheets[1].Application.Range["X" + curentRow].Value is string != true)
+				if (sellingsWb.Worksheets[1].Range["X" + curentRow].Value is string != true)
 				{
-					selingsCount = sellingsWb.Worksheets[1].Application.Range["X" + curentRow].Value;
+					selingsCount = sellingsWb.Worksheets[1].Range["X" + curentRow].Value;
 				}
 
 				// Ищем запчасть по 1С коду в массиве запчастей
 				Item item = null;
-				if (items.ContainsKey(sellingsWb.Worksheets[1].Application.Range["S" + curentRow].Value) == true)
+				if (items.ContainsKey(sellingsWb.Worksheets[1].Range["S" + curentRow].Value) == true)
 				{
-					item = items[sellingsWb.Worksheets[1].Application.Range["S" + curentRow].Value];
+					item = items[sellingsWb.Worksheets[1].Range["S" + curentRow].Value];
 				}
 
 				// Если не находим переходим к следующей строке
@@ -257,7 +257,7 @@ namespace ReDistr
 			var parametersWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfParametersWb);
 
 			// Исключения из перемещений
-			//Определяем список известных складов
+			// Составляем список складов с листа исключений
 			var stockList = new List<string>();
 			for (var i = 1; i <= Config.StockCount; i++)
 			{
@@ -270,15 +270,14 @@ namespace ReDistr
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
 				// Если не находим переходим к следующей строке
-				if (items.ContainsKey(parametersWb.Worksheets[1].Application.Range["A" + curentRow].Value))
+				string curenId1C = parametersWb.Worksheets[1].Range["A" + curentRow].Value;
+				if (items.ContainsKey(curenId1C))
 				{
-					Item item = items[parametersWb.Worksheets[1].Application.Range["A" + curentRow].Value];
-
 					// Проставляем исключения у найденной ЗЧ
 					foreach (var curentStock in stockList)
 					{
 						// Проверим, есть ли у текущей ЗЧ текущей склад
-						var stock = item.Stocks.Find(s => s.Signature.Contains(curentStock));
+						var stock = items[curenId1C].Stocks.Find(s => s.Signature.Contains(curentStock));
 						// Если такой склад уже есть, работаем с ним, если нет переходим к следующему складу
 						if (stock != null && parametersWb.Worksheets[1].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value == 1)
 						{
