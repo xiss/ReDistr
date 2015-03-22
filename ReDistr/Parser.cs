@@ -24,14 +24,38 @@ namespace ReDistr
 		}
 
 		// Указываем ячейки с настройками для парсера
-		private const string RangeNameOfSealingsWb = "B14";
-		private const string RangeNameOfStocksWb = "B13";
-		private const string RangePuthToThisWb = "B15";
-		private const string RangeNameOfParametersWb = "B16";
-		private const uint RowNumberStockConfig = 4;
-		private const uint RowNumberStocks = 7;
-		private const uint RowNumberSelings = 7;
-		private const uint RowNumberParameters = 2;
+		private const string RngNameOfSealingsWb = "B14";
+		private const string RngNameOfStocksWb = "B13";
+		private const string RngPuthToThisWb = "B15";
+		private const string RngNameOfParamWb = "B16";
+		private const uint RowStartStockCfg = 4; // Строка с которой считываются склады в настройках
+		private const string ColStockNameCfg = "A";
+		private const string ColStockMinCfg = "B";
+		private const string ColStockMaxCfg = "C";
+		private const string ColStockSignCfg = "D";
+		// Книга с остатками
+		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
+		private const string RngDateStocks = "B3"; // Ячейка содержащая дату отчета
+		private const string ColStockSignStocks = "B"; // Колонка содержащая сигнатуру склада
+		private const string ColArticleStocks = "C"; // Артикул
+		private const string ColCountStocks = "U"; // Остаток
+		private const string ColInReserveStocks = "Z"; // Резерв
+		private const string ColId1CStocks = "W"; // Код товара
+		private const string ColStorageCategoryStocks = "X"; // Категроия хранения
+		private const string ColNameStocks = "R"; // Название ЗЧ
+		private const string ColManufacturerStocks = "AA"; // Производитель
+		// Книга с продажами
+		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
+		private const string RngDateSealings = "B3"; // Дата отчета
+		private const string ColStockSignSealings = "B"; // Сигнатура склада
+		private const string ColArticleSealings = "C"; // Артикул
+		private const string ColCountSealings = "Y"; // Количество продаж
+		private const string ColId1CSealings = "S"; // Код товара
+		// Книга с дополнительными параметрами
+		private const uint RowStartParameters = 2; // Строка с которой парсится дополнительная информация
+		private const string ColId1CParameters = "A"; // Колонка с кодом ЗЧ
+		private const string ColStartParamsParameters = "E"; // Колонка с которой выводится дополнительная информация
+		// Диалоговые окна
 		private const string MessegeBoxQuestion = "Дата снятия отчета с остатком не соответствует сегодняшней, продолжить?";
 		private const string MessegeBoxCaption = "Предупреждение";
 
@@ -42,22 +66,22 @@ namespace ReDistr
 			Globals.Control.Activate();
 
 			// Прописываем в конфиг пути и названия файло виз настроечного листа
-			Config.NameOfSealingsWb = _control.Range[RangeNameOfSealingsWb].Value2;
-			Config.NameOfStocksWb = _control.Range[RangeNameOfStocksWb].Value2;
-			Config.PuthToThisWb = _control.Range[RangePuthToThisWb].Value2;
-			Config.NameOfParametersWb = _control.Range[RangeNameOfParametersWb].Value2;
+			Config.NameOfSealingsWb = _control.Range[RngNameOfSealingsWb].Value2;
+			Config.NameOfStocksWb = _control.Range[RngNameOfStocksWb].Value2;
+			Config.PuthToThisWb = _control.Range[RngPuthToThisWb].Value2;
+			Config.NameOfParametersWb = _control.Range[RngNameOfParamWb].Value2;
 
 			// Настраиваем фабрику
-			var curentRow = RowNumberStockConfig;
+			var curentRow = RowStartStockCfg;
 			uint priority = 1; // Приоритет, от большего к меньшему
 			uint count = 0; // Счетчик складов
 
-			while (_control.Range["A" + curentRow].Value != null)
+			while (_control.Range[ColStockNameCfg + curentRow].Value != null)
 			{
-				string name = _control.Range["A" + curentRow].Value.ToString();
-				var minimum = (uint)(_control.Range["B" + curentRow].Value);
-				var maximum = (uint)(_control.Range["C" + curentRow].Value);
-				string signature = _control.Range["D" + curentRow].Value.ToString();
+				string name = _control.Range[ColStockNameCfg + curentRow].Value.ToString();
+				var minimum = (uint)(_control.Range[ColStockMinCfg + curentRow].Value);
+				var maximum = (uint)(_control.Range[ColStockMaxCfg + curentRow].Value);
+				string signature = _control.Range[ColStockSignCfg + curentRow].Value.ToString();
 
 				SimpleStockFactory.CurrentFactory.SetStockParams(name, minimum, maximum, signature, priority);
 				curentRow++;
@@ -78,7 +102,7 @@ namespace ReDistr
 			var stocksWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfStocksWb);
 
 			// Вычисляем дату снятия отчета с остатками
-			string dateString = stocksWb.Worksheets[1].Range["B3"].Value;
+			string dateString = stocksWb.Worksheets[1].Range[RngDateStocks].Value;
 			Config.StockDate = DateTime.Parse(dateString.Substring(13, 8));
 
 			// Если дата снятия отчета не равна сегодняшней, предлагаем не продолжать
@@ -92,31 +116,31 @@ namespace ReDistr
 				}
 			}
 
-			var curentRow = RowNumberStocks;
+			var curentRow = RowStartStocks;
 			var curentStockSignature = String.Empty;
 
-			while (stocksWb.Worksheets[1].Range["B" + curentRow].Value != null || stocksWb.Worksheets[1].Range["C" + curentRow].Value != null)
+			while (stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value != null || stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value != null)
 			{
 				// Определяем строку с сигнатурой текущего склада
-				if (stocksWb.Worksheets[1].Range["B" + curentRow].Value != null)
+				if (stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value != null)
 				{
-					curentStockSignature = stocksWb.Worksheets[1].Range["B" + curentRow].Value.ToString();
+					curentStockSignature = stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value.ToString();
 					curentRow++;
 					continue;
 				}
 
 				// Определяем остаток
 				double itemCount = 0;
-				if (stocksWb.Worksheets[1].Range["U" + curentRow].Value is string != true)
+				if (stocksWb.Worksheets[1].Range[ColCountStocks + curentRow].Value is string != true)
 				{
-					itemCount = stocksWb.Worksheets[1].Range["U" + curentRow].Value;
+					itemCount = stocksWb.Worksheets[1].Range[ColCountStocks + curentRow].Value;
 				}
 
 				// Определяем резерв
 				double reserveCount = 0;
-				if (stocksWb.Worksheets[1].Range["Y" + curentRow].Value is string != true)
+				if (stocksWb.Worksheets[1].Range[ColInReserveStocks + curentRow].Value is string != true)
 				{
-					reserveCount = stocksWb.Worksheets[1].Range["Y" + curentRow].Value;
+					reserveCount = stocksWb.Worksheets[1].Range[ColInReserveStocks + curentRow].Value;
 				}
 
 				// Если резерв отрицателен, округляем его до 0
@@ -127,9 +151,9 @@ namespace ReDistr
 
 				// Ищем запчасть по 1С коду в массиве запчастей
 				Item item = null;
-				if (items.ContainsKey(stocksWb.Worksheets[1].Range["V" + curentRow].Value.ToString()))
+				if (items.ContainsKey(stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value.ToString()))
 				{
-					item = items[stocksWb.Worksheets[1].Range["V" + curentRow].Value.ToString()];
+					item = items[stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value.ToString()];
 				}
 
 				// Если не находим, создаем ее
@@ -137,11 +161,11 @@ namespace ReDistr
 				{
 					item = new Item
 					{
-						Id1C = stocksWb.Worksheets[1].Range["V" + curentRow].Value.ToString(),
-						Article = stocksWb.Worksheets[1].Range["C" + curentRow].Value.ToString(),
-						StorageCategory = stocksWb.Worksheets[1].Range["W" + curentRow].Value.ToString(),
-						Name = stocksWb.Worksheets[1].Range["R" + curentRow].Value.ToString(),
-						Manufacturer = stocksWb.Worksheets[1].Range["AA" + curentRow].Value.ToString(),
+						Id1C = stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value.ToString(),
+						Article = stocksWb.Worksheets[1].Range[ColArticleStocks + curentRow].Value.ToString(),
+						StorageCategory = stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString(),
+						Name = stocksWb.Worksheets[1].Range[ColNameStocks + curentRow].Value.ToString(),
+						Manufacturer = stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString(),
 					};
 
 					// Создаем склады для ЗЧ
@@ -163,16 +187,6 @@ namespace ReDistr
 					stock.Count += itemCount;
 					stock.InReserve += reserveCount;
 				}
-
-				// Если склада нет, создаем его
-				//else
-				//{
-				//	stock = SimpleStockFactory.CurrentFactory.TryGetStock(curentStockSignature);
-				//	stock.Count = itemCount;
-				//	stock.InReserve = reserveCount;
-				//	item.Stocks.Add(stock);
-				//}
-
 				curentRow++;
 			}
 
@@ -189,36 +203,36 @@ namespace ReDistr
 			var sellingsWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfSealingsWb);
 
 			// Вычисляем начальную и конечную дату периода продаж
-			string dateString = sellingsWb.Worksheets[1].Range["B3"].Value;
+			string dateString = sellingsWb.Worksheets[1].Range[RngDateSealings].Value;
 			Config.PeriodSellingFrom = DateTime.Parse(dateString.Substring(12, 8));
 			Config.PeriodSellingTo = DateTime.Parse(dateString.Substring(23, 8));
 			Config.SellingPeriod = (Config.PeriodSellingTo - Config.PeriodSellingFrom).Days;
 
-			var curentRow = RowNumberSelings;
+			var curentRow = RowStartSelings;
 			var curentStockSignature = String.Empty;
 
-			while (sellingsWb.Worksheets[1].Range["B" + curentRow].Value != null || sellingsWb.Worksheets[1].Range["C" + curentRow].Value != null)
+			while (sellingsWb.Worksheets[1].Range[ColStockSignSealings + curentRow].Value != null || sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value != null)
 			{
 				// Определяем строку с сигнатурой текущего склада
-				if (sellingsWb.Worksheets[1].Range["B" + curentRow].Value != null)
+				if (sellingsWb.Worksheets[1].Range[ColStockSignSealings + curentRow].Value != null)
 				{
-					curentStockSignature = sellingsWb.Worksheets[1].Range["B" + curentRow].Value.ToString();
+					curentStockSignature = sellingsWb.Worksheets[1].Range[ColStockSignSealings + curentRow].Value.ToString();
 					curentRow++;
 					continue;
 				}
 
 				// Определяем продажи
 				double selingsCount = 0;
-				if (sellingsWb.Worksheets[1].Range["X" + curentRow].Value is string != true)
+				if (sellingsWb.Worksheets[1].Range[ColCountSealings + curentRow].Value is string != true)
 				{
-					selingsCount = sellingsWb.Worksheets[1].Range["X" + curentRow].Value;
+					selingsCount = sellingsWb.Worksheets[1].Range[ColCountSealings + curentRow].Value;
 				}
 
 				// Ищем запчасть по 1С коду в массиве запчастей
 				Item item = null;
-				if (items.ContainsKey(sellingsWb.Worksheets[1].Range["S" + curentRow].Value.ToString()) == true)
+				if (items.ContainsKey(sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value.ToString()) == true)
 				{
-					item = items[sellingsWb.Worksheets[1].Range["S" + curentRow].Value.ToString()];
+					item = items[sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value.ToString()];
 				}
 
 				// Если не находим переходим к следующей строке
@@ -265,12 +279,12 @@ namespace ReDistr
 			}
 
 			// Считываем исключения из перемещений
-			var curentRow = RowNumberParameters;
-			while (parametersWb.Worksheets[1].Range["A" + curentRow].Value != null)
+			var curentRow = RowStartParameters;
+			while (parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
 				// Если не находим переходим к следующей строке
-				string curenId1C = parametersWb.Worksheets[1].Range["A" + curentRow].Value;
+				string curenId1C = parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value;
 				if (items.ContainsKey(curenId1C))
 				{
 					// Проставляем исключения у найденной ЗЧ
@@ -290,30 +304,30 @@ namespace ReDistr
 			}
 
 			// Кратность запчастей
-			curentRow = RowNumberParameters;
-			while (parametersWb.Worksheets[2].Range["A" + curentRow].Value != null)
+			curentRow = RowStartParameters;
+			while (parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
-				if (items.ContainsKey(parametersWb.Worksheets[2].Range["A" + curentRow].Value))
+				if (items.ContainsKey(parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value))
 				{
 					// Если нашли, проставляем кратность
-					Item item = items[parametersWb.Worksheets[2].Range["A" + curentRow].Value];
-					item.InKit = parametersWb.Worksheets[2].Range["E" + curentRow].Value;
+					Item item = items[parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value];
+					item.InKit = parametersWb.Worksheets[2].Range[ColStartParamsParameters + curentRow].Value;
 				}
 
 				curentRow++;
 			}
 
 			// Количество ЗЧ в упаковке
-			curentRow = RowNumberParameters;
-			while (parametersWb.Worksheets[3].Range["A" + curentRow].Value != null)
+			curentRow = RowStartParameters;
+			while (parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
-				if (items.ContainsKey(parametersWb.Worksheets[3].Range["A" + curentRow].Value))
+				if (items.ContainsKey(parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value))
 				{
 					// Если нашли, проставляем количество в упаковке
-					Item item = items[parametersWb.Worksheets[3].Range["A" + curentRow].Value];
-					item.InBundle = parametersWb.Worksheets[3].Range["E" + curentRow].Value;
+					Item item = items[parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value];
+					item.InBundle = parametersWb.Worksheets[3].Range[ColStartParamsParameters + curentRow].Value;
 				}
 
 				curentRow++;

@@ -78,9 +78,10 @@ namespace ReDistr
 							{
 								StockFrom = possibleDonor,
 								StockTo = stock,
-								Count = need,
+								Count = possibleDonor.FreeStock,
 								Item = item.Value
 							};
+							need -= possibleDonor.FreeStock;
 							transfer.Apply();
 							transfers.Add(transfer);
 						}
@@ -107,7 +108,13 @@ namespace ReDistr
 					// Определяем количество для обеспечения мин остатка, если потребности нет, переходим к следующему складу
 					var need = stock.GetNeedToMinStock(item.Value);
 					var possibleDonors = item.Value.GetListOfPossibleDonors();
-					if (need == 0)
+					// Определяем, достаточно ли общего свободного остатка для обеспечения потребности, если нет, уменьшаем потребность ориентируясь на кратность
+					if (need > item.Value.GetSumFreeStocks())
+					{
+						need = Math.Floor((stock.Count + item.Value.GetSumFreeStocks()) / item.Value.InKit) * item.Value.InKit - stock.Count;
+					}
+					// Если потребность нулевая или отрицательная, переходим к следующему складу
+					if (need <= 0)
 					{
 						continue;
 					}
@@ -116,12 +123,7 @@ namespace ReDistr
 					{
 						break;
 					}
-					// Определяем, достаточно ли общего свободного остатка для обеспечения потребности, если нет, переходим к следующему складу
-					// TODO Возможно перемещение все же нужно делать если свободного остатка не хватает на покрытие всей потребности, просто нужно уменьшать количество в перемещении до кратности
-					if (need > item.Value.GetSumFreeStocks())
-					{
-						continue;
-					}
+
 					// Создаем необходимые перемещения от доноров
 					foreach (var possibleDonor in possibleDonors)
 					{
@@ -147,9 +149,11 @@ namespace ReDistr
 							{
 								StockFrom = possibleDonor,
 								StockTo = stock,
-								Count = need,
+								Count = possibleDonor.FreeStock,
+								//Count = need,
 								Item = item.Value
 							};
+							need -= possibleDonor.FreeStock;
 							transfer.Apply();
 							transfers.Add(transfer);
 						}
@@ -174,6 +178,7 @@ namespace ReDistr
 				foreach (var stock in item.Value.Stocks)
 				{
 					// Определяем количество для перемещения, если перемещать ничего не нужно переходим к следующему складу
+					// TODO Проверить 65 строку Х000038655, перемещает хотя не нужно
 					var need = stock.GetNeedToSafety(item.Value);
 					// TODO Нужно оставить только уникальные перемещения по донору
 					var existTransfers = transfers.Where(transfer => transfer.Item == item.Value && transfer.StockTo == stock).Distinct().ToList();
@@ -219,9 +224,10 @@ namespace ReDistr
 							{
 								StockFrom = possibleDonor,
 								StockTo = stock,
-								Count = need,
+								Count = possibleDonor.FreeStock,
 								Item = item.Value
 							};
+							need -= possibleDonor.FreeStock;
 							transfer.Apply();
 							transfers.Add(transfer);
 						}
