@@ -43,7 +43,7 @@ namespace ReDistr
 		private const string ColId1CStocks = "W"; // Код товара
 		private const string ColStorageCategoryStocks = "X"; // Категроия хранения
 		private const string ColNameStocks = "R"; // Название ЗЧ
-		private const string ColManufacturerStocks = "AA"; // Производитель
+		private const string ColManufacturerStocks = "AB"; // Производитель
 		// Книга с продажами
 		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
 		private const string RngDateSealings = "B3"; // Дата отчета
@@ -184,15 +184,15 @@ namespace ReDistr
 				// Если такой склад уже есть, работаем с ним
 				if (stock != null)
 				{
-					stock.Count += itemCount;
-					stock.InReserve += reserveCount;
+					stock.SetOriginCount(itemCount);
+					stock.InReserve = reserveCount;
 				}
 				curentRow++;
 			}
 
 			stocksWb.Close();
-			return items;
 
+			return items;
 		}
 
 		// Получаем данные по продажам

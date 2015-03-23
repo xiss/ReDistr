@@ -36,5 +36,20 @@ namespace ReDistr
 
         #endregion
 
+		// Выводит на лист перемещения из списка перемещений сгруппированные по направлениям
+	    public void FillList(List<Transfer> transfers)
+	    {
+			// Список возможных направлений перемещений
+			var UnitedTransfers = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks()).ToList();
+
+			foreach (var unitedTransfer in UnitedTransfers)
+			{
+				// Выбираем перемещения сгруппированные по направлению и объедененные по ЗЧ
+				var transferList = transfers.Where(
+					transfer => transfer.StockFrom == unitedTransfer.StockFrom && transfer.StockTo == unitedTransfer.StockTo)
+					.GroupBy(transfer => transfer.Item).ToList();
+
+			}
+	    }
     }
 }

@@ -13,14 +13,14 @@ namespace ReDistr
 		// Название склада
 		public string Name;
 
-		// Остаток  до выполнения перемещений
+		// Текущий остаток
 		public double Count;
 
 		// Количество продаж из отчета
 		public double SelingsCount;
 
-		// Остаток после выполнения перемещений
-		public uint InStockBefore;
+		// Остаток до работы скрипта
+		public double CountOrigin;
 
 		// Минимальный остаток, кратен inKit
 		public double MinStock;
@@ -92,7 +92,7 @@ namespace ReDistr
 		{
 			// Получаем общее колличество ЗЧ без учета резервов
 			var sumStocks = item.GetSumStocks();
-			var need = Math.Ceiling(Math.Abs(sumStocks * SailPersent) / item.InKit) * item.InKit - Count;
+			var need = Math.Floor(Math.Abs(sumStocks * SailPersent) / item.InKit) * item.InKit - Count;
 
 			// Итоговое количество не должно быть больше максимального остатка
 			if ((need + Count) > MaxStock)
@@ -201,6 +201,13 @@ namespace ReDistr
 			}
 
 			FreeStock = freeStock;
+		}
+
+		// Устанавливает начальные остатки
+		public void SetOriginCount(double count)
+		{
+			Count = count;
+			CountOrigin = count;
 		}
 	}
 }

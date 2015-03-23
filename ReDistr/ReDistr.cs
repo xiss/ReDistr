@@ -178,7 +178,6 @@ namespace ReDistr
 				foreach (var stock in item.Value.Stocks)
 				{
 					// Определяем количество для перемещения, если перемещать ничего не нужно переходим к следующему складу
-					// TODO Проверить 65 строку Х000038655, перемещает хотя не нужно
 					var need = stock.GetNeedToSafety(item.Value);
 					// TODO Нужно оставить только уникальные перемещения по донору
 					var existTransfers = transfers.Where(transfer => transfer.Item == item.Value && transfer.StockTo == stock).Distinct().ToList();
@@ -194,10 +193,9 @@ namespace ReDistr
 						break;
 					}
 					// Определяем, достаточно ли общего свободного остатка для обеспечения потребности, если нет, переходим к следующему складу
-					// TODO Возможно перемещение все же нужно делать если свободного остатка не хватает на покрытие всей потребности, просто нужно уменьшать количество в перемещении до кратности
 					if (need > item.Value.GetSumFreeStocks(existTransfers))
 					{
-						continue;
+						need = Math.Floor((stock.Count + item.Value.GetSumFreeStocks(existTransfers)) / item.Value.InKit) * item.Value.InKit - stock.Count;
 					}
 					// Создаем необходимые перемещения от доноров
 					foreach (var possibleDonor in possibleDonors)
@@ -238,11 +236,6 @@ namespace ReDistr
 			return transfers;
 		}
 
-		// Проверка на перемещения
-		public static bool Check()
-		{
-			return true;
-		}
 		// Дает список возможных перемещений
 		public static List<Transfer> GetPossibleTransfers(IEnumerable<Stock> stocks)
 		{
