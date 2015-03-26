@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DONOTSHOWMSGBOX
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -108,12 +110,15 @@ namespace ReDistr
 			// Если дата снятия отчета не равна сегодняшней, предлагаем не продолжать
 			if (Config.StockDate != new DateTime().Date)
 			{
+#if(!DONOTSHOWMSGBOX)
 				var result = MessageBox.Show(MessegeBoxQuestion, MessegeBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 				if (result == DialogResult.No)
 				{
+
 					_continue = false;
 					return null;
 				}
+#endif
 			}
 
 			var curentRow = RowStartStocks;
@@ -344,6 +349,7 @@ namespace ReDistr
 			// Создаем список ЗЧ и указываем тукущие остатки
 			bool _continue;
 			var items = GetItems(out _continue);
+
 			// Если отчет не подходит, выходим
 			if (!_continue) return null;
 

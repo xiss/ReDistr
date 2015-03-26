@@ -14,7 +14,7 @@ namespace ReDistr
 		// Куда перемещение
 		public Stock StockTo;
 
-		// Колличество ЗЧ
+		// Количество ЗЧ
 		public double Count;
 
 		// ЗЧ

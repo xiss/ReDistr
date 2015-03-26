@@ -73,8 +73,6 @@ namespace ReDistr
 			resultRange[0, curentColumn += stockCount] = "SailPersent";
 			resultRange[0, curentColumn += stockCount] = "MinStock";
 			resultRange[0, curentColumn += stockCount] = "MaxStock";
-			//resultRange[0, curentColumn += stockCount] = "FreeStock";
-			//resultRange[0, curentColumn += stockCount] = "Need";
 			resultRange[0, curentColumn += stockCount] = "Priority";
 			resultRange[0, curentColumn += stockCount] = "Exclude";
 
@@ -111,8 +109,6 @@ namespace ReDistr
 					resultRange[curentRow, curentColumn += stockCount] = stock.SailPersent;
 					resultRange[curentRow, curentColumn += stockCount] = stock.MinStock;
 					resultRange[curentRow, curentColumn += stockCount] = stock.MaxStock;
-					//resultRange[curentRow, curentColumn += stockCount] = stock.FreeStock;
-					//resultRange[curentRow, curentColumn += stockCount] = stock.Need;
 					resultRange[curentRow, curentColumn += stockCount] = stock.Priority;
 					resultRange[curentRow, curentColumn += stockCount] = stock.ExcludeFromMoovings;
 
@@ -125,7 +121,6 @@ namespace ReDistr
 
 			// Выводим результат на лист
 			Range[Cells[1, 1], Cells[items.Count + 2, 7 + StockParametrsCount * Config.StockCount]].Value2 = resultRange;
-			//return resultRange;
 		}
 
 		// Выводит информацию о перемещениях на лист

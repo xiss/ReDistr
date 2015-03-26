@@ -62,6 +62,9 @@ namespace ReDistr
 			// Выводим перемещения на лист для тестов
 			Globals.Test.FillListTransfers(transfers, items);
 
+			// Выводим перемещения на лист для перемещений
+			Globals.Transfers.FillList(transfers);
+
 			// Выводим параметры отчетов
 			Globals.Control.FillReportsParameters();
 
