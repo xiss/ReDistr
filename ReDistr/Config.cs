@@ -34,5 +34,19 @@ namespace ReDistr
 		// Количество складов
 	    public static uint StockCount;
 
+		// Количество возможных перемещений
+	    public static int CountPossibleTransfers;
+
+		// Список возможных перемещений
+	    public static List<Transfer> PossibleTransfers;
+
+		// Устанавливает список возможных перемещений и их количество
+	    public static void SetPossibleTransfers()
+	    {
+			PossibleTransfers = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks()).ToList();
+		    CountPossibleTransfers = PossibleTransfers.Count;
+	    }
+			
+
     }
 }

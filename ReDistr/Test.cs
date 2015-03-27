@@ -127,7 +127,7 @@ namespace ReDistr
 		public void FillListTransfers(List<Transfer> transfers, Dictionary<string, Item> items)
 		{
 			// Первая колонка после складов
-			var FirstColumn = ArrayColumnFirstFillNumber + Config.StockCount * StockParametrsCount + 1;
+			var firstColumn = ArrayColumnFirstFillNumber + Config.StockCount * StockParametrsCount + 1;
 
 			// Список возможных направлений перемещений
 			var possibleTransfers = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks()).ToList();
@@ -153,6 +153,7 @@ namespace ReDistr
 				string CurentId1C = Range["A" + curentRow].Value2;
 				for (int j = 0; j < possibleTransfers.Count; j++)
 				{
+					// Получаем список перемещенн
 					var query = from transfer in transfers
 								where transfer.StockFrom.Name == possibleTransfers[j].StockFrom.Name &&
 							  transfer.StockTo.Name == possibleTransfers[j].StockTo.Name &&
@@ -166,7 +167,7 @@ namespace ReDistr
 			}
 
 			// Выводим результат на лист
-			Range[Cells[ArrayRowFirstFillNumber, FirstColumn], Cells[ArrayRowFirstFillNumber + items.Count, FirstColumn + possibleTransfers.Count - 1]].Value2 = resultRange;
+			Range[Cells[ArrayRowFirstFillNumber, firstColumn], Cells[ArrayRowFirstFillNumber + items.Count, firstColumn + possibleTransfers.Count - 1]].Value2 = resultRange;
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -37,15 +38,17 @@ namespace ReDistr
 		#endregion
 
 		// Определяем настройки
-		private const int StartRow = 2;
+		private const int StartRow = 3;
 		private const int ItemParametrsCount = 8;
 		private const string TransferNameStyle = "Заголовок 1";
 		// Выводит на лист перемещения из списка перемещений сгруппированные по направлениям
 		public void FillList(List<Transfer> transfers)
 		{
 			// Список возможных направлений перемещений
-			var unitedTransfers = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks()).ToList();
+			var unitedTransfers = Config.PossibleTransfers;
 			var curentRow = StartRow;
+			var firstIteration = true;
+			var resultRangeHeader = new dynamic[1, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers];
 
 			foreach (var unitedTransfer in unitedTransfers)
 			{
@@ -63,9 +66,9 @@ namespace ReDistr
 
 					}).ToList();
 
-				var resultRange = new dynamic[transferList.Count + 1, ItemParametrsCount + Config.StockCount * 4];
+				var resultRange = new dynamic[transferList.Count + 1, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers];
 				// Заполняем массив перемещениями
-				resultRange[0, 0] = transferList.First().StockFrom.Name + " " + transferList.First().StockTo.Name;
+				resultRange[0, 0] = transferList.First().StockFrom.Name + " => " + transferList.First().StockTo.Name;
 				var i = 1;
 				foreach (var curentTransfer in transferList)
 				{
@@ -81,21 +84,50 @@ namespace ReDistr
 					var y = ItemParametrsCount;
 					foreach (var stock in curentTransfer.Item.Stocks.OrderBy(t => t.Priority))
 					{
-						resultRange[i, y] = stock.Count;
+						// Выводим заголовек склада
+						if (firstIteration)
+						{
+							var shortName = stock.Name.Substring(0, 1);
+							resultRangeHeader[0, y] = shortName;
+							resultRangeHeader[0, y + Config.StockCount] = shortName;
+							resultRangeHeader[0, y + Config.StockCount * 2] = shortName;
+							resultRangeHeader[0, y + Config.StockCount * 3] = shortName;
+						}
+						resultRange[i, y] = stock.CountOrigin;
 						resultRange[i, y + Config.StockCount] = stock.SelingsCount;
 						resultRange[i, y + Config.StockCount * 2] = stock.MinStock;
 						resultRange[i, y + Config.StockCount * 3] = stock.MaxStock;
 						y++;
 					}
+					firstIteration = false;
+					// Добавляем информацию о перемещениях
+					y += (int)Config.StockCount * 3;
+					foreach (var possibleTransfer in unitedTransfers)
+					{
+						// Получаем список перемещений с данным направлением и запчастью
+						var query = from transfer1 in transfers
+									where transfer1.StockFrom.Name == possibleTransfer.StockFrom.Name &&
+								  transfer1.StockTo.Name == possibleTransfer.StockTo.Name &&
+								  transfer1.Item.Id1C == curentTransfer.Item.Id1C
+									select transfer1;
+
+						resultRange[i, y] = query.Sum(transfer1 => transfer1.Count);
+						resultRangeHeader[0, y] = possibleTransfer.StockFrom.Name.Substring(0, 1) +
+						                          possibleTransfer.StockTo.Name.Substring(0, 1);
+						y++;
+					}
 					i++;
 				}
+
 				// Выводим перемещение на лист
-				Range[Cells[curentRow, 1], Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 4]].Value2 = resultRange;
+				Range[Cells[curentRow, 1], Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Value2 = resultRange;
 				// Применяем стиль к заголовку
-				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4]].Style = TransferNameStyle;
+				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Style = TransferNameStyle;
 
 				curentRow += transferList.Count + 1;
 			}
+			// Выводим заголовки
+			Range[Cells[2, 1], Cells[2, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Value2 = resultRangeHeader;
 		}
 	}
 }

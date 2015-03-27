@@ -91,6 +91,8 @@ namespace ReDistr
 				count++;
 			}
 			Config.StockCount = count;
+			Config.SetPossibleTransfers();
+			
 		}
 
 		// Получаем остатки по складам
