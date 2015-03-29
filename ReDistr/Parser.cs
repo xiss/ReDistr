@@ -1,6 +1,4 @@
-﻿#define DONOTSHOWMSGBOX
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -17,6 +15,7 @@ namespace ReDistr
 {
 	class Parser
 	{
+		// TODO Убрать контрол, он похоже не нужен
 		private readonly Control _control;
 
 		// Конструткор
@@ -30,6 +29,10 @@ namespace ReDistr
 		private const string RngNameOfStocksWb = "B13";
 		private const string RngPuthToThisWb = "B15";
 		private const string RngNameOfParamWb = "B16";
+		private const string RngNameOfShowReport = "B17";
+		private const string RngNameOfMinSoldKits = "B18";
+		private const string RngNameOfOnlyPopovaDonor = "B19";
+		private const string RngNameFolderTransfer = "B20";
 		private const uint RowStartStockCfg = 4; // Строка с которой считываются склады в настройках
 		private const string ColStockNameCfg = "A";
 		private const string ColStockMinCfg = "B";
@@ -72,6 +75,10 @@ namespace ReDistr
 			Config.NameOfStocksWb = _control.Range[RngNameOfStocksWb].Value2;
 			Config.PuthToThisWb = _control.Range[RngPuthToThisWb].Value2;
 			Config.NameOfParametersWb = _control.Range[RngNameOfParamWb].Value2;
+			Config.FolderTransfers = _control.Range[RngNameFolderTransfer].Value2 + "\\";
+			Config.ShowReport = _control.Range[RngNameOfShowReport].Value2;
+			Config.OnlyPopovaDonor = _control.Range[RngNameOfOnlyPopovaDonor].Value2;
+			Config.MinSoldKits = (double)_control.Range[RngNameOfMinSoldKits].Value2;
 
 			// Настраиваем фабрику
 			var curentRow = RowStartStockCfg;
@@ -112,7 +119,7 @@ namespace ReDistr
 			// Если дата снятия отчета не равна сегодняшней, предлагаем не продолжать
 			if (Config.StockDate != new DateTime().Date)
 			{
-#if(!DONOTSHOWMSGBOX)
+#if(!DEBUG)
 				var result = MessageBox.Show(MessegeBoxQuestion, MessegeBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 				if (result == DialogResult.No)
 				{

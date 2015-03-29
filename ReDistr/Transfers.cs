@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Mime;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -41,6 +43,8 @@ namespace ReDistr
 		private const int StartRow = 3;
 		private const int ItemParametrsCount = 8;
 		private const string TransferNameStyle = "Заголовок 1";
+		private const string ColId1C = "A";
+		private const string ColCount = "H";
 		// Выводит на лист перемещения из списка перемещений сгруппированные по направлениям
 		public void FillList(List<Transfer> transfers)
 		{
@@ -68,7 +72,7 @@ namespace ReDistr
 
 				var resultRange = new dynamic[transferList.Count + 1, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers];
 				// Заполняем массив перемещениями
-				resultRange[0, 0] = transferList.First().StockFrom.Name + " => " + transferList.First().StockTo.Name;
+				resultRange[0, 0] = transferList.First().StockFrom.Name + " - " + transferList.First().StockTo.Name;
 				var i = 1;
 				foreach (var curentTransfer in transferList)
 				{
@@ -113,7 +117,7 @@ namespace ReDistr
 
 						resultRange[i, y] = query.Sum(transfer1 => transfer1.Count);
 						resultRangeHeader[0, y] = possibleTransfer.StockFrom.Name.Substring(0, 1) +
-						                          possibleTransfer.StockTo.Name.Substring(0, 1);
+												  possibleTransfer.StockTo.Name.Substring(0, 1);
 						y++;
 					}
 					i++;
@@ -128,6 +132,50 @@ namespace ReDistr
 			}
 			// Выводим заголовки
 			Range[Cells[2, 1], Cells[2, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Value2 = resultRangeHeader;
+		}
+
+		// Фурмирует массив содержащий код и количество ЗЧ
+		public void MakeImportTransfers()
+		{
+			var curentRow = StartRow;
+			var transferCount = 1;
+			var bookName = "";
+			Excel.Range selectionRange = null;
+
+			do
+			{
+				// Если количества в строке нет, значит это название перемещения, создаем новый список
+				if (Range[ColCount + curentRow].Value2 == null)
+				{
+					//TODO взять адрес из Excel, переделать везде
+					bookName = transferCount + " " + DateTime.Now.Month + "." + DateTime.Now.Day + " " + Range[ColId1C + curentRow].Value2 + ".xls";
+					transferCount++;
+					curentRow++;
+				}
+
+				// Если это начало списка
+				if (selectionRange == null)
+				{
+					selectionRange = Application.Union(Range[ColId1C + curentRow], Range[ColCount + curentRow]);
+				}
+				else
+				{
+					selectionRange = Application.Union(selectionRange, Range[ColId1C + curentRow], Range[ColCount + curentRow]);
+				}
+				curentRow++;
+
+				// Если начинается новый список, создаем книгу
+				if (Range[ColCount + curentRow].Value2 == null)
+				{
+					// Если список не пустой, создаем книгу
+					if (selectionRange != null)
+					{
+						ReDistr.MakeImpot1CBook(selectionRange, bookName, Config.FolderTransfers, Application);
+						selectionRange = null;
+					}
+				}
+			}
+			while (Range[ColId1C + curentRow].Value2 != null);
 		}
 	}
 }

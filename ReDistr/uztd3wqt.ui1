@@ -260,25 +260,17 @@ namespace ReDistr
 		}
 
 		// Создает книгу с заданным именем
-		public static void MakeImpot1CBook(Range inputRange, string bookName, string folder, Application excel)
+		public static void MakeImpot1CBook(List<string> id1CList, List<int> countList, string bookName, Application excel)
 		{
 			// Создаем новую книгу
 			var impot1CBook = excel.Application.Workbooks.Add();
 			// Вставляем на первый лист необходимые данные
-			inputRange.Copy(impot1CBook.Worksheets[1].Range["A2"]);
+			impot1CBook.Worksheets[1].Range["A" + id1CList.Count].Value2 = id1CList.ToArray();
+			impot1CBook.Worksheets[1].Range["B" + countList.Count].Value2 = countList.ToArray();
 			// Сохраняем книгу
-			excel.DisplayAlerts = false;
-			impot1CBook.SaveAs(Config.PuthToThisWb + Config.FolderTransfers + bookName, XlFileFormat.xlWorkbookNormal);
+			impot1CBook.SaveAs(bookName);
 			impot1CBook.Close();
-			excel.DisplayAlerts = true;
-		}
 
-		// Изменяет состояние Application
-		// TODO разобраться с этой функцией
-//		public static void Starting(bool DisplayAlerts = true, bool ScreenUpdating = true, bool DisplayPageBreaks = true)
-//		{
-//			Application.DisplayAlerts = DisplayAlerts;
-//
-//		}
+		}
 	}
 }

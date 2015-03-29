@@ -16,6 +16,11 @@ namespace ReDistr
 	{
 		private void Лист1_Startup(object sender, System.EventArgs e)
 		{
+#warning Удалить потом, для отладки
+#if(DEBUG)
+			buttonGetMoving_Click(new object(), new EventArgs());
+			buttonMakeTransfers_Click(new object(), new EventArgs());
+#endif
 		}
 
 		private void Лист1_Shutdown(object sender, System.EventArgs e)
@@ -31,6 +36,7 @@ namespace ReDistr
 		private void InternalStartup()
 		{
 			this.buttonGetMoving.Click += new System.EventHandler(this.buttonGetMoving_Click);
+			this.buttonMakeTransfers.Click += new System.EventHandler(this.buttonMakeTransfers_Click);
 			this.Startup += new System.EventHandler(this.Лист1_Startup);
 			this.Shutdown += new System.EventHandler(this.Лист1_Shutdown);
 
@@ -59,8 +65,11 @@ namespace ReDistr
 			// для обеспечения необходимого запаса, перемещения создаются для уже созданных направлений
 			transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
 
-			// Выводим перемещения на лист для тестов
-			Globals.Test.FillListTransfers(transfers, items);
+			// Выводим отчет для тестов если необходимо
+			if (Config.ShowReport)
+			{
+				Globals.Test.FillListTransfers(transfers, items);
+			}
 
 			// Выводим перемещения на лист для перемещений
 			Globals.Transfers.FillList(transfers);
@@ -68,8 +77,8 @@ namespace ReDistr
 			// Выводим параметры отчетов
 			Globals.Control.FillReportsParameters();
 
-			// Создаем список возможных перемещений
-			// var movings = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks());
+			// Выбираем лист с перемещениями
+			Globals.Transfers.Select();
 		}
 
 		// Выводит параметры отчетов на страницу управления
@@ -83,6 +92,14 @@ namespace ReDistr
 			resultRange[3, 0] = Config.StockDate;
 
 			Range["G3:G6"].Value = resultRange;
+		}
+
+		private void buttonMakeTransfers_Click(object sender, EventArgs e)
+		{
+			// Архивируем предыдущие перемещения
+			// TODO Сделать архивацию
+			
+			Globals.Transfers.MakeImportTransfers();
 		}
 	}
 }

@@ -178,6 +178,9 @@
       <DependentUpon>Transfers.cs</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Перемещения\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -199,9 +202,9 @@
         <ProjectProperties HostName="ReDistr.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files (x86)\Microsoft Office\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]ReDistr.xlsx&quot;" />
         <Host Name="Excel Document" Path=".\ReDistr.xlsx" GeneratedCodeNamespace="ReDistr">
           <HostItem Name="Лист1" Code="Control.cs" CanonicalName="Лист1" DisplayName="Управление" Blueprint="Control.Designer.xml" GeneratedCode="Control.Designer.cs" />
-          <HostItem Name="Лист3" Code="Transfers.cs" CanonicalName="Лист3" DisplayName="Перемещения" Blueprint="Transfers.Designer.xml" GeneratedCode="Transfers.Designer.cs" />
           <HostItem Name="Лист2" Code="Test.cs" CanonicalName="Лист2" DisplayName="Тест" Blueprint="Test.Designer.xml" GeneratedCode="Test.Designer.cs" />
           <HostItem Name="ThisWorkbook" Code="ThisWorkbook.cs" CanonicalName="ThisWorkbook" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.cs" />
+          <HostItem Name="Лист3" Code="Transfers.cs" CanonicalName="Лист3" DisplayName="Перемещения" Blueprint="Transfers.Designer.xml" GeneratedCode="Transfers.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>
