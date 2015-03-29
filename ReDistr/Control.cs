@@ -97,8 +97,9 @@ namespace ReDistr
 		private void buttonMakeTransfers_Click(object sender, EventArgs e)
 		{
 			// Архивируем предыдущие перемещения
-			// TODO Сделать архивацию
+			ReDistr.ArchiveTransfers();
 			
+			// Создаем книги для импорта в Excel
 			Globals.Transfers.MakeImportTransfers();
 		}
 	}

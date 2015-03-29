@@ -148,7 +148,7 @@ namespace ReDistr
 				if (Range[ColCount + curentRow].Value2 == null)
 				{
 					//TODO взять адрес из Excel, переделать везде
-					bookName = transferCount + " " + DateTime.Now.Month + "." + DateTime.Now.Day + " " + Range[ColId1C + curentRow].Value2 + ".xls";
+					bookName = DateTime.Now.ToShortDateString() + " #" + transferCount + " " + Range[ColId1C + curentRow].Value2 + ".xls";
 					transferCount++;
 					curentRow++;
 				}

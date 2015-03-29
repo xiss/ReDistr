@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Office.Interop.Excel;
@@ -275,10 +276,30 @@ namespace ReDistr
 
 		// Изменяет состояние Application
 		// TODO разобраться с этой функцией
-//		public static void Starting(bool DisplayAlerts = true, bool ScreenUpdating = true, bool DisplayPageBreaks = true)
-//		{
-//			Application.DisplayAlerts = DisplayAlerts;
-//
-//		}
+		//		public static void Starting(bool DisplayAlerts = true, bool ScreenUpdating = true, bool DisplayPageBreaks = true)
+		//		{
+		//			Application.DisplayAlerts = DisplayAlerts;
+		//
+		//		}
+
+		// Архивирует перемещения
+		public static void ArchiveTransfers()
+		{
+			// Считываем все файлы в папке с перемещениями
+			var arrayOfTransferBooks = Directory.GetFiles(Config.PuthToThisWb + Config.FolderTransfers);
+			// Перемещаем все файлы в архив
+			foreach (var transferBook in arrayOfTransferBooks)
+			{
+				// Определяем новый путь
+				var destFileName = Config.PuthToThisWb + Config.FolderArchiveTransfers + Path.GetFileName(transferBook);
+				// Если такой файл есть в конечной папке, удаляем его
+				if (File.Exists(destFileName))
+				{
+					File.Delete(destFileName);
+				}
+				File.Move(transferBook, destFileName);
+			}
+
+		}
 	}
 }

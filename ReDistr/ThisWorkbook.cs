@@ -12,35 +12,36 @@ using Office = Microsoft.Office.Core;
 
 namespace ReDistr
 {
-    public partial class ThisWorkbook
-    {
-        private void ThisWorkbook_Startup(object sender, System.EventArgs e)
-        {
-        }
+	public partial class ThisWorkbook
+	{
+		private void ThisWorkbook_Startup(object sender, System.EventArgs e)
+		{
+			//TODO Сделать здесь функцию проверяющую и если нужно создающую нужные каталоги
+		}
 
-        private void ThisWorkbook_Shutdown(object sender, System.EventArgs e)
-        {
+		private void ThisWorkbook_Shutdown(object sender, System.EventArgs e)
+		{
 			
-        }
+		}
 		
 
-        #region Код, созданный конструктором VSTO
+		#region Код, созданный конструктором VSTO
 
-        /// <summary>
-        /// Обязательный метод для поддержки конструктора - не изменяйте
-        /// содержимое этого метода с помощью редактора кода.
-        /// </summary>
-        private void InternalStartup()
-        {
-            this.Startup += new System.EventHandler(ThisWorkbook_Startup);
-            this.Shutdown += new System.EventHandler(ThisWorkbook_Shutdown);
-        }
+		/// <summary>
+		/// Обязательный метод для поддержки конструктора - не изменяйте
+		/// содержимое этого метода с помощью редактора кода.
+		/// </summary>
+		private void InternalStartup()
+		{
+			this.Startup += new System.EventHandler(ThisWorkbook_Startup);
+			this.Shutdown += new System.EventHandler(ThisWorkbook_Shutdown);
+		}
 
-        #endregion
+		#endregion
 
-    }
+	}
 
    
 
-    
+	
 }
