@@ -15,15 +15,6 @@ namespace ReDistr
 {
 	class Parser
 	{
-		// TODO Убрать контрол, он похоже не нужен
-		private readonly Control _control;
-
-		// Конструткор
-		public Parser(Control control)
-		{
-			_control = control;
-		}
-
 		// Указываем ячейки с настройками для парсера
 		private const string RngNameOfSealingsWb = "B14";
 		private const string RngNameOfStocksWb = "B13";
@@ -69,28 +60,28 @@ namespace ReDistr
 		{
 			// Выбираем лист с настройками
 			Globals.Control.Activate();
-
+			
 			// Прописываем в конфиг пути и названия файло виз настроечного листа
-			Config.NameOfSealingsWb = _control.Range[RngNameOfSealingsWb].Value2;
-			Config.NameOfStocksWb = _control.Range[RngNameOfStocksWb].Value2;
-			Config.PuthToThisWb = _control.Range[RngPuthToThisWb].Value2;
-			Config.NameOfParametersWb = _control.Range[RngNameOfParamWb].Value2;
-			Config.FolderTransfers = _control.Range[RngNameFolderTransfer].Value2 + "\\";
-			Config.ShowReport = _control.Range[RngNameOfShowReport].Value2;
-			Config.OnlyPopovaDonor = _control.Range[RngNameOfOnlyPopovaDonor].Value2;
-			Config.MinSoldKits = (double)_control.Range[RngNameOfMinSoldKits].Value2;
+			Config.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
+			Config.NameOfStocksWb = Globals.Control.Range[RngNameOfStocksWb].Value2;
+			Config.PuthToThisWb = Globals.Control.Range[RngPuthToThisWb].Value2;
+			Config.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
+			Config.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
+			Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
+			Config.OnlyPopovaDonor = Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2;
+			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
 
 			// Настраиваем фабрику
 			var curentRow = RowStartStockCfg;
 			uint priority = 1; // Приоритет, от большего к меньшему
 			uint count = 0; // Счетчик складов
 
-			while (_control.Range[ColStockNameCfg + curentRow].Value != null)
+			while (Globals.Control.Range[ColStockNameCfg + curentRow].Value != null)
 			{
-				string name = _control.Range[ColStockNameCfg + curentRow].Value.ToString();
-				var minimum = (uint)(_control.Range[ColStockMinCfg + curentRow].Value);
-				var maximum = (uint)(_control.Range[ColStockMaxCfg + curentRow].Value);
-				string signature = _control.Range[ColStockSignCfg + curentRow].Value.ToString();
+				string name = Globals.Control.Range[ColStockNameCfg + curentRow].Value.ToString();
+				var minimum = (uint)(Globals.Control.Range[ColStockMinCfg + curentRow].Value);
+				var maximum = (uint)(Globals.Control.Range[ColStockMaxCfg + curentRow].Value);
+				string signature = Globals.Control.Range[ColStockSignCfg + curentRow].Value.ToString();
 
 				SimpleStockFactory.CurrentFactory.SetStockParams(name, minimum, maximum, signature, priority);
 				curentRow++;
@@ -110,14 +101,14 @@ namespace ReDistr
 			var items = new Dictionary<string, Item>();
 
 			// Открываем  книгу с остатками
-			var stocksWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfStocksWb);
+			var stocksWb = Globals.ThisWorkbook.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfStocksWb);
 
 			// Вычисляем дату снятия отчета с остатками
 			string dateString = stocksWb.Worksheets[1].Range[RngDateStocks].Value;
 			Config.StockDate = DateTime.Parse(dateString.Substring(13, 8));
 
 			// Если дата снятия отчета не равна сегодняшней, предлагаем не продолжать
-			if (Config.StockDate != new DateTime().Date)
+			if (Config.StockDate !=  DateTime.Now.Date)
 			{
 #if(!DEBUG)
 				var result = MessageBox.Show(MessegeBoxQuestion, MessegeBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -125,6 +116,8 @@ namespace ReDistr
 				{
 
 					_continue = false;
+					// Закрываем открытую книгу
+					stocksWb.Close();
 					return null;
 				}
 #endif
@@ -214,7 +207,7 @@ namespace ReDistr
 		{
 
 			// Открываем  книгу с продажами
-			var sellingsWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfSealingsWb);
+			var sellingsWb = Globals.ThisWorkbook.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfSealingsWb);
 
 			// Вычисляем начальную и конечную дату периода продаж
 			string dateString = sellingsWb.Worksheets[1].Range[RngDateSealings].Value;
@@ -282,7 +275,7 @@ namespace ReDistr
 		private void GetAdditionalParameters(Dictionary<string, Item> items)
 		{
 			// Открываем  книгу с параметрами
-			var parametersWb = _control.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfParametersWb);
+			var parametersWb = Globals.ThisWorkbook.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfParametersWb);
 
 			// Исключения из перемещений
 			// Составляем список складов с листа исключений

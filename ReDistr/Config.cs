@@ -32,7 +32,7 @@ namespace ReDistr
 		public static string FolderTransfers;
 
 		// Папка с архивом перемещений
-		// TODO сделать настройку
+		// TODO /3 сделать настройку
 		public static string FolderArchiveTransfers = "Перемещения\\Архив\\";
 
 		// Имя книги с параметрами
@@ -48,15 +48,15 @@ namespace ReDistr
 		public static List<Transfer> PossibleTransfers;
 
 		// Показывать отчет со всеми ЗЧ
-		// TODO учитывать
+		// TODO /3 учитывать
 		public static bool ShowReport = true;
 
 		// Минимальное количество проданных комплектов для расчет мин остатка
-		// TODO учитывать
+		// TODO /5 учитывать
 		public static double MinSoldKits = 0;
 
 		// Делать перемещение только с Попова
-		// TODO учитывать
+		// TODO /8 учитывать
 		public static bool OnlyPopovaDonor = false;
 
 		// Устанавливает список возможных перемещений и их количество

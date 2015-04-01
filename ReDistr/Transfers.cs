@@ -43,11 +43,19 @@ namespace ReDistr
 		private const int StartRow = 3;
 		private const int ItemParametrsCount = 8;
 		private const string TransferNameStyle = "Заголовок 1";
+		private const string NormalNameStyle = "Обычный";
+		private const string CountNameStyle = "Хороший";
 		private const string ColId1C = "A";
 		private const string ColCount = "H";
+
 		// Выводит на лист перемещения из списка перемещений сгруппированные по направлениям
 		public void FillList(List<Transfer> transfers)
 		{
+			// Очищаем лист
+			Range["A3:Z1500"].ClearContents();
+			Range["A3:Z1500"].Style = NormalNameStyle;
+			Range["A3:E1500"].NumberFormat = "@";
+
 			// Список возможных направлений перемещений
 			var unitedTransfers = Config.PossibleTransfers;
 			var curentRow = StartRow;
@@ -69,6 +77,11 @@ namespace ReDistr
 						Count = tr.Sum(trs => trs.Count)
 
 					}).ToList();
+				// Если перемещений с данным направлением нет, переходим к следующей итерации
+				if (transferList.Count == 0)
+				{
+					continue;
+				}
 
 				var resultRange = new dynamic[transferList.Count + 1, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers];
 				// Заполняем массив перемещениями
@@ -127,6 +140,7 @@ namespace ReDistr
 				Range[Cells[curentRow, 1], Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Value2 = resultRange;
 				// Применяем стиль к заголовку
 				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Style = TransferNameStyle;
+				Range[Cells[curentRow, ItemParametrsCount], Cells[curentRow + transferList.Count, ItemParametrsCount]].Style = CountNameStyle;
 
 				curentRow += transferList.Count + 1;
 			}
@@ -147,7 +161,7 @@ namespace ReDistr
 				// Если количества в строке нет, значит это название перемещения, создаем новый список
 				if (Range[ColCount + curentRow].Value2 == null)
 				{
-					//TODO взять адрес из Excel, переделать везде
+					//TODO /5 взять адрес из Excel, переделать везде
 					bookName = DateTime.Now.ToShortDateString() + " #" + transferCount + " " + Range[ColId1C + curentRow].Value2 + ".xls";
 					transferCount++;
 					curentRow++;
@@ -170,7 +184,7 @@ namespace ReDistr
 					// Если список не пустой, создаем книгу
 					if (selectionRange != null)
 					{
-						ReDistr.MakeImpot1CBook(selectionRange, bookName, Config.FolderTransfers, Application);
+						ReDistr.MakeImpot1CBook(selectionRange, bookName, Config.FolderTransfers);
 						selectionRange = null;
 					}
 				}

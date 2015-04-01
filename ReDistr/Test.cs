@@ -82,7 +82,7 @@ namespace ReDistr
 			{
 				foreach (var stock in items.First().Value.Stocks)
 				{
-					//TODO добавить короткое имя для склада
+					//TODO /2 добавить короткое имя для склада
 					resultRange[1, curentColumn] = stock.Name.Substring(0, 1);
 					curentColumn++;
 				}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -47,8 +48,14 @@ namespace ReDistr
 		private void buttonGetMoving_Click(object sender, EventArgs e)
 		{
 			// Парсим данные из файлов
-			var parser = new Parser(this);
+			var parser = new Parser();
 			var items = parser.Parse();
+
+			// Если парсинг не удался, выходим
+			if (items == null)
+			{
+				return;
+			}
 
 			// Подготавливаем данные
 			ReDistr.PrepareData(items);
@@ -96,11 +103,16 @@ namespace ReDistr
 
 		private void buttonMakeTransfers_Click(object sender, EventArgs e)
 		{
+			// TODO test
+			//Application.DisplayAlerts = false;
+			//Debug.WriteLine(Application.GetHashCode());
+			//Debug.WriteLine(Application.DisplayAlerts); 
 			// Архивируем предыдущие перемещения
 			ReDistr.ArchiveTransfers();
 			
 			// Создаем книги для импорта в Excel
 			Globals.Transfers.MakeImportTransfers();
+			//Application.DisplayAlerts = true;
 		}
 	}
 }

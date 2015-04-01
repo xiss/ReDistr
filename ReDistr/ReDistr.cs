@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
@@ -181,7 +182,7 @@ namespace ReDistr
 				{
 					// Определяем количество для перемещения, если перемещать ничего не нужно переходим к следующему складу
 					var need = stock.GetNeedToSafety(item.Value);
-					// TODO Нужно оставить только уникальные перемещения по донору
+					// TODO /10 Нужно оставить только уникальные перемещения по донору
 					var existTransfers = transfers.Where(transfer => transfer.Item == item.Value && transfer.StockTo == stock).Distinct().ToList();
 
 					var possibleDonors = item.Value.GetListOfPossibleDonors(existTransfers);
@@ -261,26 +262,42 @@ namespace ReDistr
 		}
 
 		// Создает книгу с заданным именем
-		public static void MakeImpot1CBook(Range inputRange, string bookName, string folder, Application excel)
+		public static void MakeImpot1CBook(Range inputRange, string bookName, string folder)
 		{
 			// Создаем новую книгу
-			var impot1CBook = excel.Application.Workbooks.Add();
+			var impot1CBook = Globals.ThisWorkbook.Application.Workbooks.Add();
 			// Вставляем на первый лист необходимые данные
 			inputRange.Copy(impot1CBook.Worksheets[1].Range["A2"]);
+			// Отключаем предупреждение и обновление экрана
+			Starting(false, false);
 			// Сохраняем книгу
-			excel.DisplayAlerts = false;
 			impot1CBook.SaveAs(Config.PuthToThisWb + Config.FolderTransfers + bookName, XlFileFormat.xlWorkbookNormal);
 			impot1CBook.Close();
-			excel.DisplayAlerts = true;
+
+			Ending();
 		}
 
 		// Изменяет состояние Application
-		// TODO разобраться с этой функцией
-		//		public static void Starting(bool DisplayAlerts = true, bool ScreenUpdating = true, bool DisplayPageBreaks = true)
-		//		{
-		//			Application.DisplayAlerts = DisplayAlerts;
-		//
-		//		}
+		public static void Starting(bool displayAlerts = true, bool screenUpdating = true)
+		{
+			// Не показывать предупреждения
+			if (!displayAlerts)
+			{
+				Globals.ThisWorkbook.Application.DisplayAlerts = false;
+			}
+			// Не обновлять экран
+			if (!screenUpdating)
+			{
+				Globals.ThisWorkbook.Application.ScreenUpdating = false;
+			}
+		}
+
+		// Изменяет состояние Application
+		public static void Ending()
+		{
+			Globals.ThisWorkbook.Application.DisplayAlerts = true;
+			Globals.ThisWorkbook.Application.ScreenUpdating = true;
+		}
 
 		// Архивирует перемещения
 		public static void ArchiveTransfers()
