@@ -68,7 +68,7 @@ namespace ReDistr
 			Config.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
 			Config.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
 			Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
-			Config.OnlyPopovaDonor = Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2;
+			Config.OneDonorSignature = Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2;
 			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
 
 			// Настраиваем фабрику

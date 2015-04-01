@@ -55,9 +55,8 @@ namespace ReDistr
 		// TODO /5 учитывать
 		public static double MinSoldKits = 0;
 
-		// Делать перемещение только с Попова
-		// TODO /8 учитывать
-		public static bool OnlyPopovaDonor = false;
+		// Если параметр указан, то перемещения делать только с этого склада
+		public static string OneDonorSignature = null;
 
 		// Устанавливает список возможных перемещений и их количество
 		public static void SetPossibleTransfers()

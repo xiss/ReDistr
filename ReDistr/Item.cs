@@ -36,21 +36,36 @@ namespace ReDistr
 		// Возвращает список всех возможных доноров, отсортированный по убыванию. Если задан список перемещений, то доноры выдаются из этого списка
 		public List<Stock> GetListOfPossibleDonors(List<Transfer> existTransfers = null)
 		{
+			var listOfPossibleDonors = new List<Stock>();
 			// Если список не задан, выдаем всех возможных доноров
 			if (existTransfers == null)
 			{
 				// Если свободный осток отличен от нуля, то склад донор
-				return Stocks.Where(stock => stock.FreeStock > 0).OrderByDescending(stock => stock.FreeStock).ToList();
+				listOfPossibleDonors = Stocks.Where(stock => stock.FreeStock > 0).OrderByDescending(stock => stock.FreeStock).ToList();
 			}
 			// Если список задан выдаем доноров из него
-			var listOfPossibleDonors = new List<Stock>();
-			foreach (var stock in Stocks)
+			else
 			{
-				foreach (var transfer in existTransfers)
+				foreach (var stock in Stocks)
 				{
-					if (stock == transfer.StockFrom)
+					foreach (var transfer in existTransfers)
 					{
-						listOfPossibleDonors.Add(stock);
+						if (stock == transfer.StockFrom)
+						{
+							listOfPossibleDonors.Add(stock);
+						}
+					}
+				}
+			}
+			// Если задана дериктива одного донора, то оставляем только его в списке
+			if (Config.OneDonorSignature != null)
+			{
+				for (var i = 0; i < listOfPossibleDonors.Count; i++)
+				{
+					if (!listOfPossibleDonors[i].Signature.ToLower().Contains(Config.OneDonorSignature.ToLower()))
+					{
+						listOfPossibleDonors.Remove(listOfPossibleDonors[i]);
+						i--;
 					}
 				}
 			}
