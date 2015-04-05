@@ -25,14 +25,10 @@ namespace ReDistr
 		// Имя книги с продажами
 		public static string NameOfSealingsWb;
 
-		// Полный путь к текущей книге
-		public static string PuthToThisWb;
-
 		// Папка с перемещениями
-		public static string FolderTransfers;
+		public static string FolderTransfers = "Перемещения\\";
 
 		// Папка с архивом перемещений
-		// TODO /3 сделать настройку
 		public static string FolderArchiveTransfers = "Перемещения\\Архив\\";
 
 		// Имя книги с параметрами
@@ -48,7 +44,7 @@ namespace ReDistr
 		public static List<Transfer> PossibleTransfers;
 
 		// Показывать отчет со всеми ЗЧ
-		// TODO /3 учитывать
+		// TODO /1 учитывать
 		public static bool ShowReport = true;
 
 		// Минимальное количество проданных комплектов для расчет мин остатка
@@ -57,6 +53,9 @@ namespace ReDistr
 
 		// Если параметр указан, то перемещения делать только с этого склада
 		public static string OneDonorSignature = null;
+
+		// Категории хранения товара для перемещения
+		public static List<string> ListStorageCategoryToTransfers;
 
 		// Устанавливает список возможных перемещений и их количество
 		public static void SetPossibleTransfers()

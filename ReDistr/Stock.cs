@@ -14,16 +14,16 @@ namespace ReDistr
 		public string Name;
 
 		// Текущий остаток
-		public double Count;
+		public double Count = 0;
 
 		// Количество продаж из отчета
-		public double SelingsCount;
+		public double SelingsCount = 0;
 
 		// Остаток до работы скрипта
-		public double CountOrigin;
+		public double CountOrigin = 0;
 
 		// Минимальный остаток, кратен inKit
-		public double MinStock;
+		public double MinStock = 0;
 
 		// Период для расчета мин остатка по умолчанию
 		public uint DefaultPeriodMinStock;
@@ -32,13 +32,13 @@ namespace ReDistr
 		public uint DefaultPeriodMaxStock;
 
 		// Максимальный остаток, кратен inKit
-		public double MaxStock;
+		public double MaxStock = 0;
 
 		// Процент продаж
-		public double SailPersent;
+		public double SailPersent = 0;
 
 		// Резерв, количество товара в резерве, всегда положителен
-		public double InReserve;
+		public double InReserve = 0;
 
 		// Приоритет, в спорных ситуациях используется для определения реципиента. 
 		public uint Priority;

@@ -161,7 +161,6 @@ namespace ReDistr
 				// Если количества в строке нет, значит это название перемещения, создаем новый список
 				if (Range[ColCount + curentRow].Value2 == null)
 				{
-					//TODO /5 взять адрес из Excel, переделать везде
 					bookName = DateTime.Now.ToShortDateString() + " #" + transferCount + " " + Range[ColId1C + curentRow].Value2 + ".xls";
 					transferCount++;
 					curentRow++;

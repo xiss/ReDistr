@@ -18,12 +18,13 @@ namespace ReDistr
 		// Указываем ячейки с настройками для парсера
 		private const string RngNameOfSealingsWb = "B14";
 		private const string RngNameOfStocksWb = "B13";
-		private const string RngPuthToThisWb = "B15";
+		private const string RngNameListStorageCategoryToTransfers = "B15";
 		private const string RngNameOfParamWb = "B16";
 		private const string RngNameOfShowReport = "B17";
 		private const string RngNameOfMinSoldKits = "B18";
 		private const string RngNameOfOnlyPopovaDonor = "B19";
 		private const string RngNameFolderTransfer = "B20";
+		private const string RngNameFolderArchiveTransfers = "B21";
 		private const uint RowStartStockCfg = 4; // Строка с которой считываются склады в настройках
 		private const string ColStockNameCfg = "A";
 		private const string ColStockMinCfg = "B";
@@ -47,6 +48,9 @@ namespace ReDistr
 		private const string ColArticleSealings = "C"; // Артикул
 		private const string ColCountSealings = "Y"; // Количество продаж
 		private const string ColId1CSealings = "S"; // Код товара
+		private const string ColManufacturerSealings = "U"; // Производитель
+		private const string ColStorageCategorySealings = "S"; // Категроия хранения
+		private const string ColNameSealings = "R"; // Название ЗЧ
 		// Книга с дополнительными параметрами
 		private const uint RowStartParameters = 2; // Строка с которой парсится дополнительная информация
 		private const string ColId1CParameters = "A"; // Колонка с кодом ЗЧ
@@ -60,16 +64,19 @@ namespace ReDistr
 		{
 			// Выбираем лист с настройками
 			Globals.Control.Activate();
-			
-			// Прописываем в конфиг пути и названия файло виз настроечного листа
+
+			// Прописываем в конфиг пути и названия файлов из настроечного листа
 			Config.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
 			Config.NameOfStocksWb = Globals.Control.Range[RngNameOfStocksWb].Value2;
-			Config.PuthToThisWb = Globals.Control.Range[RngPuthToThisWb].Value2;
 			Config.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
 			Config.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
+			Config.FolderArchiveTransfers = Globals.Control.Range[RngNameFolderArchiveTransfers].Value2 + "\\";
 			Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
 			Config.OneDonorSignature = Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2;
 			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
+			// Категории для перемещения
+			string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
+			Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] {';'}).ToList();
 
 			// Настраиваем фабрику
 			var curentRow = RowStartStockCfg;
@@ -90,7 +97,7 @@ namespace ReDistr
 			}
 			Config.StockCount = count;
 			Config.SetPossibleTransfers();
-			
+
 		}
 
 		// Получаем остатки по складам
@@ -101,14 +108,15 @@ namespace ReDistr
 			var items = new Dictionary<string, Item>();
 
 			// Открываем  книгу с остатками
-			var stocksWb = Globals.ThisWorkbook.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfStocksWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.NameOfStocksWb);
+			var stocksWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Вычисляем дату снятия отчета с остатками
 			string dateString = stocksWb.Worksheets[1].Range[RngDateStocks].Value;
 			Config.StockDate = DateTime.Parse(dateString.Substring(13, 8));
 
 			// Если дата снятия отчета не равна сегодняшней, предлагаем не продолжать
-			if (Config.StockDate !=  DateTime.Now.Date)
+			if (Config.StockDate != DateTime.Now.Date)
 			{
 #if(!DEBUG)
 				var result = MessageBox.Show(MessegeBoxQuestion, MessegeBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -207,7 +215,8 @@ namespace ReDistr
 		{
 
 			// Открываем  книгу с продажами
-			var sellingsWb = Globals.ThisWorkbook.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfSealingsWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.NameOfSealingsWb);
+			var sellingsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Вычисляем начальную и конечную дату периода продаж
 			string dateString = sellingsWb.Worksheets[1].Range[RngDateSealings].Value;
@@ -242,11 +251,30 @@ namespace ReDistr
 					item = items[sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value.ToString()];
 				}
 
-				// Если не находим переходим к следующей строке
+				// Если не находим создаем ее
+				// TODO добавлено, до этого не создавали а переходили к следующей, может настройку сделать?
 				if (item == null)
 				{
-					curentRow++;
-					continue;
+					item = new Item
+					{
+						Id1C = sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value.ToString(),
+						Article = sellingsWb.Worksheets[1].Range[ColArticleSealings + curentRow].Value.ToString(),
+						StorageCategory = sellingsWb.Worksheets[1].Range[ColStorageCategorySealings + curentRow].Value.ToString(),
+						Name = sellingsWb.Worksheets[1].Range[ColNameSealings + curentRow].Value.ToString(),
+						Manufacturer = sellingsWb.Worksheets[1].Range[ColManufacturerSealings + curentRow].Value.ToString(),
+					};
+
+					// Создаем склады для ЗЧ
+					var newStocks = SimpleStockFactory.CurrentFactory.GetAllStocks();
+					foreach (var newStock in newStocks)
+					{
+						item.Stocks.Add(newStock);
+					}
+
+					items.Add(item.Id1C, item);
+
+					//curentRow++;
+					//continue;
 				}
 
 				// Проверим, есть ли у текущей ЗЧ текущей склад
@@ -275,7 +303,8 @@ namespace ReDistr
 		private void GetAdditionalParameters(Dictionary<string, Item> items)
 		{
 			// Открываем  книгу с параметрами
-			var parametersWb = Globals.ThisWorkbook.Application.Workbooks.Open(Config.PuthToThisWb + Config.NameOfParametersWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.NameOfParametersWb);
+			var parametersWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Исключения из перемещений
 			// Составляем список складов с листа исключений
@@ -287,6 +316,7 @@ namespace ReDistr
 
 			// Считываем исключения из перемещений
 			var curentRow = RowStartParameters;
+			var test = parametersWb.Worksheets[1];
 			while (parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей

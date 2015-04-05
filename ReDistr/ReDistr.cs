@@ -39,6 +39,12 @@ namespace ReDistr
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)
 				{
+					// Определяем, требуется ли перемещения для данной категории хранения
+					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					{
+						continue;
+					}
+
 					// Определяем количество для обеспечения одного комплекта, если потребности нет, переходим к следующему складу
 					var need = stock.GetNeedToInKit(item.Value);
 					var possibleDonors = item.Value.GetListOfPossibleDonors();
@@ -108,6 +114,12 @@ namespace ReDistr
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)
 				{
+					// Определяем, требуется ли перемещения для данной категории хранения
+					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					{
+						continue;
+					}
+
 					// Определяем количество для обеспечения мин остатка, если потребности нет, переходим к следующему складу
 					var need = stock.GetNeedToMinStock(item.Value);
 					var possibleDonors = item.Value.GetListOfPossibleDonors();
@@ -180,6 +192,12 @@ namespace ReDistr
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)
 				{
+					// Определяем, требуется ли перемещения для данной категории хранения
+					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					{
+						continue;
+					}
+
 					// Определяем количество для перемещения, если перемещать ничего не нужно переходим к следующему складу
 					var need = stock.GetNeedToSafety(item.Value);
 					// TODO /10 Нужно оставить только уникальные перемещения по донору
@@ -271,7 +289,8 @@ namespace ReDistr
 			// Отключаем предупреждение и обновление экрана
 			Starting(false, false);
 			// Сохраняем книгу
-			impot1CBook.SaveAs(Config.PuthToThisWb + Config.FolderTransfers + bookName, XlFileFormat.xlWorkbookNormal);
+			var fullPath = Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.FolderTransfers, bookName);
+			impot1CBook.SaveAs(fullPath, XlFileFormat.xlWorkbookNormal);
 			impot1CBook.Close();
 
 			Ending();
@@ -303,12 +322,14 @@ namespace ReDistr
 		public static void ArchiveTransfers()
 		{
 			// Считываем все файлы в папке с перемещениями
-			var arrayOfTransferBooks = Directory.GetFiles(Config.PuthToThisWb + Config.FolderTransfers);
+			var fullPath = Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.FolderTransfers);
+			var arrayOfTransferBooks = Directory.GetFiles(fullPath);
 			// Перемещаем все файлы в архив
 			foreach (var transferBook in arrayOfTransferBooks)
 			{
 				// Определяем новый путь
-				var destFileName = Config.PuthToThisWb + Config.FolderArchiveTransfers + Path.GetFileName(transferBook);
+				var destFileName = Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.FolderArchiveTransfers, Path.GetFileName(transferBook));
+				//var destFileName = Config.PuthToThisWb + Config.FolderArchiveTransfers + Path.GetFileName(transferBook);
 				// Если такой файл есть в конечной папке, удаляем его
 				if (File.Exists(destFileName))
 				{

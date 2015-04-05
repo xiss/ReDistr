@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace ReDistr
@@ -57,6 +58,7 @@ namespace ReDistr
 					}
 				}
 			}
+
 			// Если задана дериктива одного донора, то оставляем только его в списке
 			if (Config.OneDonorSignature != null)
 			{

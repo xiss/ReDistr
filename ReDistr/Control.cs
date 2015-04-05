@@ -103,16 +103,11 @@ namespace ReDistr
 
 		private void buttonMakeTransfers_Click(object sender, EventArgs e)
 		{
-			// TODO test
-			//Application.DisplayAlerts = false;
-			//Debug.WriteLine(Application.GetHashCode());
-			//Debug.WriteLine(Application.DisplayAlerts); 
 			// Архивируем предыдущие перемещения
 			ReDistr.ArchiveTransfers();
 			
 			// Создаем книги для импорта в Excel
 			Globals.Transfers.MakeImportTransfers();
-			//Application.DisplayAlerts = true;
 		}
 	}
 }
