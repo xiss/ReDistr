@@ -10,6 +10,7 @@ using Microsoft.Office.Interop.Excel;
 namespace ReDistr
 {
 	class ReDistr
+		// TODO /10 Сделать в доп параметрах принудительные остатки (создавать из него карточки), сделать в доп параметрах производителей
 	{
 		// Расчитывает первичные параметры для перемещений
 		public static void PrepareData(Dictionary<string, Item> items)

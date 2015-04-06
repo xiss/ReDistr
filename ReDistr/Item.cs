@@ -75,6 +75,7 @@ namespace ReDistr
 		}
 
 		// Возвращает сумму всех свободных остатков, если задан список перемещений то остатки берутся из доноров в этих перемещениях
+		//  TODO /10 учитывать OneDonorSignature
 		public double GetSumFreeStocks(List<Transfer> existTransfers = null)
 		{
 			// Если список не задан, выдаем сумму для всех складов

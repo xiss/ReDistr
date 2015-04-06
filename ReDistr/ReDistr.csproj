@@ -207,9 +207,7 @@
       <DependentUpon>Transfers.cs</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Перемещения\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Order.Designer.xml">
       <DependentUpon>Order.cs</DependentUpon>

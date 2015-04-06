@@ -45,7 +45,7 @@ namespace ReDistr
 		// Первая колонка с которой выводятся параметры складов
 		private const uint ArrayColumnFirstFillNumber = 7;
 		// Количество параметров для склада
-		private const uint StockParametrsCount = 8;
+		private const uint StockParametrsCount = 9;
 
 		// Метод заполняет лист Test данными из словоря запчастей
 		public void FillListStocks(Dictionary<string, Item> items)
@@ -75,6 +75,7 @@ namespace ReDistr
 			resultRange[0, curentColumn += stockCount] = "MaxStock";
 			resultRange[0, curentColumn += stockCount] = "Priority";
 			resultRange[0, curentColumn += stockCount] = "Exclude";
+			resultRange[0, curentColumn += stockCount] = "RequiredAvailability";
 
 			// Выводим заголовки складов
 			curentColumn = ArrayColumnFirstFillNumber;
@@ -111,6 +112,7 @@ namespace ReDistr
 					resultRange[curentRow, curentColumn += stockCount] = stock.MaxStock;
 					resultRange[curentRow, curentColumn += stockCount] = stock.Priority;
 					resultRange[curentRow, curentColumn += stockCount] = stock.ExcludeFromMoovings;
+					resultRange[curentRow, curentColumn += stockCount] = stock.RequiredAvailability;
 
 					curentColumn = ArrayColumnFirstFillNumber;
 					curentColumn += curentStock;
@@ -120,7 +122,7 @@ namespace ReDistr
 			}
 
 			// Выводим результат на лист
-			Range[Cells[1, 1], Cells[items.Count + 2, 7 + StockParametrsCount * Config.StockCount]].Value2 = resultRange;
+			Range[Cells[1, 1], Cells[items.Count + 2, ArrayColumnFirstFillNumber + StockParametrsCount * Config.StockCount]].Value2 = resultRange;
 		}
 
 		// Выводит информацию о перемещениях на лист

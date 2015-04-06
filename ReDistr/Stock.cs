@@ -59,6 +59,9 @@ namespace ReDistr
 		// Сигнатура склада
 		public string Signature;
 
+		// Признак обязательного наличия ЗЧ на данном складе
+		public bool RequiredAvailability;
+
 		// Возвращает требуемое количество ЗЧ для обеспечения одного комплекта на площадке
 		public double GetNeedToInKit(Item item)
 		{
@@ -147,6 +150,13 @@ namespace ReDistr
 			if (ExcludeFromMoovings)
 			{
 				minStock = 0;
+			}
+
+			// Если установлена RequiredAvailability и расчитанный минимальный остаток меньше кратности, проставлем кратность равной одному комплекту
+			// TODO /10 протестировать
+			if (RequiredAvailability && minStock < item.InKit)
+			{
+				minStock = item.InKit;
 			}
 
 			MinStock = minStock;

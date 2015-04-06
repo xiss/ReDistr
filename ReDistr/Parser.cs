@@ -54,6 +54,9 @@ namespace ReDistr
 		// Книга с дополнительными параметрами
 		private const uint RowStartParameters = 2; // Строка с которой парсится дополнительная информация
 		private const string ColId1CParameters = "A"; // Колонка с кодом ЗЧ
+		private const string ColArticleParameters = "B";
+		private const string ColManufacturerParameters = "D";
+		private const string ColNameParameters = "C";
 		private const string ColStartParamsParameters = "E"; // Колонка с которой выводится дополнительная информация
 		// Диалоговые окна
 		private const string MessegeBoxQuestion = "Дата снятия отчета с остатком не соответствует сегодняшней, продолжить?";
@@ -76,7 +79,7 @@ namespace ReDistr
 			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
 			// Категории для перемещения
 			string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
-			Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] {';'}).ToList();
+			Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
 
 			// Настраиваем фабрику
 			var curentRow = RowStartStockCfg;
@@ -306,7 +309,7 @@ namespace ReDistr
 			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.NameOfParametersWb);
 			var parametersWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
-			// Исключения из перемещений
+			// Обязательное наличие (с создание карточек)
 			// Составляем список складов с листа исключений
 			var stockList = new List<string>();
 			for (var i = 1; i <= Config.StockCount; i++)
@@ -316,7 +319,59 @@ namespace ReDistr
 
 			// Считываем исключения из перемещений
 			var curentRow = RowStartParameters;
-			var test = parametersWb.Worksheets[1];
+
+			while (parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value != null)
+			{
+				// Ищем запчасть по 1С коду в массиве запчастей
+				// Если не находим создаем необходимую ЗЧ
+				string curenId1C = parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value;
+				if (!items.ContainsKey(curenId1C))
+				{
+					var item = new Item
+					{
+						Id1C = parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value.ToString(),
+						Article = parametersWb.Worksheets[4].Range[ColArticleParameters + curentRow].Value.ToString(),
+						//StorageCategory = parametersWb.Worksheets[4].Range[ColStorageCategorySealings + curentRow].Value.ToString(),
+						Name = parametersWb.Worksheets[4].Range[ColNameParameters + curentRow].Value.ToString(),
+						Manufacturer = parametersWb.Worksheets[4].Range[ColManufacturerParameters + curentRow].Value.ToString(),
+					};
+
+					// Создаем склады для ЗЧ
+					var newStocks = SimpleStockFactory.CurrentFactory.GetAllStocks();
+					foreach (var newStock in newStocks)
+					{
+						item.Stocks.Add(newStock);
+					}
+
+					items.Add(item.Id1C, item);
+				}
+				// Проставляем исключения у найденной ЗЧ
+				foreach (var curentStock in stockList)
+				{
+					// Проверим, есть ли у текущей ЗЧ текущей склад
+					var stock = items[curenId1C].Stocks.Find(s => s.Signature.Contains(curentStock));
+					// Если такой склад уже есть, работаем с ним, если нет переходим к следующему складу
+					if (stock != null && parametersWb.Worksheets[4].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value == 1)
+					{
+						stock.RequiredAvailability = true;
+					}
+				}
+
+				curentRow++;
+			}
+
+
+			// Исключения из перемещений
+			// Составляем список складов с листа исключений
+			stockList = new List<string>();
+			for (var i = 1; i <= Config.StockCount; i++)
+			{
+				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value);
+			}
+
+			// Считываем исключения из перемещений
+			curentRow = RowStartParameters;
+
 			while (parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
