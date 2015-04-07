@@ -15,7 +15,7 @@ namespace ReDistr {
     /// 
     [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(4)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
-    public sealed partial class Order : Microsoft.Office.Tools.Excel.WorksheetBase {
+    public sealed partial class Orders : Microsoft.Office.Tools.Excel.WorksheetBase {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
@@ -23,8 +23,8 @@ namespace ReDistr {
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
-        public Order(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
-                base(factory, serviceProvider, "Order", "Order") {
+        public Orders(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
+                base(factory, serviceProvider, "Orders", "Orders") {
         }
         
         /// 
@@ -33,7 +33,7 @@ namespace ReDistr {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         protected override void Initialize() {
             base.Initialize();
-            Globals.Order = this;
+            Globals.Orders = this;
             global::System.Windows.Forms.Application.EnableVisualStyles();
             this.InitializeCachedData();
             this.InitializeControls();
@@ -148,15 +148,15 @@ namespace ReDistr {
     
     internal sealed partial class Globals {
         
-        private static Order _order;
+        private static Orders _orders;
         
-        internal static Order Order {
+        internal static Orders Orders {
             get {
-                return _order;
+                return _orders;
             }
             set {
-                if ((_order == null)) {
-                    _order = value;
+                if ((_orders == null)) {
+                    _orders = value;
                 }
                 else {
                     throw new System.NotSupportedException();

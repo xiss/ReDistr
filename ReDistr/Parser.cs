@@ -46,11 +46,11 @@ namespace ReDistr
 		private const string RngDateSealings = "B3"; // Дата отчета
 		private const string ColStockSignSealings = "B"; // Сигнатура склада
 		private const string ColArticleSealings = "C"; // Артикул
-		private const string ColCountSealings = "Y"; // Количество продаж
-		private const string ColId1CSealings = "S"; // Код товара
-		private const string ColManufacturerSealings = "U"; // Производитель
-		private const string ColStorageCategorySealings = "S"; // Категроия хранения
-		private const string ColNameSealings = "R"; // Название ЗЧ
+		private const string ColCountSealings = "X"; // Количество продаж
+		private const string ColId1CSealings = "T"; // Код товара
+		private const string ColManufacturerSealings = "R"; // Производитель
+		private const string ColStorageCategorySealings = "U"; // Категроия хранения
+		private const string ColNameSealings = "S"; // Название ЗЧ
 		// Книга с дополнительными параметрами
 		private const uint RowStartParameters = 2; // Строка с которой парсится дополнительная информация
 		private const string ColId1CParameters = "A"; // Колонка с кодом ЗЧ
@@ -366,13 +366,13 @@ namespace ReDistr
 			stockList = new List<string>();
 			for (var i = 1; i <= Config.StockCount; i++)
 			{
-				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value);
+				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value2);
 			}
 
 			// Считываем исключения из перемещений
 			curentRow = RowStartParameters;
 
-			while (parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value != null)
+			while (parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value2 != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
 				// Если не находим переходим к следующей строке
@@ -397,7 +397,7 @@ namespace ReDistr
 
 			// Кратность запчастей
 			curentRow = RowStartParameters;
-			while (parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value != null)
+			while (parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value2 != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
 				if (items.ContainsKey(parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value))
@@ -412,7 +412,7 @@ namespace ReDistr
 
 			// Количество ЗЧ в упаковке
 			curentRow = RowStartParameters;
-			while (parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value != null)
+			while (parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value2 != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
 				if (items.ContainsKey(parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value))
@@ -420,6 +420,22 @@ namespace ReDistr
 					// Если нашли, проставляем количество в упаковке
 					Item item = items[parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value];
 					item.InBundle = parametersWb.Worksheets[3].Range[ColStartParamsParameters + curentRow].Value;
+				}
+
+				curentRow++;
+			}
+			
+			// Поставщик ЗЧ
+			curentRow = RowStartParameters;
+			while (parametersWb.Worksheets[5].Range[ColId1CParameters + curentRow].Value2 != null)
+			{
+				// Ищем запчасть по 1С коду в массиве запчастей
+				if (items.ContainsKey(parametersWb.Worksheets[5].Range[ColId1CParameters + curentRow].Value))
+				{
+					// Если нашли, проставляем количество в упаковке
+					Item item = items[parametersWb.Worksheets[5].Range[ColId1CParameters + curentRow].Value];
+					// TODO /10 сделать вывод в отчеты
+					item.Supplier = parametersWb.Worksheets[5].Range[ColStartParamsParameters + curentRow].Value;
 				}
 
 				curentRow++;

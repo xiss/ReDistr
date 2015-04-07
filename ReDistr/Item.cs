@@ -25,6 +25,9 @@ namespace ReDistr
 		// Производитель 
 		public string Manufacturer;
 
+		// Поставщик
+		public string Supplier;
+
 		// Количество товара в комплекте, не может быть равен 0, больше 0.
 		public double InKit = 1;
 

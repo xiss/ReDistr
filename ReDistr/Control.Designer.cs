@@ -24,6 +24,8 @@ namespace ReDistr {
         
         internal Microsoft.Office.Tools.Excel.Controls.Button buttonMakeTransfers;
         
+        internal Microsoft.Office.Tools.Excel.Controls.Button buttonGetOrders;
+        
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
@@ -135,6 +137,7 @@ namespace ReDistr {
         private void InitializeControls() {
             this.buttonGetMoving = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "149458F491714314CA41B92C119855940056E1", "149458F491714314CA41B92C119855940056E1", this, "buttonGetMoving");
             this.buttonMakeTransfers = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "24445E89F29FB5246D328EFD26BB2632BC2CE2", "24445E89F29FB5246D328EFD26BB2632BC2CE2", this, "buttonMakeTransfers");
+            this.buttonGetOrders = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "34B3811F63229C34F2138595382F59F066D6F3", "34B3811F63229C34F2138595382F59F066D6F3", this, "buttonGetOrders");
         }
         
         /// 
@@ -161,10 +164,20 @@ namespace ReDistr {
             this.buttonMakeTransfers.UseCompatibleTextRendering = true;
             this.buttonMakeTransfers.UseVisualStyleBackColor = true;
             // 
+            // buttonGetOrders
+            // 
+            this.buttonGetOrders.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonGetOrders.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.buttonGetOrders.Name = "buttonGetOrders";
+            this.buttonGetOrders.Text = "Рассчитать заказы";
+            this.buttonGetOrders.UseCompatibleTextRendering = true;
+            this.buttonGetOrders.UseVisualStyleBackColor = true;
+            // 
             // Control
             // 
             this.buttonGetMoving.BindingContext = this.BindingContext;
             this.buttonMakeTransfers.BindingContext = this.BindingContext;
+            this.buttonGetOrders.BindingContext = this.BindingContext;
         }
         
         /// 

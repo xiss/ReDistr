@@ -128,10 +128,16 @@ namespace ReDistr
 		public void UpdateSailPersent(Item item)
 		{
 			var stockSails = SelingsCount;
-			var allSails = item.Stocks.Sum(stock => stock.SelingsCount);
+			var allSails = item.Stocks.Where(stock => stock.SelingsCount > 0).Sum(stock => stock.SelingsCount);
 
 			// Проверка на нулевые продажи
 			if (allSails == 0)
+			{
+				SailPersent = 0;
+				return;
+			}
+			// Проверка на отрицательные продажи (баг в отчете)
+			if (SelingsCount < 0)
 			{
 				SailPersent = 0;
 				return;
@@ -152,8 +158,7 @@ namespace ReDistr
 				minStock = 0;
 			}
 
-			// Если установлена RequiredAvailability и расчитанный минимальный остаток меньше кратности, проставлем кратность равной одному комплекту
-			// TODO /10 протестировать
+			// Если установлена RequiredAvailability и расчитанный минимальный остаток меньше кратности, проставлем кратность остаток равным одному комплекту
 			if (RequiredAvailability && minStock < item.InKit)
 			{
 				minStock = item.InKit;
@@ -167,6 +172,18 @@ namespace ReDistr
 		{
 			var sailsPerDay = SelingsCount / Config.SellingPeriod;
 			var maxStock = Math.Ceiling((sailsPerDay * DefaultPeriodMaxStock) / item.InKit) * item.InKit;
+
+			// Если данный склад исключен из перемещений, то максимальный остаток равен нулю
+			if (ExcludeFromMoovings)
+			{
+				maxStock = 0;
+			}
+
+			// Если установлена RequiredAvailability и расчитанный максимальный остаток меньше кратности, проставлем остаток равным одному комплекту
+			if (RequiredAvailability && maxStock < item.InKit)
+			{
+				maxStock = item.InKit;
+			}
 
 			MaxStock = maxStock;
 		}

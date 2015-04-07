@@ -10,7 +10,7 @@ using Microsoft.Office.Interop.Excel;
 namespace ReDistr
 {
 	class ReDistr
-		// TODO /10 Сделать в доп параметрах принудительные остатки (создавать из него карточки), сделать в доп параметрах производителей
+	// TODO /10 Сделать в доп параметрах принудительные остатки (создавать из него карточки), сделать в доп параметрах производителей
 	{
 		// Расчитывает первичные параметры для перемещений
 		public static void PrepareData(Dictionary<string, Item> items)
@@ -26,7 +26,7 @@ namespace ReDistr
 			}
 		}
 
-		// Создает необходимые перемещения для обеспечения одного комплекта на складах с ненулевым минсоатком
+		// Создает необходимые перемещения для обеспечения одного комплекта на складах с ненулевым миностатком
 		public static List<Transfer> GetTransfersFirstLvl(Dictionary<string, Item> items, List<Transfer> transfers)
 		{
 			// Перебираем список ЗЧ
@@ -40,8 +40,9 @@ namespace ReDistr
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)
 				{
-					// Определяем, требуется ли перемещения для данной категории хранения
-					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					// Определяем, требуется ли перемещения для данной категории хранения и установлен ли у ЗЧ параметр RequiredAvailability, 
+					// в последнем случае перемещение все равно делаем
+					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !stock.RequiredAvailability)
 					{
 						continue;
 					}
@@ -280,7 +281,14 @@ namespace ReDistr
 			return movings;
 		}
 
-		// Создает книгу с заданным именем
+		// Формирует заказы
+		// TODO /10 доделать
+		public static List<Order> GetOrders(List<Order> orders)
+		{
+			return orders;
+		} 
+
+		// Создает книгу с заданным именем, вставляет в нее нужные данные и сохраняет
 		public static void MakeImpot1CBook(Range inputRange, string bookName, string folder)
 		{
 			// Создаем новую книгу
