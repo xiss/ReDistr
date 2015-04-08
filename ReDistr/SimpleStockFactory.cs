@@ -29,7 +29,7 @@ namespace ReDistr
             //TODO: проверить поведение при несущестующем значении
             try
             {
-                var curentParams = _paramsList.Find(s => s.Signature == stockSignature);
+				var curentParams = _paramsList.Find(s => s.Signature.ToLower() == stockSignature.ToLower());
                 if(string.IsNullOrEmpty(curentParams.Signature)) return null;
                 var stock = new Stock
                 {

@@ -138,9 +138,24 @@ namespace ReDistr
 
 				// Выводим перемещение на лист
 				Range[Cells[curentRow, 1], Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Value2 = resultRange;
-				// Применяем стиль к заголовку
+				// Применяем стили
 				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Style = TransferNameStyle;
 				Range[Cells[curentRow, ItemParametrsCount], Cells[curentRow + transferList.Count, ItemParametrsCount]].Style = CountNameStyle;
+				// Границы колонок
+				// TODO как то покомпактней бы..
+				Range[
+					Cells[curentRow + 1, ItemParametrsCount + 1],
+					Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount]].Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlThin;
+				Range[
+					Cells[curentRow + 1, ItemParametrsCount + 1],
+					Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 2]].Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlThin;
+				Range[
+					Cells[curentRow + 1, ItemParametrsCount + 1],
+					Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 3]].Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlThin;
+				Range[
+					Cells[curentRow + 1, ItemParametrsCount + 1],
+					Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 4]].Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlThin;
+				//Range("U" & curRow).Borders(xlEdgeRight).Weight = xlThin 
 
 				curentRow += transferList.Count + 1;
 			}

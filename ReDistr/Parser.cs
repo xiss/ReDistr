@@ -68,19 +68,6 @@ namespace ReDistr
 			// Выбираем лист с настройками
 			Globals.Control.Activate();
 
-			// Прописываем в конфиг пути и названия файлов из настроечного листа
-			Config.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
-			Config.NameOfStocksWb = Globals.Control.Range[RngNameOfStocksWb].Value2;
-			Config.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
-			Config.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
-			Config.FolderArchiveTransfers = Globals.Control.Range[RngNameFolderArchiveTransfers].Value2 + "\\";
-			Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
-			Config.OneDonorSignature = Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2;
-			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
-			// Категории для перемещения
-			string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
-			Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
-
 			// Настраиваем фабрику
 			var curentRow = RowStartStockCfg;
 			uint priority = 1; // Приоритет, от большего к меньшему
@@ -101,6 +88,18 @@ namespace ReDistr
 			Config.StockCount = count;
 			Config.SetPossibleTransfers();
 
+			// Прописываем в конфиг пути и названия файлов из настроечного листа
+			Config.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
+			Config.NameOfStocksWb = Globals.Control.Range[RngNameOfStocksWb].Value2;
+			Config.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
+			Config.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
+			Config.FolderArchiveTransfers = Globals.Control.Range[RngNameFolderArchiveTransfers].Value2 + "\\";
+			Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
+			Config.OneDonor = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2);
+			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
+			// Категории для перемещения
+			string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
+			Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
 		}
 
 		// Получаем остатки по складам
@@ -434,7 +433,6 @@ namespace ReDistr
 				{
 					// Если нашли, проставляем количество в упаковке
 					Item item = items[parametersWb.Worksheets[5].Range[ColId1CParameters + curentRow].Value];
-					// TODO /10 сделать вывод в отчеты
 					item.Supplier = parametersWb.Worksheets[5].Range[ColStartParamsParameters + curentRow].Value;
 				}
 

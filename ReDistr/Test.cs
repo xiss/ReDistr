@@ -43,7 +43,7 @@ namespace ReDistr
 		// Строка с которой начинается заполненеие данными
 		private const uint ArrayRowFirstFillNumber = 2;
 		// Первая колонка с которой выводятся параметры складов
-		private const uint ArrayColumnFirstFillNumber = 7;
+		private const uint ArrayColumnFirstFillNumber = 8;
 		// Количество параметров для склада
 		private const uint StockParametrsCount = 9;
 
@@ -53,7 +53,7 @@ namespace ReDistr
 			var curentRow = ArrayRowFirstFillNumber;
 			var curentColumn = ArrayColumnFirstFillNumber;
 			var stockCount = Config.StockCount;
-			// 7 колонок под описание товара 8 колонок под параметры склада
+			// 7 колонок под описание товара 9 колонок под параметры склада
 			var resultRange = new dynamic[items.Count + 2, ArrayColumnFirstFillNumber + Config.StockCount * StockParametrsCount];
 			Cells.ClearContents();
 
@@ -62,20 +62,21 @@ namespace ReDistr
 			resultRange[0, 1] = "Name";
 			resultRange[0, 2] = "Article";
 			resultRange[0, 3] = "Manufacturer";
-			resultRange[0, 4] = "StorageCategory";
-			resultRange[0, 5] = "inBundle";
-			resultRange[0, 6] = "inKit";
+			resultRange[0, 4] = "Supplier";
+			resultRange[0, 5] = "StorageCat";
+			resultRange[0, 6] = "inBundle";
+			resultRange[0, 7] = "inKit";
 
 			// Выводим заголовки для параметров
 			resultRange[0, curentColumn] = "Count";
 			resultRange[0, curentColumn += stockCount] = "InReserve";
-			resultRange[0, curentColumn += stockCount] = "SelingsCount";
-			resultRange[0, curentColumn += stockCount] = "SailPersent";
+			resultRange[0, curentColumn += stockCount] = "SelCount";
+			resultRange[0, curentColumn += stockCount] = "SailPers";
 			resultRange[0, curentColumn += stockCount] = "MinStock";
 			resultRange[0, curentColumn += stockCount] = "MaxStock";
 			resultRange[0, curentColumn += stockCount] = "Priority";
 			resultRange[0, curentColumn += stockCount] = "Exclude";
-			resultRange[0, curentColumn += stockCount] = "RequiredAvailability";
+			resultRange[0, curentColumn += stockCount] = "ReqAv";
 
 			// Выводим заголовки складов
 			curentColumn = ArrayColumnFirstFillNumber;
@@ -95,9 +96,11 @@ namespace ReDistr
 				resultRange[curentRow, 1] = item.Value.Name;
 				resultRange[curentRow, 2] = item.Value.Article;
 				resultRange[curentRow, 3] = item.Value.Manufacturer;
-				resultRange[curentRow, 4] = item.Value.StorageCategory;
-				resultRange[curentRow, 5] = item.Value.InBundle;
-				resultRange[curentRow, 6] = item.Value.InKit;
+				resultRange[curentRow, 4] = item.Value.Supplier;
+				resultRange[curentRow, 5] = item.Value.StorageCategory;
+				resultRange[curentRow, 6] = item.Value.InBundle;
+				resultRange[curentRow, 7] = item.Value.InKit;
+
 
 				// Выводим информацию по складам
 				curentColumn = ArrayColumnFirstFillNumber;

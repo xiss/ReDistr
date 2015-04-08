@@ -19,9 +19,9 @@ namespace ReDistr
 		{
 #warning Удалить потом, для отладки
 #if(DEBUG)
-			//buttonGetMoving_Click(new object(), new EventArgs());
-			//buttonMakeTransfers_Click(new object(), new EventArgs());
-			buttonGetOrders_Click(new object(), new EventArgs());
+			buttonGetMoving_Click(new object(), new EventArgs());
+			buttonMakeTransfers_Click(new object(), new EventArgs());
+			//buttonGetOrders_Click(new object(), new EventArgs());
 #endif
 		}
 

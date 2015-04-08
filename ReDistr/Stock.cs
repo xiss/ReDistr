@@ -62,6 +62,45 @@ namespace ReDistr
 		// Признак обязательного наличия ЗЧ на данном складе
 		public bool RequiredAvailability;
 
+		// Перегруженный оператор ==
+		public static bool operator ==(Stock a, Stock b)
+		{
+			// Оба могут быть нулом
+			if (ReferenceEquals(a, b))
+			{
+				return true;
+			}
+
+			// Проверяем что не один не является нулом
+			if (((object)a == null) || ((object)b == null))
+			{
+				return false;
+			}
+
+			// Проверяем что сигнатура одна и та же
+			if (a.Signature == b.Signature)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		// Перегруженный оператор !=
+		public static bool operator !=(Stock a, Stock b)
+		{
+			return !(a == b);
+		}
+
+//		public override bool Equals(System.Object obj)
+//		{
+//			if (obj == obj)
+//			{
+//				return true;
+//			}
+//			return false;
+//		}
+
 		// Возвращает требуемое количество ЗЧ для обеспечения одного комплекта на площадке
 		public double GetNeedToInKit(Item item)
 		{

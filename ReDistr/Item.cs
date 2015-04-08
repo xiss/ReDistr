@@ -63,11 +63,11 @@ namespace ReDistr
 			}
 
 			// Если задана дериктива одного донора, то оставляем только его в списке
-			if (Config.OneDonorSignature != null)
+			if (Config.OneDonor != null)
 			{
 				for (var i = 0; i < listOfPossibleDonors.Count; i++)
 				{
-					if (!listOfPossibleDonors[i].Signature.ToLower().Contains(Config.OneDonorSignature.ToLower()))
+					if (listOfPossibleDonors[i] != Config.OneDonor)
 					{
 						listOfPossibleDonors.Remove(listOfPossibleDonors[i]);
 						i--;
@@ -78,7 +78,7 @@ namespace ReDistr
 		}
 
 		// Возвращает сумму всех свободных остатков, если задан список перемещений то остатки берутся из доноров в этих перемещениях
-		//  TODO /10 учитывать OneDonorSignature
+		//  TODO /10 учитывать OneDonor
 		public double GetSumFreeStocks(List<Transfer> existTransfers = null)
 		{
 			// Если список не задан, выдаем сумму для всех складов
@@ -87,19 +87,26 @@ namespace ReDistr
 				return Stocks.Sum(stock => stock.FreeStock);
 			}
 
-			var ExistDonors = new List<Stock>();
+			// Если задан OneDonor, выдаем свободные остатки только для этого донора
+			if (Config.OneDonor != null)
+			{
+				return Stocks.Where(stock => stock == Config.OneDonor).Sum(stock => stock.FreeStock);
+			}
+
+			// Если задан список доноров, выдаем сумму свободных остатков по этим донорам
+			var existDonors = new List<Stock>();
 			foreach (var stock in Stocks)
 			{
 				foreach (var transfer in existTransfers)
 				{
 					if (stock == transfer.StockFrom)
 					{
-						ExistDonors.Add(stock);
+						existDonors.Add(stock);
 					}
 				}
 			}
 
-			return ExistDonors.Sum(stock => stock.FreeStock);
+			return existDonors.Sum(stock => stock.FreeStock);
 		}
 
 		// Возвращает общее количество ЗЧ без учета резервов

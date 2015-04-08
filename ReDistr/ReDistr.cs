@@ -10,7 +10,6 @@ using Microsoft.Office.Interop.Excel;
 namespace ReDistr
 {
 	class ReDistr
-	// TODO /10 Сделать в доп параметрах принудительные остатки (создавать из него карточки), сделать в доп параметрах производителей
 	{
 		// Расчитывает первичные параметры для перемещений
 		public static void PrepareData(Dictionary<string, Item> items)
@@ -271,7 +270,7 @@ namespace ReDistr
 				foreach (var stockTo in stocksArray)
 				{
 					// Не составляем пару с одтнаковыми складами
-					if (stockFrom.Signature != stockTo.Signature)
+					if (stockFrom != stockTo)
 					{
 						var moving = new Transfer { StockFrom = stockFrom, StockTo = stockTo };
 						movings.Add(moving);

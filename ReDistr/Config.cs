@@ -52,7 +52,7 @@ namespace ReDistr
 		public static double MinSoldKits = 0;
 
 		// Если параметр указан, то перемещения делать только с этого склада
-		public static string OneDonorSignature = null;
+		public static Stock OneDonor = null;
 
 		// Категории хранения товара для перемещения
 		public static List<string> ListStorageCategoryToTransfers;
