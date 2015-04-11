@@ -159,11 +159,17 @@
     <Compile Include="Transfers.Designer.cs">
       <DependentUpon>Transfers.Designer.xml</DependentUpon>
     </Compile>
-    <Compile Include="Orders.cs">
+    <Compile Include="Лист42.cs">
       <DependentUpon>ReDistr.xlsx</DependentUpon>
     </Compile>
-    <Compile Include="Orders.Designer.cs">
-      <DependentUpon>Orders.Designer.xml</DependentUpon>
+    <Compile Include="Лист42.Designer.cs">
+      <DependentUpon>Лист42.Designer.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Лист5.cs">
+      <DependentUpon>ReDistr.xlsx</DependentUpon>
+    </Compile>
+    <Compile Include="Лист5.Designer.Designer.cs">
+      <DependentUpon>Лист5.Designer.Designer.xml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Control.resx">
       <DependentUpon>Control.cs</DependentUpon>
@@ -208,10 +214,14 @@
       <DependentUpon>Transfers.cs</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="Orders.Designer.xml">
-      <DependentUpon>Orders.cs</DependentUpon>
+    <None Include="Лист5.Designer.Designer.xml">
+      <DependentUpon>Лист5.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Лист42.Designer.xml">
+      <DependentUpon>Лист42.cs</DependentUpon>
     </None>
   </ItemGroup>
   <PropertyGroup>
@@ -235,10 +245,11 @@
         <ProjectProperties HostName="ReDistr.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files (x86)\Microsoft Office\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]ReDistr.xlsx&quot;" />
         <Host Name="Excel Document" Path=".\ReDistr.xlsx" GeneratedCodeNamespace="ReDistr">
           <HostItem Name="Лист1" Code="Control.cs" CanonicalName="Лист1" DisplayName="Управление" Blueprint="Control.Designer.xml" GeneratedCode="Control.Designer.cs" />
-          <HostItem Name="Лист4" Code="Orders.cs" CanonicalName="Лист4" DisplayName="Заказы" Blueprint="Orders.Designer.xml" GeneratedCode="Orders.Designer.cs" />
           <HostItem Name="Лист2" Code="Test.cs" CanonicalName="Лист2" DisplayName="Тест" Blueprint="Test.Designer.xml" GeneratedCode="Test.Designer.cs" />
           <HostItem Name="ThisWorkbook" Code="ThisWorkbook.cs" CanonicalName="ThisWorkbook" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.cs" />
           <HostItem Name="Лист3" Code="Transfers.cs" CanonicalName="Лист3" DisplayName="Перемещения" Blueprint="Transfers.Designer.xml" GeneratedCode="Transfers.Designer.cs" />
+          <HostItem Name="Лист4" Code="Лист42.cs" CanonicalName="Лист4" DisplayName="Заказы" Blueprint="Лист42.Designer.xml" GeneratedCode="Лист42.Designer.cs" />
+          <HostItem Name="Лист5" Code="Лист5.cs" CanonicalName="Лист5" DisplayName="Заказы" Blueprint="Лист5.Designer.Designer.xml" GeneratedCode="Лист5.Designer.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>
