@@ -8,8 +8,7 @@ namespace ReDistr
 	class Order
 	{
 		// Куда заказ
-		//TODO пока н
-		//public Stock Stock;
+		public Stock Stock;
 
 		// Количество ЗЧ
 		public double Count;

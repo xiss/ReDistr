@@ -5,7 +5,6 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms.VisualStyles;
 using Microsoft.Office.Interop.Excel;
 
 namespace ReDistr
@@ -282,27 +281,9 @@ namespace ReDistr
 		}
 
 		// Формирует заказы
-		public static List<Order> GetOrders(List<Order> orders, Dictionary<string, Item> items)
+		// TODO /10 доделать
+		public static List<Order> GetOrders(List<Order> orders)
 		{
-			// Перебираем список ЗЧ
-			foreach (var item in items)
-			{
-				// Определяем суммарный мин остаток и суммарный остаток
-				var sumMinStocks = item.Value.GetSumMinStocks();
-				var sumMaxStocks = item.Value.GetSumMaxStocks();
-				var sumStocks = item.Value.GetSumStocks();
-
-				// Если общий остаток меньше общего минимального остатка, делаем заказ
-				if (sumStocks <= sumMinStocks)
-				{
-					var order = new Order
-					{
-						Item =  item.Value,
-						Count = sumMaxStocks - sumStocks
-					};
-					orders.Add(order);
-				}
-			}
 			return orders;
 		} 
 
