@@ -26,7 +26,7 @@ namespace ReDistr
 		public string Manufacturer;
 
 		// Поставщик
-		public string Supplier;
+		public string Supplier = Config.DefaultSupplierName;
 
 		// Количество товара в комплекте, не может быть равен 0, больше 0.
 		public double InKit = 1;
@@ -113,7 +113,25 @@ namespace ReDistr
 		public double GetSumStocks()
 		{
 			var sumStocks = Stocks.Sum(stock => stock.Count - stock.InReserve);
+			if (sumStocks < 0)
+			{
+				sumStocks = 0;
+			}
 			return sumStocks;
+		}
+
+		// Возвращает общий минимальный остаток
+		public double GetSumMinStocks()
+		{
+			var sumMinStocks = Stocks.Sum(stock => stock.MinStock);
+			return sumMinStocks;
+		}
+
+		// Возвращает общий максимальный остаток
+		public double GetSumMaxStocks()
+		{
+			var sumMaxStocks = Stocks.Sum(stock => stock.MaxStock);
+			return sumMaxStocks;
 		}
 
 		// Обновляет свободные остатки

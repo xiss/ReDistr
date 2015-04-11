@@ -19,9 +19,9 @@ namespace ReDistr
 		{
 #warning Удалить потом, для отладки
 #if(DEBUG)
-			buttonGetMoving_Click(new object(), new EventArgs());
-			buttonMakeTransfers_Click(new object(), new EventArgs());
-			//buttonGetOrders_Click(new object(), new EventArgs());
+			//buttonGetMoving_Click(new object(), new EventArgs());
+			//buttonMakeTransfers_Click(new object(), new EventArgs());
+			buttonGetOrders_Click(new object(), new EventArgs());
 #endif
 		}
 
@@ -108,7 +108,7 @@ namespace ReDistr
 		{
 			// Архивируем предыдущие перемещения
 			ReDistr.ArchiveTransfers();
-			
+
 			// Создаем книги для импорта в Excel
 			Globals.Transfers.MakeImportTransfers();
 		}
@@ -136,7 +136,13 @@ namespace ReDistr
 
 			// Формирует заказы
 			var orders = new List<Order>();
-			orders = ReDistr.GetOrders(orders);
+			orders = ReDistr.GetOrders(orders, items);
+
+			// Выводим заказы на страницу заказов
+			Globals.Orders.FillList(orders);
+
+			// Выбираем лист с pfrfpfvb
+			Globals.Orders.Select();
 		}
 	}
 }

@@ -5,10 +5,10 @@ using System.Text;
 
 namespace ReDistr
 {
-	class Order
+	public class Order
 	{
 		// Куда заказ
-		public Stock Stock;
+		//public Stock Stock;
 
 		// Количество ЗЧ
 		public double Count;
