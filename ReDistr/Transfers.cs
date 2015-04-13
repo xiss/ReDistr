@@ -43,17 +43,18 @@ namespace ReDistr
 		private const int StartRow = 3;
 		private const int ItemParametrsCount = 8;
 		private const string TransferNameStyle = "Заголовок 1";
-		private const string NormalNameStyle = "Обычный";
+		private const string DefaultNameStyle = "Обычный";
 		private const string CountNameStyle = "Хороший";
 		private const string ColId1C = "A";
 		private const string ColCount = "H";
-
+		private const Excel.XlBordersIndex XlEdgeRight = Excel.XlBordersIndex.xlEdgeRight;
+		private const Excel.XlBorderWeight XlThin = Excel.XlBorderWeight.xlThin;
 		// Выводит на лист перемещения из списка перемещений сгруппированные по направлениям
 		public void FillList(List<Transfer> transfers)
 		{
 			// Очищаем лист
 			Range["A3:Z1500"].ClearContents();
-			Range["A3:Z1500"].Style = NormalNameStyle;
+			Range["A3:Z1500"].Style = DefaultNameStyle;
 			Range["A3:E1500"].NumberFormat = "@";
 
 			// Список возможных направлений перемещений
@@ -90,8 +91,8 @@ namespace ReDistr
 				foreach (var curentTransfer in transferList)
 				{
 					resultRange[i, 0] = curentTransfer.Item.Id1C;
-					resultRange[i, 1] = curentTransfer.Item.Name;
-					resultRange[i, 2] = curentTransfer.Item.Article;
+					resultRange[i, 1] = curentTransfer.Item.Article;
+					resultRange[i, 2] = curentTransfer.Item.Name;
 					resultRange[i, 3] = curentTransfer.Item.Manufacturer;
 					resultRange[i, 4] = curentTransfer.Item.StorageCategory;
 					resultRange[i, 5] = curentTransfer.Item.InBundle;
@@ -111,7 +112,7 @@ namespace ReDistr
 							resultRangeHeader[0, y + Config.StockCount * 3] = shortName;
 						}
 						resultRange[i, y] = stock.CountOrigin;
-						resultRange[i, y + Config.StockCount] = stock.SelingsCount;
+						resultRange[i, y + Config.StockCount] = stock.CountSelings;
 						resultRange[i, y + Config.StockCount * 2] = stock.MinStock;
 						resultRange[i, y + Config.StockCount * 3] = stock.MaxStock;
 						y++;
@@ -142,20 +143,10 @@ namespace ReDistr
 				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers]].Style = TransferNameStyle;
 				Range[Cells[curentRow, ItemParametrsCount], Cells[curentRow + transferList.Count, ItemParametrsCount]].Style = CountNameStyle;
 				// Границы колонок
-				// TODO как то покомпактней бы..
-				Range[
-					Cells[curentRow + 1, ItemParametrsCount + 1],
-					Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount]].Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlThin;
-				Range[
-					Cells[curentRow + 1, ItemParametrsCount + 1],
-					Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 2]].Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlThin;
-				Range[
-					Cells[curentRow + 1, ItemParametrsCount + 1],
-					Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 3]].Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlThin;
-				Range[
-					Cells[curentRow + 1, ItemParametrsCount + 1],
-					Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 4]].Borders(Excel.XlBordersIndex.xlEdgeRight).Weight = Excel.XlBorderWeight.xlThin;
-				//Range("U" & curRow).Borders(xlEdgeRight).Weight = xlThin 
+				Range[Cells[curentRow + 1, ItemParametrsCount + 1],Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount]].Borders(XlEdgeRight).Weight = XlThin;
+				Range[Cells[curentRow + 1, ItemParametrsCount + 1],Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 2]].Borders(XlEdgeRight).Weight = XlThin;
+				Range[Cells[curentRow + 1, ItemParametrsCount + 1],Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 3]].Borders(XlEdgeRight).Weight = XlThin;
+				Range[Cells[curentRow + 1, ItemParametrsCount + 1],Cells[curentRow + transferList.Count, ItemParametrsCount + Config.StockCount * 4]].Borders(XlEdgeRight).Weight = XlThin;
 
 				curentRow += transferList.Count + 1;
 			}

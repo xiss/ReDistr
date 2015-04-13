@@ -17,7 +17,7 @@ namespace ReDistr
 		public double Count = 0;
 
 		// Количество продаж из отчета
-		public double SelingsCount = 0;
+		public double CountSelings = 0;
 
 		// Остаток до работы скрипта
 		public double CountOrigin = 0;
@@ -166,8 +166,8 @@ namespace ReDistr
 		// Расчитывает процент продаж для склада
 		public void UpdateSailPersent(Item item)
 		{
-			var stockSails = SelingsCount;
-			var allSails = item.Stocks.Where(stock => stock.SelingsCount > 0).Sum(stock => stock.SelingsCount);
+			var stockSails = CountSelings;
+			var allSails = item.Stocks.Where(stock => stock.CountSelings > 0).Sum(stock => stock.CountSelings);
 
 			// Проверка на нулевые продажи
 			if (allSails == 0)
@@ -176,7 +176,7 @@ namespace ReDistr
 				return;
 			}
 			// Проверка на отрицательные продажи (баг в отчете)
-			if (SelingsCount < 0)
+			if (CountSelings < 0)
 			{
 				SailPersent = 0;
 				return;
@@ -188,7 +188,7 @@ namespace ReDistr
 		// Расчитывает минимальный остаток для склада
 		public void UpdateMinStock(Item item)
 		{
-			var sailsPerDay = SelingsCount / Config.SellingPeriod;
+			var sailsPerDay = CountSelings / Config.SellingPeriod;
 			var minStock = Math.Ceiling((sailsPerDay * DefaultPeriodMinStock) / item.InKit) * item.InKit;
 
 			// Если данный склад исключен из перемещений, то минимальный остаток равен нулю
@@ -209,7 +209,7 @@ namespace ReDistr
 		// Расчитывает максимальный остаток для указанного склада
 		public void UpdateMaxStock(Item item)
 		{
-			var sailsPerDay = SelingsCount / Config.SellingPeriod;
+			var sailsPerDay = CountSelings / Config.SellingPeriod;
 			var maxStock = Math.Ceiling((sailsPerDay * DefaultPeriodMaxStock) / item.InKit) * item.InKit;
 
 			// Если данный склад исключен из перемещений, то максимальный остаток равен нулю

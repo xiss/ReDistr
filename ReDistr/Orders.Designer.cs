@@ -13,7 +13,7 @@ namespace ReDistr {
     
     
     /// 
-    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(4)]
+    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(3)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
     public sealed partial class Orders : Microsoft.Office.Tools.Excel.WorksheetBase {
         
@@ -24,7 +24,7 @@ namespace ReDistr {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         public Orders(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
-                base(factory, serviceProvider, "Orders", "Orders") {
+                base(factory, serviceProvider, "Лист4", "Лист4") {
         }
         
         /// 
@@ -148,15 +148,15 @@ namespace ReDistr {
     
     internal sealed partial class Globals {
         
-        private static Orders _orders;
+        private static Orders _Orders;
         
         internal static Orders Orders {
             get {
-                return _orders;
+                return _Orders;
             }
             set {
-                if ((_orders == null)) {
-                    _orders = value;
+                if ((_Orders == null)) {
+                    _Orders = value;
                 }
                 else {
                     throw new System.NotSupportedException();

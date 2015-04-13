@@ -57,6 +57,12 @@ namespace ReDistr
 		// Категории хранения товара для перемещения
 		public static List<string> ListStorageCategoryToTransfers;
 
+		// Список поставщиков
+		public static List<string> ListSuppliers;
+
+		// Значение параметра Supplier по умолчанию у ЗЧ
+		public static string DefaultSupplierName = "none";
+
 		// Устанавливает список возможных перемещений и их количество
 		public static void SetPossibleTransfers()
 		{

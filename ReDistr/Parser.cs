@@ -274,9 +274,6 @@ namespace ReDistr
 					}
 
 					items.Add(item.Id1C, item);
-
-					//curentRow++;
-					//continue;
 				}
 
 				// Проверим, есть ли у текущей ЗЧ текущей склад
@@ -285,14 +282,14 @@ namespace ReDistr
 				// Если такой склад уже есть, работаем с ним
 				if (stock != null)
 				{
-					stock.SelingsCount += selingsCount;
+					stock.CountSelings += selingsCount;
 				}
 
 				// Если склада нет, создаем его
 				else
 				{
 					stock = SimpleStockFactory.CurrentFactory.TryGetStock(curentStockSignature);
-					stock.SelingsCount = selingsCount;
+					stock.CountSelings = selingsCount;
 					item.Stocks.Add(stock);
 				}
 				curentRow++;
@@ -441,6 +438,13 @@ namespace ReDistr
 			parametersWb.Close();
 		}
 
+		// Добавляем параметры в конфиг
+		public void SetConfig(Dictionary<string, Item> items)
+		{
+			// Составляем список производителей
+			Config.ListSuppliers = items.Values.Select(item => item.Supplier).Distinct().ToList();
+		}
+
 		// Основной метод парсера, из него вызываются все остальные
 		public Dictionary<string, Item> Parse()
 		{
@@ -459,6 +463,9 @@ namespace ReDistr
 
 			// Добавляем Кратность и исключения
 			GetAdditionalParameters(items);
+
+			// Настраиваем конфиг
+			SetConfig(items);
 
 			return items;
 		}

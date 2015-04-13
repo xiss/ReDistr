@@ -109,7 +109,7 @@ namespace ReDistr
 				{
 					resultRange[curentRow, curentColumn] = stock.Count;
 					resultRange[curentRow, curentColumn += stockCount] = stock.InReserve;
-					resultRange[curentRow, curentColumn += stockCount] = stock.SelingsCount;
+					resultRange[curentRow, curentColumn += stockCount] = stock.CountSelings;
 					resultRange[curentRow, curentColumn += stockCount] = stock.SailPersent;
 					resultRange[curentRow, curentColumn += stockCount] = stock.MinStock;
 					resultRange[curentRow, curentColumn += stockCount] = stock.MaxStock;

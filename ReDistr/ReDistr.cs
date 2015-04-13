@@ -289,7 +289,15 @@ namespace ReDistr
 				// Определяем суммарный мин остаток и суммарный остаток
 				var sumMinStocks = item.Value.GetSumMinStocks();
 				var sumMaxStocks = item.Value.GetSumMaxStocks();
-				var sumStocks = item.Value.GetSumStocks();
+				var sumStocks = item.Value.GetSumStocks(false);
+				var sumSelingKits = item.Value.GetSumSelings(true);
+
+				// Если продалось меньше 3х комплектов, переходим к следующей зч
+				// TODO временно, для тестов
+				if (sumSelingKits < 3)
+				{
+					continue;
+				}
 
 				// Если общий остаток меньше общего минимального остатка и максимального, делаем заказ
 				if (sumStocks <= sumMinStocks && sumStocks < sumMaxStocks)
@@ -355,7 +363,6 @@ namespace ReDistr
 			{
 				// Определяем новый путь
 				var destFileName = Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.FolderArchiveTransfers, Path.GetFileName(transferBook));
-				//var destFileName = Config.PuthToThisWb + Config.FolderArchiveTransfers + Path.GetFileName(transferBook);
 				// Если такой файл есть в конечной папке, удаляем его
 				if (File.Exists(destFileName))
 				{
