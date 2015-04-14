@@ -43,16 +43,16 @@ namespace ReDistr
 		private const Excel.XlBorderWeight XlThin = Excel.XlBorderWeight.xlThin;
 		private const string CountNameStyle = "Хороший";
 		private const string TransferNameStyle = "Заголовок 1";
-		private const string DefaultNameStyle = "Обычный";
+		private const string NumberFormatText = "@";
 
 		// Выводит на лист заказы сгруппированные по поставщику
 		public void FillList(List<Order> orders)
 		{
 			// Очищаем лист
 			// TODO /5 Подумать как сделать это проще, сейчас становятся активными лишние ячейки
-			Range["A3:Z1500"].ClearContents();
-			Range["A3:Z1500"].Style = DefaultNameStyle;
-			Range["A3:E1500"].NumberFormat = "@";
+			//Cells.Clear();
+			Range["A3:Z1500"].Clear();
+			//Range["A3:E1500"].NumberFormat = NumberFormatText;
 
 			var curentRow = StartRow;
 			var firstIteration = true;
@@ -102,9 +102,10 @@ namespace ReDistr
 				}
 				// Выводим перемещение на лист
 				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 4]].Value2 = resultRange;
-				// Применяем стили
+				// Применяем стили и форматирование
 				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4]].Style = TransferNameStyle;
 				Range[Cells[curentRow, ItemParametrsCount], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].Style = CountNameStyle;
+				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].NumberFormat = NumberFormatText;
 				// Границы колонок
 				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount]].Borders(XlEdgeRight).Weight = XlThin;
 				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 2]].Borders(XlEdgeRight).Weight = XlThin;

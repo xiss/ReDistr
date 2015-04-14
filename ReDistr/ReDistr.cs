@@ -31,6 +31,7 @@ namespace ReDistr
 			// Перебираем список ЗЧ
 			foreach (KeyValuePair<string, Item> item in items)
 			{
+				// TODO /5 Их же можно сортировать в момент создания списка
 				// Сортируем склады по приоритету, в первую очередб обрабатываем более приоритетные
 				item.Value.Stocks = item.Value.Stocks.OrderByDescending(stock => stock.Priority).ToList();
 				// Расчитываем свободные остатки на складах

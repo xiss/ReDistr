@@ -254,7 +254,7 @@ namespace ReDistr
 				}
 
 				// Если не находим создаем ее
-				// TODO добавлено, до этого не создавали а переходили к следующей, может настройку сделать?
+				// TODO /1 добавлено, до этого не создавали а переходили к следующей, может настройку сделать?
 				if (item == null)
 				{
 					item = new Item
@@ -277,6 +277,7 @@ namespace ReDistr
 				}
 
 				// Проверим, есть ли у текущей ЗЧ текущей склад
+				// TODO /5 Сравнивать нужно приводя к одному регистру, это нужно сделать везде с сигнатйрами
 				var stock = item.Stocks.Find(s => curentStockSignature.Contains(s.Signature));
 
 				// Если такой склад уже есть, работаем с ним
@@ -284,13 +285,13 @@ namespace ReDistr
 				{
 					stock.CountSelings += selingsCount;
 				}
-
 				// Если склада нет, создаем его
 				else
 				{
-					stock = SimpleStockFactory.CurrentFactory.TryGetStock(curentStockSignature);
-					stock.CountSelings = selingsCount;
-					item.Stocks.Add(stock);
+					// TODO нужны ли эта ветка??
+					//stock = SimpleStockFactory.CurrentFactory.TryGetStock(curentStockSignature);
+					//stock.CountSelings = selingsCount;
+					//item.Stocks.Add(stock);
 				}
 				curentRow++;
 			}
