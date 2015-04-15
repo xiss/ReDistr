@@ -192,10 +192,11 @@ namespace ReDistr
 			var minStock = Math.Ceiling((sailsPerDay * DefaultPeriodMinStock) / item.InKit) * item.InKit;
 
 			// Если данный склад исключен из перемещений, то минимальный остаток равен нулю
-			if (ExcludeFromMoovings)
-			{
-				minStock = 0;
-			}
+			// TODO /8 Для расчета заказа, мин остаток нужен, а для перемещений нет, учитывать в перемещениях эту дириктиву
+//			if (ExcludeFromMoovings)
+//			{
+//				minStock = 0;
+//			}
 
 			// Если установлена RequiredAvailability и расчитанный минимальный остаток меньше кратности, проставлем кратность остаток равным одному комплекту
 			if (RequiredAvailability && minStock < item.InKit)
@@ -212,11 +213,11 @@ namespace ReDistr
 			var sailsPerDay = CountSelings / Config.SellingPeriod;
 			var maxStock = Math.Ceiling((sailsPerDay * DefaultPeriodMaxStock) / item.InKit) * item.InKit;
 
-			// Если данный склад исключен из перемещений, то максимальный остаток равен нулю
-			if (ExcludeFromMoovings)
-			{
-				maxStock = 0;
-			}
+//			// Если данный склад исключен из перемещений, то максимальный остаток равен нулю
+//			if (ExcludeFromMoovings)
+//			{
+//				maxStock = 0;
+//			}
 
 			// Если установлена RequiredAvailability и расчитанный максимальный остаток меньше кратности, проставлем остаток равным одному комплекту
 			if (RequiredAvailability && maxStock < item.InKit)

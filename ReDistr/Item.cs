@@ -166,5 +166,11 @@ namespace ReDistr
 				stock.UpdateFreeStock(this, typeFreeStock);
 			}
 		}
+
+		// Проверяет, имеет ли хоть один склад директиву RequiredAvailability True
+		public bool IsRequiredAvailability()
+		{
+			return Stocks.Any(stock => stock.RequiredAvailability);
+		}
 	}
 }

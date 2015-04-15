@@ -42,11 +42,16 @@ namespace ReDistr
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения и установлен ли у ЗЧ параметр RequiredAvailability, 
 					// в последнем случае перемещение все равно делаем
+					// TODO /9 помомему в условии что то не так
 					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !stock.RequiredAvailability)
 					{
 						continue;
 					}
-
+					// Если данный склад исключен из перемещений, переходим к следующему складу
+					if (stock.ExcludeFromMoovings)
+					{
+						continue;
+					}
 					// Определяем количество для обеспечения одного комплекта, если потребности нет, переходим к следующему складу
 					var need = stock.GetNeedToInKit(item.Value);
 					var possibleDonors = item.Value.GetListOfPossibleDonors();
@@ -118,6 +123,12 @@ namespace ReDistr
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения
 					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					{
+						continue;
+					}
+
+					// Если данный склад исключен из перемещений, переходим к следующему складу
+					if (stock.ExcludeFromMoovings)
 					{
 						continue;
 					}
@@ -200,9 +211,15 @@ namespace ReDistr
 						continue;
 					}
 
+					// Если данный склад исключен из перемещений, переходим к следующему складу
+					if (stock.ExcludeFromMoovings)
+					{
+						continue;
+					}
+
 					// Определяем количество для перемещения, если перемещать ничего не нужно переходим к следующему складу
 					var need = stock.GetNeedToSafety(item.Value);
-					// TODO /10 Нужно оставить только уникальные перемещения по донору
+					// TODO /9 Нужно оставить только уникальные перемещения по донору
 					var existTransfers = transfers.Where(transfer => transfer.Item == item.Value && transfer.StockTo == stock).Distinct().ToList();
 
 					var possibleDonors = item.Value.GetListOfPossibleDonors(existTransfers);
@@ -295,7 +312,13 @@ namespace ReDistr
 
 				// Если продалось меньше 3х комплектов, переходим к следующей зч
 				// TODO временно, для тестов
-				if (sumSelingKits < 3)
+				//if (sumSelingKits < 3)
+				//{
+				//	continue;
+				//}
+
+				// Делаем заказ только для запчастей имеющих директиву RequiredAvailability
+				if (!item.Value.IsRequiredAvailability())
 				{
 					continue;
 				}
@@ -306,13 +329,23 @@ namespace ReDistr
 					var order = new Order
 					{
 						Item = item.Value,
-						Count = sumMaxStocks - sumStocks
+						Count = Math.Floor((sumMaxStocks - sumStocks) / item.Value.InBundle) * item.Value.InBundle
+					};
+					orders.Add(order);
+				}
+				// Иначе добавляем в заказ с нулевым количеством
+				else
+				{
+					var order = new Order
+					{
+						Item = item.Value,
+						Count = 0
 					};
 					orders.Add(order);
 				}
 			}
 			return orders;
-		} 
+		}
 
 		// Создает книгу с заданным именем, вставляет в нее нужные данные и сохраняет
 		public static void MakeImpot1CBook(Range inputRange, string bookName, string folder)

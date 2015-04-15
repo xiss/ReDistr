@@ -288,7 +288,7 @@ namespace ReDistr
 				// Если склада нет, создаем его
 				else
 				{
-					// TODO нужны ли эта ветка??
+					// TODO /5 нужны ли эта ветка??
 					//stock = SimpleStockFactory.CurrentFactory.TryGetStock(curentStockSignature);
 					//stock.CountSelings = selingsCount;
 					//item.Stocks.Add(stock);
