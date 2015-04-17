@@ -42,7 +42,6 @@ namespace ReDistr
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения и установлен ли у ЗЧ параметр RequiredAvailability, 
 					// в последнем случае перемещение все равно делаем
-					// TODO /9 помомему в условии что то не так
 					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !stock.RequiredAvailability)
 					{
 						continue;

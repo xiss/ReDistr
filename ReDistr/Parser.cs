@@ -36,7 +36,7 @@ namespace ReDistr
 		private const string ColStockSignStocks = "B"; // Колонка содержащая сигнатуру склада
 		private const string ColArticleStocks = "C"; // Артикул
 		private const string ColCountStocks = "U"; // Остаток
-		private const string ColInReserveStocks = "Z"; // Резерв
+		private const string ColInReserveStocks = "V"; // Резерв
 		private const string ColId1CStocks = "W"; // Код товара
 		private const string ColStorageCategoryStocks = "X"; // Категроия хранения
 		private const string ColNameStocks = "R"; // Название ЗЧ
