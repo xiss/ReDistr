@@ -71,6 +71,11 @@ namespace ReDistr
             return true;
         }
 
+        public void ClearStockParams()
+        {
+        	_paramsList.Clear();
+        }
+
         public IEnumerable<Stock> GetAllStocks()
         {
             return _paramsList.Select(stockParam => GetStock(stockParam.Signature));
