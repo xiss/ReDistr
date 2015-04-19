@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Order.cs" />
+    <Compile Include="OrderRequiredItem.cs" />
     <Compile Include="Transfer.cs" />
     <Compile Include="ReDistr.cs" />
     <Compile Include="Config.cs" />
@@ -164,6 +165,12 @@
     </Compile>
     <Compile Include="Orders.Designer.cs">
       <DependentUpon>Orders.Designer.xml</DependentUpon>
+    </Compile>
+    <Compile Include="OrderLists.cs">
+      <DependentUpon>ReDistr.xlsx</DependentUpon>
+    </Compile>
+    <Compile Include="OrderLists.Designer.cs">
+      <DependentUpon>OrderLists.Designer.xml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Control.resx">
       <DependentUpon>Control.cs</DependentUpon>
@@ -208,7 +215,11 @@
       <DependentUpon>Transfers.cs</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="OrderLists.Designer.xml">
+      <DependentUpon>OrderLists.cs</DependentUpon>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Orders.Designer.xml">
       <DependentUpon>Orders.cs</DependentUpon>
@@ -239,6 +250,7 @@
           <HostItem Name="Лист2" Code="Test.cs" CanonicalName="Лист2" DisplayName="Тест" Blueprint="Test.Designer.xml" GeneratedCode="Test.Designer.cs" />
           <HostItem Name="ThisWorkbook" Code="ThisWorkbook.cs" CanonicalName="ThisWorkbook" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.cs" />
           <HostItem Name="Лист3" Code="Transfers.cs" CanonicalName="Лист3" DisplayName="Перемещения" Blueprint="Transfers.Designer.xml" GeneratedCode="Transfers.Designer.cs" />
+          <HostItem Name="Лист5" Code="OrderLists.cs" CanonicalName="Лист5" DisplayName="Списоков заказов" Blueprint="OrderLists.Designer.xml" GeneratedCode="OrderLists.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>

@@ -56,8 +56,13 @@ namespace ReDistr
 		// Выставляет свободный остатко равным реальному остатку за вычетом резервов
 		public bool ExcludeFromMoovings;
 
-		// Сигнатура склада
-		public string Signature;
+		// Сигнатура склада, в нижнем регистре
+		private string _signature;
+		public string Signature
+		{
+			get { return _signature.ToLower(); }
+			set { _signature = value; }
+		}
 
 		// Признак обязательного наличия ЗЧ на данном складе
 		public bool RequiredAvailability;
@@ -78,12 +83,7 @@ namespace ReDistr
 			}
 
 			// Проверяем что сигнатура одна и та же
-			if (a.Signature == b.Signature)
-			{
-				return true;
-			}
-
-			return false;
+			return a.Signature == b.Signature;
 		}
 
 		// Перегруженный оператор !=
@@ -92,14 +92,15 @@ namespace ReDistr
 			return !(a == b);
 		}
 
-//		public override bool Equals(System.Object obj)
-//		{
-//			if (obj == obj)
-//			{
-//				return true;
-//			}
-//			return false;
-//		}
+		// Переопределенный оператор Equals
+		public override bool Equals(Object obj)
+		{
+			if (obj.GetType() != typeof(Stock))
+			{
+				return false;
+			}
+			return this == (Stock)obj;
+		}
 
 		// Возвращает требуемое количество ЗЧ для обеспечения одного комплекта на площадке
 		public double GetNeedToInKit(Item item)

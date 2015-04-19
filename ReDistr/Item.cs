@@ -34,7 +34,10 @@ namespace ReDistr
 		// Количество товара в упаковке
 		public double InBundle = 1;
 
-		// Остатки на складах 
+		// Комментарий, почему установлена RequiredAvailability
+		public string NoteRequiredAvailability;
+
+		// Остатки на складах
 		public List<Stock> Stocks = new List<Stock>();
 
 		// Возвращает список всех возможных доноров, отсортированный по убыванию. Если задан список перемещений, то доноры выдаются из этого списка
@@ -122,7 +125,7 @@ namespace ReDistr
 			{
 				sumStocks = Stocks.Sum(stock => stock.Count);
 			}
-			
+
 			if (sumStocks < 0)
 			{
 				sumStocks = 0;
@@ -152,7 +155,7 @@ namespace ReDistr
 			// Переводим в комплекты
 			if (inKits)
 			{
-				sumSelings = sumSelings/InKit;
+				sumSelings = sumSelings / InKit;
 			}
 
 			return sumSelings;
@@ -172,5 +175,6 @@ namespace ReDistr
 		{
 			return Stocks.Any(stock => stock.RequiredAvailability);
 		}
+
 	}
 }

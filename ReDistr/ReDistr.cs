@@ -31,7 +31,6 @@ namespace ReDistr
 			// Перебираем список ЗЧ
 			foreach (KeyValuePair<string, Item> item in items)
 			{
-				// TODO /5 Их же можно сортировать в момент создания списка
 				// Сортируем склады по приоритету, в первую очередб обрабатываем более приоритетные
 				item.Value.Stocks = item.Value.Stocks.OrderByDescending(stock => stock.Priority).ToList();
 				// Расчитываем свободные остатки на складах
@@ -218,7 +217,7 @@ namespace ReDistr
 
 					// Определяем количество для перемещения, если перемещать ничего не нужно переходим к следующему складу
 					var need = stock.GetNeedToSafety(item.Value);
-					// TODO /9 Нужно оставить только уникальные перемещения по донору
+					// TODO /9 Нужно оставить только уникальные перемещения по донору (Проверить)
 					var existTransfers = transfers.Where(transfer => transfer.Item == item.Value && transfer.StockTo == stock).Distinct().ToList();
 
 					var possibleDonors = item.Value.GetListOfPossibleDonors(existTransfers);
@@ -295,6 +294,37 @@ namespace ReDistr
 				}
 			}
 			return movings;
+		}
+
+		// Возвращает из заданного списка ЗЧ, те позиции которые необходимо обеспечивать в наличии хотябы на одном складе
+		public static List<OrderRequiredItem> GetOrderRequiredItems(Dictionary<string, Item> items)
+		{
+			var orderRequiredItems = new List<OrderRequiredItem>();
+			foreach (var item in items)
+			{
+				var requiredStocks = new List<Stock>();
+				var requiredItem = new OrderRequiredItem();
+				// Если ЗЧ имеет RequiredAvailability, добавляем ее в список
+				if(item.Value.IsRequiredAvailability())
+				{
+					requiredItem.Item = item.Value;
+					
+				}
+				// Перебираем склады для ЗЧ
+				foreach (var stock in item.Value.Stocks)
+				{
+					// Если склад имеет больше 3х продаж, добавляем данную зч в список для заказа
+					if (stock.CountSelings >= 3 && requiredItem.Item != null)
+					{
+						requiredStocks.Add(stock);
+					}
+				}
+				// Если складов с обязательным налчием нет или RequiredAvailability не была установлена, переходим к следующей ЗЧ
+				if (!requiredStocks.Any() && requiredItem.Item == null) continue;
+				requiredItem.OrderRequiredStocks = requiredStocks;
+				orderRequiredItems.Add(requiredItem);
+			}
+			return orderRequiredItems;
 		}
 
 		// Формирует заказы
@@ -404,6 +434,16 @@ namespace ReDistr
 				File.Move(transferBook, destFileName);
 			}
 
+		}
+
+		// Преобразует логическое значение в инт
+		public static int BoolToInt(bool inPut)
+		{
+			if (inPut)
+			{
+				return 1;
+			}
+			return 0;
 		}
 	}
 }

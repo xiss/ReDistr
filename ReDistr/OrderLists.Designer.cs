@@ -13,9 +13,9 @@ namespace ReDistr {
     
     
     /// 
-    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(5)]
+    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(4)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
-    public sealed partial class Test : Microsoft.Office.Tools.Excel.WorksheetBase {
+    public sealed partial class OrderLists : Microsoft.Office.Tools.Excel.WorksheetBase {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
@@ -23,8 +23,8 @@ namespace ReDistr {
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
-        public Test(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
-                base(factory, serviceProvider, "Лист2", "Лист2") {
+        public OrderLists(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
+                base(factory, serviceProvider, "Лист5", "Лист5") {
         }
         
         /// 
@@ -33,7 +33,7 @@ namespace ReDistr {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         protected override void Initialize() {
             base.Initialize();
-            Globals.Test = this;
+            Globals.OrderLists = this;
             global::System.Windows.Forms.Application.EnableVisualStyles();
             this.InitializeCachedData();
             this.InitializeControls();
@@ -148,15 +148,15 @@ namespace ReDistr {
     
     internal sealed partial class Globals {
         
-        private static Test _Test;
+        private static OrderLists _OrderLists;
         
-        internal static Test Test {
+        internal static OrderLists OrderLists {
             get {
-                return _Test;
+                return _OrderLists;
             }
             set {
-                if ((_Test == null)) {
-                    _Test = value;
+                if ((_OrderLists == null)) {
+                    _OrderLists = value;
                 }
                 else {
                     throw new System.NotSupportedException();
