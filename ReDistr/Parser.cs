@@ -58,6 +58,7 @@ namespace ReDistr
 		private const string ColManufacturerParameters = "D";
 		private const string ColNameParameters = "C";
 		private const string ColStartParamsParameters = "E"; // Колонка с которой выводится дополнительная информация
+		
 		// Диалоговые окна
 		private const string MessegeBoxQuestion = "Дата снятия отчета с остатком не соответствует сегодняшней, продолжить?";
 		private const string MessegeBoxCaption = "Предупреждение";
@@ -69,6 +70,8 @@ namespace ReDistr
 			Globals.Control.Activate();
 
 			// Настраиваем фабрику
+			// Обнуляем параметры
+			SimpleStockFactory.CurrentFactory.ClearStockParams();
 			var curentRow = RowStartStockCfg;
 			uint priority = 1; // Приоритет, от большего к меньшему
 			uint count = 0; // Счетчик складов
@@ -141,7 +144,7 @@ namespace ReDistr
 				// Определяем строку с сигнатурой текущего склада
 				if (stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value != null)
 				{
-					curentStockSignature = stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value.ToString();
+					curentStockSignature = stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value.ToString().ToLower();
 					curentRow++;
 					continue;
 				}
@@ -234,7 +237,7 @@ namespace ReDistr
 				// Определяем строку с сигнатурой текущего склада
 				if (sellingsWb.Worksheets[1].Range[ColStockSignSealings + curentRow].Value != null)
 				{
-					curentStockSignature = sellingsWb.Worksheets[1].Range[ColStockSignSealings + curentRow].Value.ToString();
+					curentStockSignature = sellingsWb.Worksheets[1].Range[ColStockSignSealings + curentRow].Value.ToString().ToLower();
 					curentRow++;
 					continue;
 				}
@@ -277,21 +280,12 @@ namespace ReDistr
 				}
 
 				// Проверим, есть ли у текущей ЗЧ текущей склад
-				// TODO /5 Сравнивать нужно приводя к одному регистру, это нужно сделать везде с сигнатйрами
 				var stock = item.Stocks.Find(s => curentStockSignature.Contains(s.Signature));
 
 				// Если такой склад уже есть, работаем с ним
 				if (stock != null)
 				{
 					stock.CountSelings += selingsCount;
-				}
-				// Если склада нет, создаем его
-				else
-				{
-					// TODO /5 нужны ли эта ветка??
-					//stock = SimpleStockFactory.CurrentFactory.TryGetStock(curentStockSignature);
-					//stock.CountSelings = selingsCount;
-					//item.Stocks.Add(stock);
 				}
 				curentRow++;
 			}
@@ -306,12 +300,12 @@ namespace ReDistr
 			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.NameOfParametersWb);
 			var parametersWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
-			// Обязательное наличие (с создание карточек)
+			// Обязательное наличие (с созданием карточек)
 			// Составляем список складов с листа исключений
 			var stockList = new List<string>();
 			for (var i = 1; i <= Config.StockCount; i++)
 			{
-				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value);
+				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value.ToLower());
 			}
 
 			// Считываем исключения из перемещений
@@ -321,7 +315,7 @@ namespace ReDistr
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
 				// Если не находим создаем необходимую ЗЧ
-				string curenId1C = parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value;
+				string curenId1C = parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value2;
 				if (!items.ContainsKey(curenId1C))
 				{
 					var item = new Item
@@ -348,22 +342,27 @@ namespace ReDistr
 					// Проверим, есть ли у текущей ЗЧ текущей склад
 					var stock = items[curenId1C].Stocks.Find(s => s.Signature.Contains(curentStock));
 					// Если такой склад уже есть, работаем с ним, если нет переходим к следующему складу
-					if (stock != null && parametersWb.Worksheets[4].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value == 1)
+					if (stock != null && parametersWb.Worksheets[4].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value2 == 1)
 					{
 						stock.RequiredAvailability = true;
 					}
 				}
+				// Проставляем комментарий
+				if (items[curenId1C].IsRequiredAvailability())
+				{
+					items[curenId1C].NoteRequiredAvailability =
+						parametersWb.Worksheets[4].Cells[curentRow, 5 + Config.StockCount].Value2;
+				}
 
 				curentRow++;
 			}
-
-
+			
 			// Исключения из перемещений
 			// Составляем список складов с листа исключений
 			stockList = new List<string>();
 			for (var i = 1; i <= Config.StockCount; i++)
 			{
-				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value2);
+				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value2.ToLower());
 			}
 
 			// Считываем исключения из перемещений
@@ -373,7 +372,7 @@ namespace ReDistr
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
 				// Если не находим переходим к следующей строке
-				string curenId1C = parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value;
+				string curenId1C = parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value2;
 				if (items.ContainsKey(curenId1C))
 				{
 					// Проставляем исключения у найденной ЗЧ

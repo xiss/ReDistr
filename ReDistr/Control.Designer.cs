@@ -26,6 +26,8 @@ namespace ReDistr {
         
         internal Microsoft.Office.Tools.Excel.Controls.Button buttonGetOrders;
         
+        internal Microsoft.Office.Tools.Excel.Controls.Button buttonGetOrderLists;
+        
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
@@ -138,6 +140,7 @@ namespace ReDistr {
             this.buttonGetMoving = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "149458F491714314CA41B92C119855940056E1", "149458F491714314CA41B92C119855940056E1", this, "buttonGetMoving");
             this.buttonMakeTransfers = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "24445E89F29FB5246D328EFD26BB2632BC2CE2", "24445E89F29FB5246D328EFD26BB2632BC2CE2", this, "buttonMakeTransfers");
             this.buttonGetOrders = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "34B3811F63229C34F2138595382F59F066D6F3", "34B3811F63229C34F2138595382F59F066D6F3", this, "buttonGetOrders");
+            this.buttonGetOrderLists = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "418EBCAAA4B79144CAA4BC824D8EEE9F4DA014", "418EBCAAA4B79144CAA4BC824D8EEE9F4DA014", this, "buttonGetOrderLists");
         }
         
         /// 
@@ -173,11 +176,21 @@ namespace ReDistr {
             this.buttonGetOrders.UseCompatibleTextRendering = true;
             this.buttonGetOrders.UseVisualStyleBackColor = true;
             // 
+            // buttonGetOrderLists
+            // 
+            this.buttonGetOrderLists.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonGetOrderLists.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.buttonGetOrderLists.Name = "buttonGetOrderLists";
+            this.buttonGetOrderLists.Text = "Рассчитать списки заказов";
+            this.buttonGetOrderLists.UseCompatibleTextRendering = true;
+            this.buttonGetOrderLists.UseVisualStyleBackColor = true;
+            // 
             // Control
             // 
             this.buttonGetMoving.BindingContext = this.BindingContext;
             this.buttonMakeTransfers.BindingContext = this.BindingContext;
             this.buttonGetOrders.BindingContext = this.BindingContext;
+            this.buttonGetOrderLists.BindingContext = this.BindingContext;
         }
         
         /// 

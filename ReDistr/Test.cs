@@ -114,9 +114,9 @@ namespace ReDistr
 					resultRange[curentRow, curentColumn += stockCount] = stock.MinStock;
 					resultRange[curentRow, curentColumn += stockCount] = stock.MaxStock;
 					resultRange[curentRow, curentColumn += stockCount] = stock.Priority;
-					resultRange[curentRow, curentColumn += stockCount] = stock.ExcludeFromMoovings;
-					resultRange[curentRow, curentColumn += stockCount] = stock.RequiredAvailability;
-
+					resultRange[curentRow, curentColumn += stockCount] = ReDistr.BoolToInt(stock.ExcludeFromMoovings);
+					resultRange[curentRow, curentColumn += stockCount] = ReDistr.BoolToInt(stock.RequiredAvailability);
+					
 					curentColumn = ArrayColumnFirstFillNumber;
 					curentColumn += curentStock;
 					curentStock++;

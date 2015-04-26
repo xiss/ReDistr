@@ -19,9 +19,10 @@ namespace ReDistr
 		{
 #warning Удалить потом, для отладки
 #if(DEBUG)
-			//buttonGetMoving_Click(new object(), new EventArgs());
+			buttonGetMoving_Click(new object(), new EventArgs());
 			//buttonMakeTransfers_Click(new object(), new EventArgs());
-			buttonGetOrders_Click(new object(), new EventArgs());
+			//buttonGetOrders_Click(new object(), new EventArgs());
+			//buttonGetOrderLists_Click(new object(), new EventArgs());
 #endif
 		}
 
@@ -40,6 +41,7 @@ namespace ReDistr
 			this.buttonGetMoving.Click += new System.EventHandler(this.buttonGetMoving_Click);
 			this.buttonMakeTransfers.Click += new System.EventHandler(this.buttonMakeTransfers_Click);
 			this.buttonGetOrders.Click += new System.EventHandler(this.buttonGetOrders_Click);
+			this.buttonGetOrderLists.Click += new System.EventHandler(this.buttonGetOrderLists_Click);
 			this.Startup += new System.EventHandler(this.Лист1_Startup);
 			this.Shutdown += new System.EventHandler(this.Лист1_Shutdown);
 
@@ -143,6 +145,36 @@ namespace ReDistr
 
 			// Выбираем лист с pfrfpfvb
 			Globals.Orders.Select();
+		}
+
+		private void buttonGetOrderLists_Click(object sender, EventArgs e)
+		{
+			// Парсим данные из файлов
+			var parser = new Parser();
+			var items = parser.Parse();
+
+			// Если парсинг не удался, выходим
+			if (items == null)
+			{
+				return;
+			}
+
+			// Подготавливаем данные
+			ReDistr.PrepareData(items);
+
+			// Выводим таблицу для тестов
+			Globals.Test.FillListStocks(items);
+
+			// Выводим параметры отчетов
+			Globals.Control.FillReportsParameters();
+
+			// Составляем список для заказа
+			var orderRequiredItems = ReDistr.GetOrderRequiredItems(items);
+
+			// Выводим списки для заказа на лист со списками
+			Globals.OrderLists.FillList(orderRequiredItems);
+
+
 		}
 	}
 }

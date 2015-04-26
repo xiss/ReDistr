@@ -42,7 +42,7 @@ namespace ReDistr
 		private const Excel.XlBordersIndex XlEdgeRight = Excel.XlBordersIndex.xlEdgeRight;
 		private const Excel.XlBorderWeight XlThin = Excel.XlBorderWeight.xlThin;
 		private const string CountNameStyle = "Хороший";
-		private const string TransferNameStyle = "Заголовок 1";
+		private const string HeaderNameStyle = "Заголовок 1";
 		private const string NumberFormatText = "@";
 
 		// Выводит на лист заказы сгруппированные по поставщику
@@ -103,7 +103,7 @@ namespace ReDistr
 				// Выводим перемещение на лист
 				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 4]].Value2 = resultRange;
 				// Применяем стили и форматирование
-				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4]].Style = TransferNameStyle;
+				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4]].Style = HeaderNameStyle;
 				Range[Cells[curentRow, ItemParametrsCount], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].Style = CountNameStyle;
 				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].NumberFormat = NumberFormatText;
 				// Границы колонок
