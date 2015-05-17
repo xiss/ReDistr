@@ -202,6 +202,7 @@ namespace ReDistr
 		}
 
 		// Расчитывает максимальный остаток для указанного склада
+		// TODO учитывать категории для расчета остатков, подумать нужно ли это делать
 		public void UpdateMaxStock(Item item)
 		{
 			var sailsPerDay = CountSelings / Config.SellingPeriod;

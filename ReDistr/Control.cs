@@ -70,11 +70,11 @@ namespace ReDistr
 			// Формируем перемещения
 			var transfers = new List<Transfer>();
 			// для обеспечения одного комплекта
-			//transfers = ReDistr.GetTransfersFirstLvl(items, transfers);
+			transfers = ReDistr.GetTransfersFirstLvl(items, transfers);
 			// для обеспечения мин. остатка
-			//transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
+			transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
 			// для обеспечения необходимого запаса, перемещения создаются для уже созданных направлений
-			//transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
+			transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
 
 			// Если необходимо делаем перемещение неликвида на Попова
 			if (Config.StockToTransferIlliquid != null)
