@@ -13,5 +13,6 @@ namespace ReDistr
         bool SetStockParams(string stockName, uint minimum, uint maximum, string signature, uint priority); //устанавливает параметры для создаваемых экземляров
                                                                                            //возвращает false если такая сигнатура уже существует
         IEnumerable<Stock> GetAllStocks();
+	    void ClearStockParams();
     }
 }

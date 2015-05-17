@@ -19,8 +19,8 @@ namespace ReDistr
 		{
 #warning Удалить потом, для отладки
 #if(DEBUG)
-			buttonGetMoving_Click(new object(), new EventArgs());
-			//buttonMakeTransfers_Click(new object(), new EventArgs());
+			buttonGetTransfers_Click(new object(), new EventArgs());
+			//buttonMakeTransfersBook_Click(new object(), new EventArgs());
 			//buttonGetOrders_Click(new object(), new EventArgs());
 			//buttonGetOrderLists_Click(new object(), new EventArgs());
 #endif
@@ -38,8 +38,8 @@ namespace ReDistr
 		/// </summary>
 		private void InternalStartup()
 		{
-			this.buttonGetMoving.Click += new System.EventHandler(this.buttonGetMoving_Click);
-			this.buttonMakeTransfers.Click += new System.EventHandler(this.buttonMakeTransfers_Click);
+			this.buttonGetMoving.Click += new System.EventHandler(this.buttonGetTransfers_Click);
+			this.buttonMakeTransfers.Click += new System.EventHandler(this.buttonMakeTransfersBook_Click);
 			this.buttonGetOrders.Click += new System.EventHandler(this.buttonGetOrders_Click);
 			this.buttonGetOrderLists.Click += new System.EventHandler(this.buttonGetOrderLists_Click);
 			this.Startup += new System.EventHandler(this.Лист1_Startup);
@@ -49,7 +49,7 @@ namespace ReDistr
 
 		#endregion
 
-		private void buttonGetMoving_Click(object sender, EventArgs e)
+		private void buttonGetTransfers_Click(object sender, EventArgs e)
 		{
 			// Парсим данные из файлов
 			var parser = new Parser();
@@ -70,11 +70,17 @@ namespace ReDistr
 			// Формируем перемещения
 			var transfers = new List<Transfer>();
 			// для обеспечения одного комплекта
-			transfers = ReDistr.GetTransfersFirstLvl(items, transfers);
+			//transfers = ReDistr.GetTransfersFirstLvl(items, transfers);
 			// для обеспечения мин. остатка
-			transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
+			//transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
 			// для обеспечения необходимого запаса, перемещения создаются для уже созданных направлений
-			transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
+			//transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
+
+			// Если необходимо делаем перемещение неликвида на Попова
+			if (Config.StockToTransferIlliquid != null)
+			{
+				transfers = ReDistr.GetTransfersIlliuid(items, transfers);
+			}
 
 			// Выводим отчет для тестов если необходимо
 			if (Config.ShowReport)
@@ -106,7 +112,7 @@ namespace ReDistr
 		}
 
 		// Архивирует старый книги с перемещениями, и создает новые
-		private void buttonMakeTransfers_Click(object sender, EventArgs e)
+		private void buttonMakeTransfersBook_Click(object sender, EventArgs e)
 		{
 			// Архивируем предыдущие перемещения
 			ReDistr.ArchiveTransfers();

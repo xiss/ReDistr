@@ -6,93 +6,93 @@ using System.Text;
 
 namespace ReDistr
 {
-    public class SimpleStockFactory: IStockFactory
-    {
-        private static IStockFactory _factoryReference;
+	public class SimpleStockFactory: IStockFactory
+	{
+		private static IStockFactory _factoryReference;
 
-        private SimpleStockFactory()
-        {
-            _paramsList = new List<StockParams>();
-        }
+		private SimpleStockFactory()
+		{
+			_paramsList = new List<StockParams>();
+		}
 
-        public static IStockFactory CurrentFactory
-        {
-            get
-            {
-                if(_factoryReference == null)
-                    _factoryReference = new SimpleStockFactory();
-                return _factoryReference;
-            }
-        }
-        public Stock GetStock(string stockSignature)
-        {
-            //TODO: проверить поведение при несущестующем значении
-            try
-            {
+		public static IStockFactory CurrentFactory
+		{
+			get
+			{
+				if(_factoryReference == null)
+					_factoryReference = new SimpleStockFactory();
+				return _factoryReference;
+			}
+		}
+		public Stock GetStock(string stockSignature)
+		{
+			//TODO: проверить поведение при несущестующем значении
+			try
+			{
 				var curentParams = _paramsList.Find(s => s.Signature.ToLower() == stockSignature.ToLower());
-                if(string.IsNullOrEmpty(curentParams.Signature)) return null;
-                var stock = new Stock
-                {
-                    Signature =  curentParams.Signature,
-                    Name = curentParams.Name,
-                    DefaultPeriodMaxStock = curentParams.Maximum,
-                    DefaultPeriodMinStock = curentParams.Minimum,
-                    Priority = curentParams.Priority
-                };
-                return stock;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            
-        }
+				if(string.IsNullOrEmpty(curentParams.Signature)) return null;
+				var stock = new Stock
+				{
+					Signature =  curentParams.Signature,
+					Name = curentParams.Name,
+					DefaultPeriodMaxStock = curentParams.Maximum,
+					DefaultPeriodMinStock = curentParams.Minimum,
+					Priority = curentParams.Priority
+				};
+				return stock;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+			
+		}
 
 
 
-        public Stock TryGetStock(string inputString)
-        {
-            Stock foundStock = null;
-            foreach (var prm in _paramsList)
-            {
-                if (inputString.ToLower().Contains(prm.Signature.ToLower()))
-                {
-                    foundStock = GetStock(prm.Signature);
-                    break;
-                }
-            }
-            return foundStock;
-        }
+		public Stock TryGetStock(string inputString)
+		{
+			Stock foundStock = null;
+			foreach (var prm in _paramsList)
+			{
+				if (inputString.ToLower().Contains(prm.Signature.ToLower()))
+				{
+					foundStock = GetStock(prm.Signature);
+					break;
+				}
+			}
+			return foundStock;
+		}
 
-        public bool SetStockParams(string stockName, uint minimum, uint maximum, string signature, uint priority)
-        {
-            if(_paramsList.Exists(s => s.Signature == signature)) return false;
-            _paramsList.Add(new StockParams() { Maximum = maximum, Minimum = minimum, Name = stockName, Signature = signature, Priority = priority });
-            return true;
-        }
+		public bool SetStockParams(string stockName, uint minimum, uint maximum, string signature, uint priority)
+		{
+			if(_paramsList.Exists(s => s.Signature == signature)) return false;
+			_paramsList.Add(new StockParams() { Maximum = maximum, Minimum = minimum, Name = stockName, Signature = signature, Priority = priority });
+			return true;
+		}
 
-        public void ClearStockParams()
-        {
-        	_paramsList.Clear();
-        }
+		public void ClearStockParams()
+		{
+			_paramsList.Clear();
+		}
 
-        public IEnumerable<Stock> GetAllStocks()
-        {
-            return _paramsList.Select(stockParam => GetStock(stockParam.Signature));
-        }
+		public IEnumerable<Stock> GetAllStocks()
+		{
+			return _paramsList.Select(stockParam => GetStock(stockParam.Signature));
+		}
 
-        private readonly  List<StockParams> _paramsList;
+		private readonly  List<StockParams> _paramsList;
 
-        private struct StockParams
-        {
-            public string Name;
-            public string Signature;
-            public uint Maximum;
-            public uint Minimum;
-            public uint Priority;
-        }
-        
-    }
+		private struct StockParams
+		{
+			public string Name;
+			public string Signature;
+			public uint Maximum;
+			public uint Minimum;
+			public uint Priority;
+		}
+		
+	}
 
-    
+	
 }

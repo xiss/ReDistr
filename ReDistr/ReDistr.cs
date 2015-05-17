@@ -274,6 +274,64 @@ namespace ReDistr
 			return transfers;
 		}
 
+		// Создает перемещения неликвида на попова если там 0
+		public static List<Transfer> GetTransfersIlliuid(Dictionary<string, Item> items, List<Transfer> transfers)
+		{
+			var stockTo = Config.StockToTransferIlliquid;
+
+			// Перебираем список ЗЧ
+			foreach (KeyValuePair<string, Item> item in items)
+			{
+				// Расчитываем свободные остатки на складах
+				// TODO наверное убрать, не помню
+				item.Value.UpdateFreeStocks("kit");
+
+				// Если категория не неликвид, переходим к следующей ЗЧ
+				// TODO hardcode
+				if (item.Value.StorageCategory != "Неликвид")
+				{
+					continue;
+				}
+
+				// Если на нужном складе 0, а на других есть в наличии, делаем перемещение
+				if (!(item.Value.Stocks.Find(stock => stock == stockTo).Count == 0 && item.Value.GetSumStocks() > 0))
+				{
+					continue;
+				}
+				
+				// Перебираем список складов у ЗЧ
+				foreach (var stock in item.Value.Stocks)
+				{
+					// Если данный склад исключен из перемещений, переходим к следующему складу
+					if (stock.ExcludeFromMoovings)
+					{
+						continue;
+					}
+
+					// Если на данном складе установлено обязательное наличие, Переходим к следующему
+					if (stock.RequiredAvailability)
+					{
+						continue;
+					}
+
+					var possibleDonors = item.Value.GetListOfPossibleDonors();
+					// Создаем необходимые перемещения от доноров
+					foreach (var possibleDonor in possibleDonors)
+					{
+						var transfer = new Transfer
+							{
+								StockFrom = possibleDonor,
+								StockTo = stockTo,
+								Count = possibleDonor.FreeStock,
+								Item = item.Value
+							};
+							transfer.Apply();
+							transfers.Add(transfer);
+					}
+				}
+			}
+			return transfers;
+		}
 		// Дает список возможных перемещений
 		public static List<Transfer> GetPossibleTransfers(IEnumerable<Stock> stocks)
 		{
