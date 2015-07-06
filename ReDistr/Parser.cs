@@ -303,14 +303,14 @@ namespace ReDistr
 			var parametersWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Обязательное наличие (с созданием карточек)
-			// Составляем список складов с листа исключений
+			// Составляем список складов с листа
 			var stockList = new List<string>();
 			for (var i = 1; i <= Config.StockCount; i++)
 			{
 				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value.ToLower());
 			}
 
-			// Считываем исключения из перемещений
+			// Считываем обязательное наличие
 			var curentRow = RowStartParameters;
 
 			while (parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value != null)
@@ -323,10 +323,10 @@ namespace ReDistr
 					var item = new Item
 					{
 						Id1C = parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value.ToString(),
-						Article = parametersWb.Worksheets[4].Range[ColArticleParameters + curentRow].Value.ToString(),
+						Article = parametersWb.Worksheets[4].Range[ColArticleParameters + curentRow].Value,
 						//StorageCategory = parametersWb.Worksheets[4].Range[ColStorageCategorySealings + curentRow].Value.ToString(),
 						Name = parametersWb.Worksheets[4].Range[ColNameParameters + curentRow].Value.ToString(),
-						Manufacturer = parametersWb.Worksheets[4].Range[ColManufacturerParameters + curentRow].Value.ToString(),
+						Manufacturer = parametersWb.Worksheets[4].Range[ColManufacturerParameters + curentRow].Value.ToString()
 					};
 
 					// Создаем склады для ЗЧ
@@ -338,7 +338,7 @@ namespace ReDistr
 
 					items.Add(item.Id1C, item);
 				}
-				// Проставляем исключения у найденной ЗЧ
+				// Проставляем обязательное наличие у найденной ЗЧ
 				foreach (var curentStock in stockList)
 				{
 					// Проверим, есть ли у текущей ЗЧ текущей склад
