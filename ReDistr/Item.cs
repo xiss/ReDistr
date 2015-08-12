@@ -83,16 +83,16 @@ namespace ReDistr
 		// Возвращает сумму всех свободных остатков, если задан список перемещений то остатки берутся из доноров в этих перемещениях
 		public double GetSumFreeStocks(List<Transfer> existTransfers = null)
 		{
-			// Если список не задан, выдаем сумму для всех складов
-			if (existTransfers == null)
-			{
-				return Stocks.Sum(stock => stock.FreeStock);
-			}
-
 			// Если задан OneDonor, выдаем свободные остатки только для этого донора
 			if (Config.OneDonor != null)
 			{
 				return Stocks.Where(stock => stock == Config.OneDonor).Sum(stock => stock.FreeStock);
+			}
+
+			// Если список не задан, выдаем сумму для всех складов
+			if (existTransfers == null)
+			{
+				return Stocks.Sum(stock => stock.FreeStock);
 			}
 
 			// Если задан список доноров, выдаем сумму свободных остатков по этим донорам

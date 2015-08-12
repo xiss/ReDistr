@@ -189,6 +189,7 @@ namespace ReDistr
 			return transfers;
 		}
 
+		// TODO следующей итерацией мы обеспечиваем наличия мин остатка, но не обеспечиваем перемещение в случае если мин остаток равен остатку. Пока так и оставлю.
 		// Создает необходимые перемещения для обеспечения необходимого запаса
 		public static List<Transfer> GetTransfersThirdLvl(Dictionary<string, Item> items, List<Transfer> transfers)
 		{
