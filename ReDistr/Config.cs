@@ -51,8 +51,11 @@ namespace ReDistr
 		// TODO /5 учитывать
 		public static double MinSoldKits = 0;
 
-		// Склад для перемещения неликвида
-		public static Stock StockToTransferIlliquid = null;
+		// Склад для перемещения выбранных категорий (неликвид)
+		public static Stock StockToTransferSelectedStorageCategory = null;
+
+		// Список категорий для перемещения на выбранный склад
+		public static List<String> ListSelectedStorageCategoryToTransfer;
 
 		// Если параметр указан, то перемещения делать только с этого склада
 		public static Stock OneDonor = null;

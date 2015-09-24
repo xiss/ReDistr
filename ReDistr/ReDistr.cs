@@ -278,18 +278,17 @@ namespace ReDistr
 		// Создает перемещения неликвида на попова если там 0
 		public static List<Transfer> GetTransfersIlliuid(Dictionary<string, Item> items, List<Transfer> transfers)
 		{
-			var stockTo = Config.StockToTransferIlliquid;
+			var stockTo = Config.StockToTransferSelectedStorageCategory;
 
 			// Перебираем список ЗЧ
 			foreach (KeyValuePair<string, Item> item in items)
 			{
 				// Расчитываем свободные остатки на складах
 				// TODO наверное убрать, не помню
-				item.Value.UpdateFreeStocks("kit");
+				//item.Value.UpdateFreeStocks("kit");
 
-				// Если категория не неликвид, переходим к следующей ЗЧ
-				// TODO hardcode
-				if (item.Value.StorageCategory != "Неликвид")
+				// Если категория не указана в списке, переходим к следующей ЗЧ
+				if (!Config.ListSelectedStorageCategoryToTransfer.Contains(item.Value.StorageCategory))
 				{
 					continue;
 				}

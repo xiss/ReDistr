@@ -77,7 +77,7 @@ namespace ReDistr
 			transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
 
 			// Если необходимо делаем перемещение неликвида на Попова
-			if (Config.StockToTransferIlliquid != null)
+			if (Config.StockToTransferSelectedStorageCategory != null)
 			{
 				transfers = ReDistr.GetTransfersIlliuid(items, transfers);
 			}

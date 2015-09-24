@@ -25,7 +25,8 @@ namespace ReDistr
 		private const string RngNameOfOnlyPopovaDonor = "B19";
 		private const string RngNameFolderTransfer = "B20";
 		private const string RngNameFolderArchiveTransfers = "B21";
-		private const string RngNameStockToTransferIlliquid = "B22";
+		private const string RngNameListSelectedStorageCategoryToTransfer = "B22";
+		private const string RngNameStockToTransferSelectedStorageCategory = "B23";
 		private const uint RowStartStockCfg = 4; // Строка с которой считываются склады в настройках
 		private const string ColStockNameCfg = "A";
 		private const string ColStockMinCfg = "B";
@@ -47,7 +48,7 @@ namespace ReDistr
 		private const string RngDateSealings = "B3"; // Дата отчета
 		private const string ColStockSignSealings = "B"; // Сигнатура склада
 		private const string ColArticleSealings = "C"; // Артикул
-		private const string ColCountSealings = "X"; // Количество продаж
+		private const string ColCountSealings = "AE"; // Количество продаж
 		private const string ColId1CSealings = "T"; // Код товара
 		private const string ColManufacturerSealings = "R"; // Производитель
 		private const string ColStorageCategorySealings = "U"; // Категроия хранения
@@ -101,7 +102,10 @@ namespace ReDistr
 			Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
 			Config.OneDonor = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2);
 			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
-			Config.StockToTransferIlliquid = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngNameStockToTransferIlliquid].Value2);
+			Config.StockToTransferSelectedStorageCategory = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngNameStockToTransferSelectedStorageCategory].Value2);
+			// Категории для перемещения на указанный склад полностью
+			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
+			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
 			// Категории для перемещения
 			string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
 			Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
