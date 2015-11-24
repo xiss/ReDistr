@@ -49,6 +49,18 @@ namespace ReDistr
 
 		#endregion
 
+        // Выводит параметры отчетов на страницу управления
+        public void FillReportsParameters()
+        {
+            var resultRange = new dynamic[4, 1];
+
+            resultRange[0, 0] = Config.PeriodSellingFrom;
+            resultRange[1, 0] = Config.PeriodSellingTo;
+            resultRange[2, 0] = Config.SellingPeriod;
+            resultRange[3, 0] = Config.StockDate;
+
+            Range["G3:G6"].Value = resultRange;
+        }
 		private void buttonGetTransfers_Click(object sender, EventArgs e)
 		{
 			// Парсим данные из файлов
@@ -96,19 +108,6 @@ namespace ReDistr
 
 			// Выбираем лист с перемещениями
 			Globals.Transfers.Select();
-		}
-
-		// Выводит параметры отчетов на страницу управления
-		public void FillReportsParameters()
-		{
-			var resultRange = new dynamic[4, 1];
-
-			resultRange[0, 0] = Config.PeriodSellingFrom;
-			resultRange[1, 0] = Config.PeriodSellingTo;
-			resultRange[2, 0] = Config.SellingPeriod;
-			resultRange[3, 0] = Config.StockDate;
-
-			Range["G3:G6"].Value = resultRange;
 		}
 
 		// Архивирует старый книги с перемещениями, и создает новые
