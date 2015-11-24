@@ -127,12 +127,6 @@
   <ItemGroup>
     <Compile Include="Order.cs" />
     <Compile Include="OrderRequiredItem.cs" />
-    <Compile Include="Ribbon1.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Ribbon1.Designer.cs">
-      <DependentUpon>Ribbon1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Transfer.cs" />
     <Compile Include="ReDistr.cs" />
     <Compile Include="Config.cs" />
@@ -190,9 +184,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Ribbon1.resx">
-      <DependentUpon>Ribbon1.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -205,7 +196,6 @@
     <None Include="ReDistr.xlsx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReDistr_TemporaryKey.pfx" />
     <None Include="ThisWorkbook.Designer.xml">
       <DependentUpon>ThisWorkbook.cs</DependentUpon>
     </None>
@@ -246,21 +236,21 @@
     <ManifestKeyFile>ReDistr_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>42F1BFDA9751EA058548B97376C89EEFECEC6F53</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>F63D155E946EDF0FCDA81B1194E62B82DF0A6D57</ManifestCertificateThumbprint>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
-        <ProjectProperties HostName="ReDistr.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files\Microsoft Office\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]ReDistr.xlsx&quot;" />
+        <ProjectProperties HostName="ReDistr.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files (x86)\Microsoft Office\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]ReDistr.xlsx&quot;" />
         <Host Name="Excel Document" Path=".\ReDistr.xlsx" GeneratedCodeNamespace="ReDistr">
           <HostItem Name="Лист1" Code="Control.cs" CanonicalName="Лист1" DisplayName="Управление" Blueprint="Control.Designer.xml" GeneratedCode="Control.Designer.cs" />
-          <HostItem Name="Лист5" Code="OrderLists.cs" CanonicalName="Лист5" DisplayName="Списоков заказов" Blueprint="OrderLists.Designer.xml" GeneratedCode="OrderLists.Designer.cs" />
           <HostItem Name="Лист4" Code="Orders.cs" CanonicalName="Лист4" DisplayName="Заказы" Blueprint="Orders.Designer.xml" GeneratedCode="Orders.Designer.cs" />
           <HostItem Name="Лист2" Code="Test.cs" CanonicalName="Лист2" DisplayName="Тест" Blueprint="Test.Designer.xml" GeneratedCode="Test.Designer.cs" />
           <HostItem Name="ThisWorkbook" Code="ThisWorkbook.cs" CanonicalName="ThisWorkbook" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.cs" />
           <HostItem Name="Лист3" Code="Transfers.cs" CanonicalName="Лист3" DisplayName="Перемещения" Blueprint="Transfers.Designer.xml" GeneratedCode="Transfers.Designer.cs" />
+          <HostItem Name="Лист5" Code="OrderLists.cs" CanonicalName="Лист5" DisplayName="Списоков заказов" Blueprint="OrderLists.Designer.xml" GeneratedCode="OrderLists.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>
