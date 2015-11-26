@@ -33,6 +33,8 @@ namespace ReDistr
 		private const string ColStockMinCfg = "B";
 		private const string ColStockMaxCfg = "C";
 		private const string ColStockSignCfg = "D";
+        private const uint RowStartExcludeCompetitors = 4;
+        private const string ColExcludeCompetitors = "G";
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
 		private const string RngDateStocks = "B3"; // Ячейка содержащая дату отчета
@@ -105,6 +107,16 @@ namespace ReDistr
 			}
 			Config.StockCount = count;
 			Config.SetPossibleTransfers();
+
+            // Конкуренты-исключения
+            curentRow = RowStartExcludeCompetitors;
+            var list = new List<string>() ;
+            while (Globals.Control.Range[ColExcludeCompetitors + curentRow].Value != null)
+            {
+                list.Add(Globals.Control.Range[ColExcludeCompetitors + curentRow].Value.ToString());
+                curentRow++;
+            }
+            Config.ListExcludeCompetitors = list;
 
 			// Прописываем в конфиг пути и названия файлов из настроечного листа
 			Config.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
@@ -520,26 +532,41 @@ namespace ReDistr
 		}
 
 		// Основной метод парсера, из него вызываются все остальные
-		public Dictionary<string, Item> Parse()
+        public Dictionary<string, Item> Parse(bool IncludeSellings = true, bool IncludeAdditionalParameters = true, bool IncludeCompetitorsFromAP = true)
 		{
+            Globals.ThisWorkbook.items = null;
+
 			// Считываем настройки
 			MakeConfig();
 
 			// Создаем список ЗЧ и указываем тукущие остатки
 			bool _continue;
 			var items = GetItems(out _continue);
+            Config.ParsedStocks = true;
 
 			// Если отчет не подходит, выходим
 			if (!_continue) return null;
 
 			// Добавляем информацию по продажам
-			GetSellings(items);
+            if (IncludeSellings)
+            {
+                GetSellings(items);
+            }
+            Config.ParsedSealings = true;
 
 			// Добавляем Кратность и исключения
-			GetAdditionalParameters(items);
+            if (IncludeAdditionalParameters)
+            {
+                GetAdditionalParameters(items);
+            }
+            Config.ParsedAdditionalParameters = true;
 
             // Добавляем конкурентов
-            GetCompetitorsFromAP(items);
+            if (IncludeCompetitorsFromAP)
+            {
+                GetCompetitorsFromAP(items);
+            }
+            Config.ParsedCompetitors = true;
 
 			// Настраиваем конфиг
 			SetConfig(items);

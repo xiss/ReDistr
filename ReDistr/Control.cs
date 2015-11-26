@@ -17,13 +17,7 @@ namespace ReDistr
 	{
 		private void Лист1_Startup(object sender, System.EventArgs e)
 		{
-#warning Удалить потом, для отладки
-#if(DEBUG)
-			buttonGetTransfers_Click(new object(), new EventArgs());
-			//buttonMakeTransfersBook_Click(new object(), new EventArgs());
-			//buttonGetOrders_Click(new object(), new EventArgs());
-			//buttonGetOrderLists_Click(new object(), new EventArgs());
-#endif
+
 		}
 
 		private void Лист1_Shutdown(object sender, System.EventArgs e)

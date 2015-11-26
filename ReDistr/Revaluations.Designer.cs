@@ -13,9 +13,9 @@ namespace ReDistr {
     
     
     /// 
-    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(6)]
+    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(3)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
-    public sealed partial class Test : Microsoft.Office.Tools.Excel.WorksheetBase {
+    public sealed partial class Revaluations : Microsoft.Office.Tools.Excel.WorksheetBase {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
@@ -23,8 +23,8 @@ namespace ReDistr {
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
-        public Test(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
-                base(factory, serviceProvider, "Лист2", "Лист2") {
+        public Revaluations(global::Microsoft.Office.Tools.Excel.Factory factory, global::System.IServiceProvider serviceProvider) : 
+                base(factory, serviceProvider, "Лист6", "Лист6") {
         }
         
         /// 
@@ -33,7 +33,7 @@ namespace ReDistr {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         protected override void Initialize() {
             base.Initialize();
-            Globals.Test = this;
+            Globals.Revaluations = this;
             global::System.Windows.Forms.Application.EnableVisualStyles();
             this.InitializeCachedData();
             this.InitializeControls();
@@ -136,6 +136,9 @@ namespace ReDistr {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeComponents() {
+            // 
+            // Revaluation
+            // 
         }
         
         /// 
@@ -148,15 +151,15 @@ namespace ReDistr {
     
     internal sealed partial class Globals {
         
-        private static Test _Test;
+        private static Revaluations _Revaluations;
         
-        internal static Test Test {
+        internal static Revaluations Revaluations {
             get {
-                return _Test;
+                return _Revaluations;
             }
             set {
-                if ((_Test == null)) {
-                    _Test = value;
+                if ((_Revaluations == null)) {
+                    _Revaluations = value;
                 }
                 else {
                     throw new System.NotSupportedException();

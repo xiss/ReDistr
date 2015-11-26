@@ -434,6 +434,27 @@ namespace ReDistr
 			return orders;
 		}
 
+        // Создает переоценку
+        public static List<Revaluation> GetRevaluations(Dictionary<string, Item> items)
+        {
+            var revaluations = new List<Revaluation>();
+
+            // Перебираем ЗЧ
+            foreach (KeyValuePair<string, Item> item in items)
+            {
+                // Если ЗЧ не имеет указанных конкурентов, продолжаем
+                if (item.Value.Сompetitors.Count == 0)
+                {
+                    continue;
+                }
+
+                // Ищем ближайшего конкурента
+                item.Value.GetСompetitor();
+
+            }
+            return revaluations;
+        }
+
 		// Создает книгу с заданным именем, вставляет в нее нужные данные и сохраняет
 		public static void MakeImpot1CBook(Range inputRange, string bookName, string folder)
 		{

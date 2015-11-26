@@ -66,11 +66,26 @@ namespace ReDistr
 		// Категории хранения товара для перемещения
 		public static List<string> ListStorageCategoryToTransfers;
 
+        // Список конкурентов исключений
+        public static List<string> ListExcludeCompetitors;
+
 		// Список поставщиков
 		public static List<string> ListSuppliers;
 
 		// Значение параметра Supplier по умолчанию у ЗЧ
 		public static string DefaultSupplierName = "none";
+
+        // Выполнялся ли парс Остатков
+        public static bool ParsedStocks = false;
+
+        // Выполнялся ли парс Продаж
+        public static bool ParsedSealings = false;
+
+        // Выполнялся ли парс дополнительных параметров
+        public static bool ParsedAdditionalParameters = false;
+
+        // Выполнялся ли парс конкурентов
+        public static bool ParsedCompetitors = false;
 
 		// Устанавливает список возможных перемещений и их количество
 		public static void SetPossibleTransfers()

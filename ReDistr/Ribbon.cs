@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Office.Tools.Ribbon;
+using System.Windows.Forms;
 
 namespace ReDistr
 {
@@ -10,7 +11,15 @@ namespace ReDistr
     {
         private void Ribbon_Load(object sender, RibbonUIEventArgs e)
         {
+#warning Удалить потом, для отладки
+#if(DEBUG)
+            // Парсим данные из файлов
+            var parser = new Parser();
+            Globals.ThisWorkbook.items = parser.Parse(true, true,true);
 
+            // Обновляем параметры
+            this.updateInfo();
+#endif
         }
 
         // Обновить блок с информацией
@@ -18,14 +27,20 @@ namespace ReDistr
             labelPeriodSelling.Label = Config.PeriodSellingFrom.ToString("dd.MM.yy") + " - " + Config.PeriodSellingTo.ToString("dd.MM.yy");
             labelPeriodSellingCount.Label = Config.SellingPeriod.ToString() + " (дни)";
             labelStockDate.Label = Config.StockDate.ToString("dd.MM.yy");
+
+            // Включаем/отключаем кнопки в зависимости от результатов парса
+            // TODO Доделать с остальными
+            if( Config.ParsedStocks || Config.ParsedSealings || Config.ParsedAdditionalParameters){
+                buttonGetOrder.Enabled = true;                
+            }
+            
         }
         
+#if(!REVAL)
         // Сформировать списки для заказа
         private void buttonGetOrderLists_Click(object sender, RibbonControlEventArgs e)
         {
-            // Парсим данные из файлов
-            var parser = new Parser();
-            var items = parser.Parse();
+            var items = Globals.ThisWorkbook.items;
 
             // Если парсинг не удался, выходим
             if (items == null)
@@ -52,9 +67,7 @@ namespace ReDistr
         // Сформировать заказы
         private void buttonGetOrders_Click(object sender, RibbonControlEventArgs e)
         {
-            // Парсим данные из файлов
-            var parser = new Parser();
-            var items = parser.Parse();
+            var items = Globals.ThisWorkbook.items;
 
             // Если парсинг не удался, выходим
             if (items == null)
@@ -94,9 +107,7 @@ namespace ReDistr
         // Сформировать перемещения
         private void buttonGetTransfers_Click(object sender, RibbonControlEventArgs e)
         {
-            // Парсим данные из файлов
-            var parser = new Parser();
-            var items = parser.Parse();
+            var items = Globals.ThisWorkbook.items;
 
             // Если парсинг не удался, выходим
             if (items == null)
@@ -139,6 +150,28 @@ namespace ReDistr
 
             // Выбираем лист с перемещениями
             Globals.Transfers.Select();
+        }
+#endif
+        // Парсим данные
+        private void buttonParseData_Click(object sender, RibbonControlEventArgs e)
+        {
+            // Парсим данные из файлов
+            var parser = new Parser();
+            Globals.ThisWorkbook.items = parser.Parse(checkBoxIncludeSellings.Checked, checkBoxIncludeAdditionalParameters.Checked, checkBoxIncludeCompetitorsFromAP.Checked);
+
+            // Обновляем параметры
+            this.updateInfo();
+        }
+
+        private void button1_Click(object sender, RibbonControlEventArgs e)
+        {
+            button1.Label = Config.StockCount.ToString();
+           
+        }
+
+        private void buttonGetRevaluations_Click(object sender, RibbonControlEventArgs e)
+        {
+            ReDistr.GetRevaluations(Globals.ThisWorkbook.items);
         }
 
     }

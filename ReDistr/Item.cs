@@ -35,7 +35,7 @@ namespace ReDistr
 		public double InBundle = 1;
 
         // Себестоимость
-        public double CostPrice;
+        public double CostPrice = 0;
 
 		// Комментарий, почему установлена RequiredAvailability
 		public string NoteRequiredAvailability;
@@ -181,6 +181,15 @@ namespace ReDistr
 		{
 			return Stocks.Any(stock => stock.RequiredAvailability);
 		}
+
+        // Возвращает ближаещего конкурента с учетом исключений
+        // TODO Доделать
+        public Сompetitor GetСompetitor()
+        {
+            //var a =  Сompetitors.OrderBy(competitor => competitor.PositionNumber).First;
+            return null;
+         
+        }
 
 	}
 }
