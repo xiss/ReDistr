@@ -178,6 +178,7 @@
     <Compile Include="OrderLists.Designer.cs">
       <DependentUpon>OrderLists.Designer.xml</DependentUpon>
     </Compile>
+    <Compile Include="Сompetitor.cs" />
     <EmbeddedResource Include="Control.resx">
       <DependentUpon>Control.cs</DependentUpon>
     </EmbeddedResource>

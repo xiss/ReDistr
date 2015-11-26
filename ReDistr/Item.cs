@@ -34,11 +34,17 @@ namespace ReDistr
 		// Количество товара в упаковке
 		public double InBundle = 1;
 
+        // Себестоимость
+        public double CostPrice;
+
 		// Комментарий, почему установлена RequiredAvailability
 		public string NoteRequiredAvailability;
 
 		// Остатки на складах
 		public List<Stock> Stocks = new List<Stock>();
+
+        // Конкуренты в Питерплюсе
+        public List<Сompetitor> Сompetitors = new List<Сompetitor>();
 
 		// Возвращает список всех возможных доноров, отсортированный по убыванию. Если задан список перемещений, то доноры выдаются из этого списка
 		public List<Stock> GetListOfPossibleDonors(List<Transfer> existTransfers = null)

@@ -12,12 +12,44 @@ namespace ReDistr
         {
 
         }
-        // Заказы
-        private void buttonGetOrderLists_Click(object sender, RibbonControlEventArgs e)
-        {
 
+        // Обновить блок с информацией
+        public void updateInfo(){
+            labelPeriodSelling.Label = Config.PeriodSellingFrom.ToString("dd.MM.yy") + " - " + Config.PeriodSellingTo.ToString("dd.MM.yy");
+            labelPeriodSellingCount.Label = Config.SellingPeriod.ToString() + " (дни)";
+            labelStockDate.Label = Config.StockDate.ToString("dd.MM.yy");
         }
         
+        // Сформировать списки для заказа
+        private void buttonGetOrderLists_Click(object sender, RibbonControlEventArgs e)
+        {
+            // Парсим данные из файлов
+            var parser = new Parser();
+            var items = parser.Parse();
+
+            // Если парсинг не удался, выходим
+            if (items == null)
+            {
+                return;
+            }
+
+            // Подготавливаем данные
+            ReDistr.PrepareData(items);
+
+            // Выводим таблицу для тестов
+            Globals.Test.FillListStocks(items);
+
+            // Обновляем параметры
+            this.updateInfo();
+
+            // Составляем список для заказа
+            var orderRequiredItems = ReDistr.GetOrderRequiredItems(items);
+
+            // Выводим списки для заказа на лист со списками
+            Globals.OrderLists.FillList(orderRequiredItems);
+        }
+        
+        // Сформировать заказы
         private void buttonGetOrders_Click(object sender, RibbonControlEventArgs e)
         {
             // Парсим данные из файлов
@@ -36,8 +68,8 @@ namespace ReDistr
             // Выводим таблицу для тестов
             Globals.Test.FillListStocks(items);
 
-            // Выводим параметры отчетов
-            Globals.Control.FillReportsParameters();
+            // Обновляем параметры
+            this.updateInfo();
 
             // Формирует заказы
             var orders = new List<Order>();
@@ -49,7 +81,6 @@ namespace ReDistr
             // Выбираем лист с pfrfpfvb
             Globals.Orders.Select();
         }
-        // Перемещения
         // Архивирует старый книги с перемещениями, и создает новые
         private void buttonMakeTransfersBook_Click(object sender, RibbonControlEventArgs e)
         {
@@ -103,8 +134,8 @@ namespace ReDistr
             // Выводим перемещения на лист для перемещений
             Globals.Transfers.FillList(transfers);
 
-            // Выводим параметры отчетов
-            Globals.Control.FillReportsParameters();
+            // Обновляем параметры
+            this.updateInfo();
 
             // Выбираем лист с перемещениями
             Globals.Transfers.Select();

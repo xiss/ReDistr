@@ -25,6 +25,9 @@ namespace ReDistr
 		// Имя книги с продажами
 		public static string NameOfSealingsWb;
 
+        // Имя книги с конкурентами
+        public static string NameOfCompetitorsWb;
+
 		// Папка с перемещениями
 		public static string FolderTransfers = "Перемещения\\";
 

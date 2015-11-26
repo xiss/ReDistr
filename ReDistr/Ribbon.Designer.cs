@@ -37,18 +37,17 @@
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.buttonGetOrder = this.Factory.CreateRibbonButton();
+            this.buttonGetOrdersLists = this.Factory.CreateRibbonButton();
             this.group2 = this.Factory.CreateRibbonGroup();
             this.buttonGetTransfers = this.Factory.CreateRibbonButton();
             this.buttonMakeTransfersBook = this.Factory.CreateRibbonButton();
-            this.buttonGetOrdersLists = this.Factory.CreateRibbonButton();
             this.group3 = this.Factory.CreateRibbonGroup();
             this.label1 = this.Factory.CreateRibbonLabel();
+            this.labelPeriodSelling = this.Factory.CreateRibbonLabel();
+            this.labelPeriodSellingCount = this.Factory.CreateRibbonLabel();
             this.separator1 = this.Factory.CreateRibbonSeparator();
             this.label2 = this.Factory.CreateRibbonLabel();
-            this.labelPeriodSellingTo = this.Factory.CreateRibbonLabel();
-            this.labelPeriodSelling = this.Factory.CreateRibbonLabel();
             this.labelStockDate = this.Factory.CreateRibbonLabel();
-            this.labelPeriodSellingFrom = this.Factory.CreateRibbonLabel();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -76,6 +75,12 @@
             this.buttonGetOrder.Name = "buttonGetOrder";
             this.buttonGetOrder.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetOrders_Click);
             // 
+            // buttonGetOrdersLists
+            // 
+            this.buttonGetOrdersLists.Label = "Рассчитать списки заказов";
+            this.buttonGetOrdersLists.Name = "buttonGetOrdersLists";
+            this.buttonGetOrdersLists.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetOrderLists_Click);
+            // 
             // group2
             // 
             this.group2.Items.Add(this.buttonGetTransfers);
@@ -95,18 +100,11 @@
             this.buttonMakeTransfersBook.Name = "buttonMakeTransfersBook";
             this.buttonMakeTransfersBook.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonMakeTransfersBook_Click);
             // 
-            // buttonGetOrdersLists
-            // 
-            this.buttonGetOrdersLists.Label = "Рассчитать списки заказов";
-            this.buttonGetOrdersLists.Name = "buttonGetOrdersLists";
-            this.buttonGetOrdersLists.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetOrderLists_Click);
-            // 
             // group3
             // 
             this.group3.Items.Add(this.label1);
-            this.group3.Items.Add(this.labelPeriodSellingFrom);
-            this.group3.Items.Add(this.labelPeriodSellingTo);
             this.group3.Items.Add(this.labelPeriodSelling);
+            this.group3.Items.Add(this.labelPeriodSellingCount);
             this.group3.Items.Add(this.separator1);
             this.group3.Items.Add(this.label2);
             this.group3.Items.Add(this.labelStockDate);
@@ -118,6 +116,16 @@
             this.label1.Label = "Отчет \"Продажи\"";
             this.label1.Name = "label1";
             // 
+            // labelPeriodSelling
+            // 
+            this.labelPeriodSelling.Label = "from";
+            this.labelPeriodSelling.Name = "labelPeriodSelling";
+            // 
+            // labelPeriodSellingCount
+            // 
+            this.labelPeriodSellingCount.Label = "count";
+            this.labelPeriodSellingCount.Name = "labelPeriodSellingCount";
+            // 
             // separator1
             // 
             this.separator1.Name = "separator1";
@@ -127,25 +135,10 @@
             this.label2.Label = "Отчет \"Остатки\"";
             this.label2.Name = "label2";
             // 
-            // labelPeriodSellingTo
-            // 
-            this.labelPeriodSellingTo.Label = "To";
-            this.labelPeriodSellingTo.Name = "labelPeriodSellingTo";
-            // 
-            // labelPeriodSelling
-            // 
-            this.labelPeriodSelling.Label = "count";
-            this.labelPeriodSelling.Name = "labelPeriodSelling";
-            // 
             // labelStockDate
             // 
             this.labelStockDate.Label = "StockDate";
             this.labelStockDate.Name = "labelStockDate";
-            // 
-            // labelPeriodSellingFrom
-            // 
-            this.labelPeriodSellingFrom.Label = "from";
-            this.labelPeriodSellingFrom.Name = "labelPeriodSellingFrom";
             // 
             // Ribbon
             // 
@@ -175,9 +168,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonGetOrdersLists;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group3;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel label1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonLabel labelPeriodSellingFrom;
-        internal Microsoft.Office.Tools.Ribbon.RibbonLabel labelPeriodSellingTo;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel labelPeriodSelling;
+        internal Microsoft.Office.Tools.Ribbon.RibbonLabel labelPeriodSellingCount;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator1;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel label2;
         internal Microsoft.Office.Tools.Ribbon.RibbonLabel labelStockDate;
