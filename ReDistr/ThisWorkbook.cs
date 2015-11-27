@@ -14,10 +14,10 @@ namespace ReDistr
 {
 	public partial class ThisWorkbook
 	{
-        // Список ЗЧ
-        public Dictionary<string, Item> items;
+		// Список ЗЧ
+		public Dictionary<string, Item> items;
 
-        
+		
 
 		private void ThisWorkbook_Startup(object sender, System.EventArgs e)
 		{

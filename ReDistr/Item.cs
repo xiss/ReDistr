@@ -34,8 +34,8 @@ namespace ReDistr
 		// Количество товара в упаковке
 		public double InBundle = 1;
 
-        // Себестоимость
-        public double CostPrice = 0;
+		// Себестоимость
+		public double CostPrice = 0;
 
 		// Комментарий, почему установлена RequiredAvailability
 		public string NoteRequiredAvailability;
@@ -43,8 +43,8 @@ namespace ReDistr
 		// Остатки на складах
 		public List<Stock> Stocks = new List<Stock>();
 
-        // Конкуренты в Питерплюсе
-        public List<Сompetitor> Сompetitors = new List<Сompetitor>();
+		// Конкуренты в Питерплюсе
+		public List<Сompetitor> Сompetitors = new List<Сompetitor>();
 
 		// Возвращает список всех возможных доноров, отсортированный по убыванию. Если задан список перемещений, то доноры выдаются из этого списка
 		public List<Stock> GetListOfPossibleDonors(List<Transfer> existTransfers = null)
@@ -54,7 +54,8 @@ namespace ReDistr
 			if (existTransfers == null)
 			{
 				// Если свободный осток отличен от нуля, то склад донор
-				listOfPossibleDonors = Stocks.Where(stock => stock.FreeStock > 0).OrderByDescending(stock => stock.FreeStock).ToList();
+				listOfPossibleDonors =
+					Stocks.Where(stock => stock.FreeStock > 0).OrderByDescending(stock => stock.FreeStock).ToList();
 			}
 			// Если список задан выдаем доноров из него
 			else
@@ -182,14 +183,28 @@ namespace ReDistr
 			return Stocks.Any(stock => stock.RequiredAvailability);
 		}
 
-        // Возвращает ближаещего конкурента с учетом исключений
-        // TODO Доделать
-        public Сompetitor GetСompetitor()
-        {
-            //var a =  Сompetitors.OrderBy(competitor => competitor.PositionNumber).First;
-            return null;
-         
-        }
+		// Возвращает ближаещего конкурента с учетом исключений
+		public Сompetitor GetСompetitor(double minStock, bool withExcludes = true)
+		{
+			Сompetitors = Сompetitors.OrderBy(competitor => competitor.PositionNumber).ToList();
 
+			foreach (var competitor in Сompetitors)
+			{
+				// Проверяем список исключений если нужно
+				if (Config.ListExcludeCompetitors.Contains(competitor.Id) & withExcludes)
+				{
+					return null;
+				}
+
+				// Проверяем остаток у конкурента
+				var count = Stocks.Where(stock => stock == Config.WholesaleStock).ToList().First().Count;
+				if (count * Config.MinStockForCompetitor > competitor.Count)
+				{
+					return null;
+				}
+				return competitor;
+			}
+			return null;
+		}
 	}
 }

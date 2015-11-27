@@ -13,6 +13,6 @@ namespace ReDistr
         public double NewPrice;
 
         //ЗЧ
-        public Item item;
+        public Item Item;
     }
 }

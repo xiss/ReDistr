@@ -7,172 +7,183 @@ using System.Windows.Forms;
 
 namespace ReDistr
 {
-    public partial class Ribbon
-    {
-        private void Ribbon_Load(object sender, RibbonUIEventArgs e)
-        {
+	public partial class Ribbon
+	{
+		private void Ribbon_Load(object sender, RibbonUIEventArgs e)
+		{
 #warning Удалить потом, для отладки
 #if(DEBUG)
-            // Парсим данные из файлов
-            var parser = new Parser();
-            Globals.ThisWorkbook.items = parser.Parse(true, true,true);
+			// Парсим данные из файлов
+			var parser = new Parser();
+			Globals.ThisWorkbook.items = parser.Parse(true, true, true);
 
-            // Обновляем параметры
-            this.updateInfo();
+			// Обновляем параметры
+			this.UpdateInfo();
 #endif
-        }
+		}
 
-        // Обновить блок с информацией
-        public void updateInfo(){
-            labelPeriodSelling.Label = Config.PeriodSellingFrom.ToString("dd.MM.yy") + " - " + Config.PeriodSellingTo.ToString("dd.MM.yy");
-            labelPeriodSellingCount.Label = Config.SellingPeriod.ToString() + " (дни)";
-            labelStockDate.Label = Config.StockDate.ToString("dd.MM.yy");
+		// Обновить блок с информацией
+		public void UpdateInfo()
+		{
+			labelPeriodSelling.Label = Config.PeriodSellingFrom.ToString("dd.MM.yy") + " - " + Config.PeriodSellingTo.ToString("dd.MM.yy");
+			labelPeriodSellingCount.Label = Config.SellingPeriod.ToString() + " (дни)";
+			labelStockDate.Label = Config.StockDate.ToString("dd.MM.yy");
 
-            // Включаем/отключаем кнопки в зависимости от результатов парса
-            // TODO Доделать с остальными
-            if( Config.ParsedStocks || Config.ParsedSealings || Config.ParsedAdditionalParameters){
-                buttonGetOrder.Enabled = true;                
-            }
-            
-        }
-        
+			// Включаем/отключаем кнопки в зависимости от результатов парса
+			// TODO Доделать с остальными
+			if (Config.ParsedStocks & Config.ParsedSealings & Config.ParsedAdditionalParameters)
+			{
+				buttonGetOrder.Enabled = true;
+				buttonGetOrdersLists.Enabled = true;
+				buttonGetTransfers.Enabled = true;
+
+			}
+			if (Config.ParsedStocks & Config.ParsedSealings & Config.ParsedAdditionalParameters & Config.ParsedCompetitors)
+			{
+				buttonGetRevaluations.Enabled = true;
+			}
+
+		}
+
 #if(!REVAL)
-        // Сформировать списки для заказа
-        private void buttonGetOrderLists_Click(object sender, RibbonControlEventArgs e)
-        {
-            var items = Globals.ThisWorkbook.items;
+		// Сформировать списки для заказа
+		private void buttonGetOrderLists_Click(object sender, RibbonControlEventArgs e)
+		{
+			var items = Globals.ThisWorkbook.items;
 
-            // Если парсинг не удался, выходим
-            if (items == null)
-            {
-                return;
-            }
+			// Если парсинг не удался, выходим
+			if (items == null)
+			{
+				return;
+			}
 
-            // Подготавливаем данные
-            ReDistr.PrepareData(items);
+			// Подготавливаем данные
+			ReDistr.PrepareData(items);
 
-            // Выводим таблицу для тестов
-            Globals.Test.FillListStocks(items);
+			// Выводим таблицу для тестов
+			Globals.Test.FillListStocks(items);
 
-            // Обновляем параметры
-            this.updateInfo();
+			// Обновляем параметры
+			this.UpdateInfo();
 
-            // Составляем список для заказа
-            var orderRequiredItems = ReDistr.GetOrderRequiredItems(items);
+			// Составляем список для заказа
+			var orderRequiredItems = ReDistr.GetOrderRequiredItems(items);
 
-            // Выводим списки для заказа на лист со списками
-            Globals.OrderLists.FillList(orderRequiredItems);
-        }
-        
-        // Сформировать заказы
-        private void buttonGetOrders_Click(object sender, RibbonControlEventArgs e)
-        {
-            var items = Globals.ThisWorkbook.items;
+			// Выводим списки для заказа на лист со списками
+			Globals.OrderLists.FillList(orderRequiredItems);
+		}
 
-            // Если парсинг не удался, выходим
-            if (items == null)
-            {
-                return;
-            }
+		// Сформировать заказы
+		private void buttonGetOrders_Click(object sender, RibbonControlEventArgs e)
+		{
+			var items = Globals.ThisWorkbook.items;
 
-            // Подготавливаем данные
-            ReDistr.PrepareData(items);
+			// Если парсинг не удался, выходим
+			if (items == null)
+			{
+				return;
+			}
 
-            // Выводим таблицу для тестов
-            Globals.Test.FillListStocks(items);
+			// Подготавливаем данные
+			ReDistr.PrepareData(items);
 
-            // Обновляем параметры
-            this.updateInfo();
+			// Выводим таблицу для тестов
+			Globals.Test.FillListStocks(items);
 
-            // Формирует заказы
-            var orders = new List<Order>();
-            orders = ReDistr.GetOrders(orders, items);
+			// Обновляем параметры
+			this.UpdateInfo();
 
-            // Выводим заказы на страницу заказов
-            Globals.Orders.FillList(orders);
+			// Формирует заказы
+			var orders = new List<Order>();
+			orders = ReDistr.GetOrders(orders, items);
 
-            // Выбираем лист с pfrfpfvb
-            Globals.Orders.Select();
-        }
-        // Архивирует старый книги с перемещениями, и создает новые
-        private void buttonMakeTransfersBook_Click(object sender, RibbonControlEventArgs e)
-        {
-            // Архивируем предыдущие перемещения
-            ReDistr.ArchiveTransfers();
+			// Выводим заказы на страницу заказов
+			Globals.Orders.FillList(orders);
 
-            // Создаем книги для импорта в Excel
-            Globals.Transfers.MakeImportTransfers();
-        }        
-   
-        // Сформировать перемещения
-        private void buttonGetTransfers_Click(object sender, RibbonControlEventArgs e)
-        {
-            var items = Globals.ThisWorkbook.items;
+			// Выбираем лист с pfrfpfvb
+			Globals.Orders.Select();
+		}
+		// Архивирует старый книги с перемещениями, и создает новые
+		private void buttonMakeTransfersBook_Click(object sender, RibbonControlEventArgs e)
+		{
+			// Архивируем предыдущие перемещения
+			ReDistr.ArchiveTransfers();
 
-            // Если парсинг не удался, выходим
-            if (items == null)
-            {
-                return;
-            }
+			// Создаем книги для импорта в Excel
+			Globals.Transfers.MakeImportTransfers();
+		}
 
-            // Подготавливаем данные
-            ReDistr.PrepareData(items);
+		// Сформировать перемещения
+		private void buttonGetTransfers_Click(object sender, RibbonControlEventArgs e)
+		{
+			var items = Globals.ThisWorkbook.items;
 
-            // Выводим таблицу для тестов
-            Globals.Test.FillListStocks(items);
+			// Если парсинг не удался, выходим
+			if (items == null)
+			{
+				return;
+			}
 
-            // Формируем перемещения
-            var transfers = new List<Transfer>();
-            // для обеспечения одного комплекта
-            transfers = ReDistr.GetTransfersFirstLvl(items, transfers);
-            // для обеспечения мин. остатка
-            transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
-            // для обеспечения необходимого запаса, перемещения создаются для уже созданных направлений
-            transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
+			// Подготавливаем данные
+			ReDistr.PrepareData(items);
 
-            // Если необходимо делаем перемещение неликвида на Попова
-            if (Config.StockToTransferSelectedStorageCategory != null)
-            {
-                transfers = ReDistr.GetTransfersIlliuid(items, transfers);
-            }
+			// Выводим таблицу для тестов
+			Globals.Test.FillListStocks(items);
 
-            // Выводим отчет для тестов если необходимо
-            if (Config.ShowReport)
-            {
-                Globals.Test.FillListTransfers(transfers, items);
-            }
+			// Формируем перемещения
+			var transfers = new List<Transfer>();
+			// для обеспечения одного комплекта
+			transfers = ReDistr.GetTransfersFirstLvl(items, transfers);
+			// для обеспечения мин. остатка
+			transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
+			// для обеспечения необходимого запаса, перемещения создаются для уже созданных направлений
+			transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
 
-            // Выводим перемещения на лист для перемещений
-            Globals.Transfers.FillList(transfers);
+			// Если необходимо делаем перемещение неликвида на Попова
+			if (Config.StockToTransferSelectedStorageCategory != null)
+			{
+				transfers = ReDistr.GetTransfersIlliuid(items, transfers);
+			}
 
-            // Обновляем параметры
-            this.updateInfo();
+			// Выводим отчет для тестов если необходимо
+			if (Config.ShowReport)
+			{
+				Globals.Test.FillListTransfers(transfers, items);
+			}
 
-            // Выбираем лист с перемещениями
-            Globals.Transfers.Select();
-        }
+			// Выводим перемещения на лист для перемещений
+			Globals.Transfers.FillList(transfers);
+
+			// Обновляем параметры
+			this.UpdateInfo();
+
+			// Выбираем лист с перемещениями
+			Globals.Transfers.Select();
+		}
 #endif
-        // Парсим данные
-        private void buttonParseData_Click(object sender, RibbonControlEventArgs e)
-        {
-            // Парсим данные из файлов
-            var parser = new Parser();
-            Globals.ThisWorkbook.items = parser.Parse(checkBoxIncludeSellings.Checked, checkBoxIncludeAdditionalParameters.Checked, checkBoxIncludeCompetitorsFromAP.Checked);
+		// Парсим данные
+		private void buttonParseData_Click(object sender, RibbonControlEventArgs e)
+		{
+			// Парсим данные из файлов
+			var parser = new Parser();
+			Globals.ThisWorkbook.items = parser.Parse(checkBoxIncludeSellings.Checked, checkBoxIncludeAdditionalParameters.Checked, checkBoxIncludeCompetitorsFromAP.Checked);
 
-            // Обновляем параметры
-            this.updateInfo();
-        }
+			// Обновляем параметры
+			this.UpdateInfo();
+		}
 
-        private void button1_Click(object sender, RibbonControlEventArgs e)
-        {
-            button1.Label = Config.StockCount.ToString();
-           
-        }
+		// Для теста
+		private void button1_Click(object sender, RibbonControlEventArgs e)
+		{
+			button1.Label = Config.StockCount.ToString();
 
-        private void buttonGetRevaluations_Click(object sender, RibbonControlEventArgs e)
-        {
-            ReDistr.GetRevaluations(Globals.ThisWorkbook.items);
-        }
+		}
 
-    }
+		// Сформировать переоценку
+		private void buttonGetRevaluations_Click(object sender, RibbonControlEventArgs e)
+		{
+			var revaluation = ReDistr.GetRevaluations(Globals.ThisWorkbook.items);
+		}
+
+	}
 }

@@ -27,14 +27,16 @@ namespace ReDistr
 		private const string RngNameFolderArchiveTransfers = "B21";
 		private const string RngNameListSelectedStorageCategoryToTransfer = "B22";
 		private const string RngNameStockToTransferSelectedStorageCategory = "B23";
-        private const string RngNameOfContributorsWb = "B24";
+		private const string RngNameOfContributorsWb = "B24";
 		private const uint RowStartStockCfg = 4; // Строка с которой считываются склады в настройках
 		private const string ColStockNameCfg = "A";
 		private const string ColStockMinCfg = "B";
 		private const string ColStockMaxCfg = "C";
 		private const string ColStockSignCfg = "D";
-        private const uint RowStartExcludeCompetitors = 4;
-        private const string ColExcludeCompetitors = "G";
+		private const uint RowStartExcludeCompetitors = 4;
+		private const string ColExcludeCompetitors = "G";
+		private const string RngMinStockForCompetitor = "B25";
+		private const string RngWholesaleStock = "B26";
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
 		private const string RngDateStocks = "B3"; // Ячейка содержащая дату отчета
@@ -64,19 +66,19 @@ namespace ReDistr
 		private const string ColNameParameters = "C";
 		private const string ColStartParamsParameters = "E"; // Колонка с которой выводится дополнительная информация
 		// Книга с конкурентами питерплюса
-        private const uint RowStartContributors = 2; // Строка с которой начинается парсинг остатков
-        private const string ColArticleContributors = "A"; // Артикул
-        private const string ColId1CContributors = "J"; // Код товара
-        private const string ColPriceContributors = "C"; // Цена
-        private const string ColDeliveryTimeContributors = "E"; // Срок поставки
-        private const string ColPositionNumberContributors = "F"; // Строка на портале
-        private const string ColRegionContributors = "G"; // Город
-        private const string ColIdContributorContributors = "I"; // ID конкурента
-        private const string ColCostPriceContributors = "L"; // Себестоимость
-        private const string ColCountContributors = "D"; // Остаток у конкурента
+		private const uint RowStartContributors = 2; // Строка с которой начинается парсинг остатков
+		private const string ColArticleContributors = "A"; // Артикул
+		private const string ColId1CContributors = "J"; // Код товара
+		private const string ColPriceContributors = "C"; // Цена
+		private const string ColDeliveryTimeContributors = "E"; // Срок поставки
+		private const string ColPositionNumberContributors = "F"; // Строка на портале
+		private const string ColRegionContributors = "G"; // Город
+		private const string ColIdContributorContributors = "I"; // ID конкурента
+		private const string ColCostPriceContributors = "L"; // Себестоимость
+		private const string ColCountContributors = "D"; // Остаток у конкурента
 
-        
-        // Диалоговые окна
+		
+		// Диалоговые окна
 		private const string MessegeBoxQuestion = "Дата снятия отчета с остатком не соответствует сегодняшней, продолжить?";
 		private const string MessegeBoxCaption = "Предупреждение";
 
@@ -108,27 +110,29 @@ namespace ReDistr
 			Config.StockCount = count;
 			Config.SetPossibleTransfers();
 
-            // Конкуренты-исключения
-            curentRow = RowStartExcludeCompetitors;
-            var list = new List<string>() ;
-            while (Globals.Control.Range[ColExcludeCompetitors + curentRow].Value != null)
-            {
-                list.Add(Globals.Control.Range[ColExcludeCompetitors + curentRow].Value.ToString());
-                curentRow++;
-            }
-            Config.ListExcludeCompetitors = list;
+			// Конкуренты-исключения
+			curentRow = RowStartExcludeCompetitors;
+			var list = new List<string>() ;
+			while (Globals.Control.Range[ColExcludeCompetitors + curentRow].Value != null)
+			{
+				list.Add(Globals.Control.Range[ColExcludeCompetitors + curentRow].Value.ToString());
+				curentRow++;
+			}
+			Config.ListExcludeCompetitors = list;
 
 			// Прописываем в конфиг пути и названия файлов из настроечного листа
 			Config.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
 			Config.NameOfStocksWb = Globals.Control.Range[RngNameOfStocksWb].Value2;
 			Config.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
-            Config.NameOfCompetitorsWb = Globals.Control.Range[RngNameOfContributorsWb].Value2;
+			Config.NameOfCompetitorsWb = Globals.Control.Range[RngNameOfContributorsWb].Value2;
 			Config.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
 			Config.FolderArchiveTransfers = Globals.Control.Range[RngNameFolderArchiveTransfers].Value2 + "\\";
 			Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
 			Config.OneDonor = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2);
 			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
 			Config.StockToTransferSelectedStorageCategory = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngNameStockToTransferSelectedStorageCategory].Value2);
+			Config.WholesaleStock = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngWholesaleStock].Value2);
+			Config.MinStockForCompetitor = Globals.Control.Range[RngMinStockForCompetitor].Value2;
 			// Категории для перемещения на указанный склад полностью
 			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
 			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
@@ -470,60 +474,60 @@ namespace ReDistr
 			parametersWb.Close();
 		}
 
-        // Получаем конкурентов на Питерплюсе
-        private void GetCompetitorsFromAP(Dictionary<string, Item> items)
-        {
-            // Открываем  книгу с продажами
+		// Получаем конкурентов на Питерплюсе
+		private void GetCompetitorsFromAP(Dictionary<string, Item> items)
+		{
+			// Открываем  книгу с продажами
 			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.NameOfCompetitorsWb);
-            var competitorsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
+			var competitorsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
-            var curentRow = RowStartContributors;
+			var curentRow = RowStartContributors;
 
-            while (competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value != null)
-            {
-                // Если в данных ошибка, переходим к следующей строке
-                if (competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value == "Ошибка")
-                {
-                    curentRow++;
-                    continue;
-                }
-                // Ищем запчасть по 1С коду в массиве запчастей, 
-                Item item = null;
-                if (items.ContainsKey(competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value.ToString()) == true)
-                {
-                    item = items[competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value.ToString()];
-                }
-                // Если не находим то ничего не делаем
-                else 
-                {
-                    curentRow++;
-                    continue;
-                }
-                // Если себестоимость еще не установлена, устанавливаем
-                if (item.CostPrice == 0)
-                {
-                    item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
-                }
+			while (competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value != null)
+			{
+				// Если в данных ошибка, переходим к следующей строке
+				if (competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value == "Ошибка")
+				{
+					curentRow++;
+					continue;
+				}
+				// Ищем запчасть по 1С коду в массиве запчастей, 
+				Item item = null;
+				if (items.ContainsKey(competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value.ToString()) == true)
+				{
+					item = items[competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value.ToString()];
+				}
+				// Если не находим то ничего не делаем
+				else 
+				{
+					curentRow++;
+					continue;
+				}
+				// Если себестоимость еще не установлена, устанавливаем
+				if (item.CostPrice == 0)
+				{
+					item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
+				}
 
-                // Создаем нового конкурента
-                var competitor = new Сompetitor
-                {
-                    DeliveryTime = competitorsWb.Worksheets[1].Range[ColDeliveryTimeContributors + curentRow].Value,
-                    Count = competitorsWb.Worksheets[1].Range[ColCountContributors + curentRow].Value,
-                    Id = competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString(),
-                    PositionNumber = competitorsWb.Worksheets[1].Range[ColPositionNumberContributors + curentRow].Value,
-                    Price = competitorsWb.Worksheets[1].Range[ColPriceContributors + curentRow].Value,
-                    Region = competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value
-                };
+				// Создаем нового конкурента
+				var competitor = new Сompetitor
+				{
+					DeliveryTime = competitorsWb.Worksheets[1].Range[ColDeliveryTimeContributors + curentRow].Value,
+					Count = competitorsWb.Worksheets[1].Range[ColCountContributors + curentRow].Value,
+					Id = competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString(),
+					PositionNumber = competitorsWb.Worksheets[1].Range[ColPositionNumberContributors + curentRow].Value,
+					Price = competitorsWb.Worksheets[1].Range[ColPriceContributors + curentRow].Value,
+					Region = competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value
+				};
 
-                item.Сompetitors.Add(competitor);
+				item.Сompetitors.Add(competitor);
 
-                curentRow++;
-            }
+				curentRow++;
+			}
 
-            competitorsWb.Close();
+			competitorsWb.Close();
 
-        }
+		}
 		// Добавляем параметры в конфиг
 		public void SetConfig(Dictionary<string, Item> items)
 		{
@@ -532,9 +536,9 @@ namespace ReDistr
 		}
 
 		// Основной метод парсера, из него вызываются все остальные
-        public Dictionary<string, Item> Parse(bool IncludeSellings = true, bool IncludeAdditionalParameters = true, bool IncludeCompetitorsFromAP = true)
+		public Dictionary<string, Item> Parse(bool IncludeSellings = true, bool IncludeAdditionalParameters = true, bool IncludeCompetitorsFromAP = true)
 		{
-            Globals.ThisWorkbook.items = null;
+			Globals.ThisWorkbook.items = null;
 
 			// Считываем настройки
 			MakeConfig();
@@ -542,32 +546,32 @@ namespace ReDistr
 			// Создаем список ЗЧ и указываем тукущие остатки
 			bool _continue;
 			var items = GetItems(out _continue);
-            Config.ParsedStocks = true;
+			Config.ParsedStocks = true;
 
 			// Если отчет не подходит, выходим
 			if (!_continue) return null;
 
 			// Добавляем информацию по продажам
-            if (IncludeSellings)
-            {
-                GetSellings(items);
-            }
-            Config.ParsedSealings = true;
+			if (IncludeSellings)
+			{
+				GetSellings(items);
+				Config.ParsedSealings = true;
+			}
 
 			// Добавляем Кратность и исключения
-            if (IncludeAdditionalParameters)
-            {
-                GetAdditionalParameters(items);
-            }
-            Config.ParsedAdditionalParameters = true;
-
-            // Добавляем конкурентов
-            if (IncludeCompetitorsFromAP)
-            {
-                GetCompetitorsFromAP(items);
-            }
-            Config.ParsedCompetitors = true;
-
+			if (IncludeAdditionalParameters)
+			{
+				GetAdditionalParameters(items);
+				Config.ParsedAdditionalParameters = true;
+			}
+			
+			// Добавляем конкурентов
+			if (IncludeCompetitorsFromAP)
+			{
+				GetCompetitorsFromAP(items);
+				Config.ParsedCompetitors = true;
+			}
+			
 			// Настраиваем конфиг
 			SetConfig(items);
 

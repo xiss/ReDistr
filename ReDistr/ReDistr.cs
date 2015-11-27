@@ -298,7 +298,7 @@ namespace ReDistr
 				{
 					continue;
 				}
-				
+
 				// Перебираем список складов у ЗЧ
 				foreach (var stock in item.Value.Stocks)
 				{
@@ -325,8 +325,8 @@ namespace ReDistr
 								Count = possibleDonor.FreeStock,
 								Item = item.Value
 							};
-							transfer.Apply();
-							transfers.Add(transfer);
+						transfer.Apply();
+						transfers.Add(transfer);
 					}
 				}
 			}
@@ -363,10 +363,10 @@ namespace ReDistr
 				var requiredStocks = new List<Stock>();
 				var requiredItem = new OrderRequiredItem();
 				// Если ЗЧ имеет RequiredAvailability, добавляем ее в список
-				if(item.Value.IsRequiredAvailability())
+				if (item.Value.IsRequiredAvailability())
 				{
 					requiredItem.Item = item.Value;
-					
+
 				}
 				// Перебираем склады для ЗЧ
 				foreach (var stock in item.Value.Stocks)
@@ -434,26 +434,34 @@ namespace ReDistr
 			return orders;
 		}
 
-        // Создает переоценку
-        public static List<Revaluation> GetRevaluations(Dictionary<string, Item> items)
-        {
-            var revaluations = new List<Revaluation>();
+		// Создает переоценку
+		public static List<Revaluation> GetRevaluations(Dictionary<string, Item> items)
+		{
+			var revaluations = new List<Revaluation>();
 
-            // Перебираем ЗЧ
-            foreach (KeyValuePair<string, Item> item in items)
-            {
-                // Если ЗЧ не имеет указанных конкурентов, продолжаем
-                if (item.Value.Сompetitors.Count == 0)
-                {
-                    continue;
-                }
+			// Перебираем ЗЧ
+			foreach (KeyValuePair<string, Item> item in items)
+			{
+				// Если ЗЧ не имеет указанных конкурентов, берем следующую ЗЧ
+				if (item.Value.Сompetitors.Count == 0)
+				{
+					continue;
+				}
 
-                // Ищем ближайшего конкурента
-                item.Value.GetСompetitor();
-
-            }
-            return revaluations;
-        }
+				// Ищем ближайшего конкурента
+				var competitor = item.Value.GetСompetitor(Config.MinStockForCompetitor);
+				if (competitor != null)
+				{
+					var revaluation = new Revaluation
+					{
+						Item = item.Value,
+						NewPrice = 0
+					};
+					revaluations.Add(revaluation);
+				}
+			}
+			return revaluations;
+		}
 
 		// Создает книгу с заданным именем, вставляет в нее нужные данные и сохраняет
 		public static void MakeImpot1CBook(Range inputRange, string bookName, string folder)

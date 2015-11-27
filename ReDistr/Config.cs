@@ -25,8 +25,8 @@ namespace ReDistr
 		// Имя книги с продажами
 		public static string NameOfSealingsWb;
 
-        // Имя книги с конкурентами
-        public static string NameOfCompetitorsWb;
+		// Имя книги с конкурентами
+		public static string NameOfCompetitorsWb;
 
 		// Папка с перемещениями
 		public static string FolderTransfers = "Перемещения\\";
@@ -63,11 +63,14 @@ namespace ReDistr
 		// Если параметр указан, то перемещения делать только с этого склада
 		public static Stock OneDonor = null;
 
+		// Склад для оптовых отгрузок
+		public static Stock WholesaleStock;
+
 		// Категории хранения товара для перемещения
 		public static List<string> ListStorageCategoryToTransfers;
 
-        // Список конкурентов исключений
-        public static List<string> ListExcludeCompetitors;
+		// Список конкурентов исключений
+		public static List<string> ListExcludeCompetitors;
 
 		// Список поставщиков
 		public static List<string> ListSuppliers;
@@ -75,17 +78,20 @@ namespace ReDistr
 		// Значение параметра Supplier по умолчанию у ЗЧ
 		public static string DefaultSupplierName = "none";
 
-        // Выполнялся ли парс Остатков
-        public static bool ParsedStocks = false;
+		// Выполнялся ли парс Остатков
+		public static bool ParsedStocks = false;
 
-        // Выполнялся ли парс Продаж
-        public static bool ParsedSealings = false;
+		// Выполнялся ли парс Продаж
+		public static bool ParsedSealings = false;
 
-        // Выполнялся ли парс дополнительных параметров
-        public static bool ParsedAdditionalParameters = false;
+		// Выполнялся ли парс дополнительных параметров
+		public static bool ParsedAdditionalParameters = false;
 
-        // Выполнялся ли парс конкурентов
-        public static bool ParsedCompetitors = false;
+		// Выполнялся ли парс конкурентов
+		public static bool ParsedCompetitors = false;
+
+		// Процент остатка от нашего склада для рассмотрения его как конкурента
+		public static double MinStockForCompetitor;
 
 		// Устанавливает список возможных перемещений и их количество
 		public static void SetPossibleTransfers()
