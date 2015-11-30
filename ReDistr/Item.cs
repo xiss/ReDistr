@@ -37,6 +37,9 @@ namespace ReDistr
 		// Себестоимость
 		public double CostPrice = 0;
 
+		// Стоимость
+		public double Price = 0;
+
 		// Комментарий, почему установлена RequiredAvailability
 		public string NoteRequiredAvailability;
 

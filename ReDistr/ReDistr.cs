@@ -450,15 +450,18 @@ namespace ReDistr
 
 				// Ищем ближайшего конкурента
 				var competitor = item.Value.GetСompetitor(Config.MinStockForCompetitor);
-				if (competitor != null)
+				if (competitor == null)
 				{
-					var revaluation = new Revaluation
+					continue;
+				}
+				var revaluation = new Revaluation
 					{
 						Item = item.Value,
-						NewPrice = 0
+						NewPrice = 0,
+						Competitor = competitor
 					};
-					revaluations.Add(revaluation);
-				}
+				revaluations.Add(revaluation);
+
 			}
 			return revaluations;
 		}

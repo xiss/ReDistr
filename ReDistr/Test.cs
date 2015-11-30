@@ -43,7 +43,7 @@ namespace ReDistr
 		// Строка с которой начинается заполненеие данными
 		private const uint ArrayRowFirstFillNumber = 2;
 		// Первая колонка с которой выводятся параметры складов
-		private const uint ArrayColumnFirstFillNumber = 8;
+		private const uint ArrayColumnFirstFillNumber = 10;
 		// Количество параметров для склада
 		private const uint StockParametrsCount = 9;
 
@@ -66,6 +66,8 @@ namespace ReDistr
 			resultRange[0, 5] = "StorageCat";
 			resultRange[0, 6] = "inBundle";
 			resultRange[0, 7] = "inKit";
+			resultRange[0, 8] = "CostPrice";
+			resultRange[0, 9] = "Price";
 
 			// Выводим заголовки для параметров
 			resultRange[0, curentColumn] = "Count";
@@ -100,6 +102,8 @@ namespace ReDistr
 				resultRange[curentRow, 5] = item.Value.StorageCategory;
 				resultRange[curentRow, 6] = item.Value.InBundle;
 				resultRange[curentRow, 7] = item.Value.InKit;
+				resultRange[curentRow, 8] = item.Value.CostPrice;
+				resultRange[curentRow, 9] = item.Value.Price;
 
 
 				// Выводим информацию по складам

@@ -37,6 +37,7 @@ namespace ReDistr
 		private const string ColExcludeCompetitors = "G";
 		private const string RngMinStockForCompetitor = "B25";
 		private const string RngWholesaleStock = "B26";
+		private const string RngIdPriceAp = "B27";
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
 		private const string RngDateStocks = "B3"; // Ячейка содержащая дату отчета
@@ -133,6 +134,7 @@ namespace ReDistr
 			Config.StockToTransferSelectedStorageCategory = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngNameStockToTransferSelectedStorageCategory].Value2);
 			Config.WholesaleStock = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngWholesaleStock].Value2);
 			Config.MinStockForCompetitor = Globals.Control.Range[RngMinStockForCompetitor].Value2;
+			Config.IdPriceAp = Globals.Control.Range[RngIdPriceAp].Value2;
 			// Категории для перемещения на указанный склад полностью
 			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
 			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
@@ -477,7 +479,7 @@ namespace ReDistr
 		// Получаем конкурентов на Питерплюсе
 		private void GetCompetitorsFromAP(Dictionary<string, Item> items)
 		{
-			// Открываем  книгу с продажами
+			// Открываем  книгу с конкурентами
 			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.NameOfCompetitorsWb);
 			var competitorsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
@@ -508,7 +510,12 @@ namespace ReDistr
 				{
 					item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
 				}
-
+				// Если цена не установлена, устанавливаем
+				var d = competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString();
+				if (item.Price == 0 & Config.IdPriceAp == competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString())
+				{
+					item.Price = competitorsWb.Worksheets[1].Range[ColPriceContributors + curentRow].Value;
+				}
 				// Создаем нового конкурента
 				var competitor = new Сompetitor
 				{
@@ -536,7 +543,7 @@ namespace ReDistr
 		}
 
 		// Основной метод парсера, из него вызываются все остальные
-		public Dictionary<string, Item> Parse(bool IncludeSellings = true, bool IncludeAdditionalParameters = true, bool IncludeCompetitorsFromAP = true)
+		public Dictionary<string, Item> Parse(bool includeSellings = true, bool includeAdditionalParameters = true, bool includeCompetitorsFromAp = true)
 		{
 			Globals.ThisWorkbook.items = null;
 
@@ -552,21 +559,21 @@ namespace ReDistr
 			if (!_continue) return null;
 
 			// Добавляем информацию по продажам
-			if (IncludeSellings)
+			if (includeSellings)
 			{
 				GetSellings(items);
 				Config.ParsedSealings = true;
 			}
 
 			// Добавляем Кратность и исключения
-			if (IncludeAdditionalParameters)
+			if (includeAdditionalParameters)
 			{
 				GetAdditionalParameters(items);
 				Config.ParsedAdditionalParameters = true;
 			}
 			
 			// Добавляем конкурентов
-			if (IncludeCompetitorsFromAP)
+			if (includeCompetitorsFromAp)
 			{
 				GetCompetitorsFromAP(items);
 				Config.ParsedCompetitors = true;

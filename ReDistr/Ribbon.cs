@@ -17,6 +17,10 @@ namespace ReDistr
 			var parser = new Parser();
 			Globals.ThisWorkbook.items = parser.Parse(true, true, true);
 
+			var revaluation = ReDistr.GetRevaluations(Globals.ThisWorkbook.items);
+			// Заполняем лист с переоценкой
+			Globals.Revaluations.FillList(revaluation);
+
 			// Обновляем параметры
 			this.UpdateInfo();
 #endif
@@ -175,14 +179,16 @@ namespace ReDistr
 		// Для теста
 		private void button1_Click(object sender, RibbonControlEventArgs e)
 		{
-			button1.Label = Config.StockCount.ToString();
-
+			button1.Label = Globals.ThisWorkbook.items.Count.ToString();
 		}
 
 		// Сформировать переоценку
 		private void buttonGetRevaluations_Click(object sender, RibbonControlEventArgs e)
 		{
 			var revaluation = ReDistr.GetRevaluations(Globals.ThisWorkbook.items);
+
+			// Заполняем лист с переоценкой
+			Globals.Revaluations.FillList(revaluation);
 		}
 
 	}

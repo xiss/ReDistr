@@ -28,6 +28,9 @@ namespace ReDistr
 		// Имя книги с конкурентами
 		public static string NameOfCompetitorsWb;
 
+		// id нашего прайса на П+
+		public static string IdPriceAp;
+
 		// Папка с перемещениями
 		public static string FolderTransfers = "Перемещения\\";
 

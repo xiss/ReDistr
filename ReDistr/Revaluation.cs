@@ -14,5 +14,8 @@ namespace ReDistr
 
         //ЗЧ
         public Item Item;
+
+		// Выбранный конкурент
+		public Сompetitor Competitor;
     }
 }
