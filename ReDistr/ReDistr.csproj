@@ -216,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReDistr_1_TemporaryKey.pfx" />
+    <None Include="ReDistr_TemporaryKey.pfx" />
     <None Include="ThisWorkbook.Designer.xml">
       <DependentUpon>ThisWorkbook.cs</DependentUpon>
     </None>
@@ -258,10 +259,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ReDistr_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ReDistr_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>B1B17319F6B071959E5400E84EC8D2958329E7DF</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>2A294E3ACEA4F8BBDB6F443823D57C10D906A4BD</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Reval|AnyCPU' ">
     <OutputPath>bin\Revaluation\</OutputPath>
@@ -281,10 +282,10 @@
           <HostItem Name="Лист1" Code="Control.cs" CanonicalName="Лист1" DisplayName="Управление" Blueprint="Control.Designer.xml" GeneratedCode="Control.Designer.cs" />
           <HostItem Name="Лист5" Code="OrderLists.cs" CanonicalName="Лист5" DisplayName="Списоков заказов" Blueprint="OrderLists.Designer.xml" GeneratedCode="OrderLists.Designer.cs" />
           <HostItem Name="Лист4" Code="Orders.cs" CanonicalName="Лист4" DisplayName="Заказы" Blueprint="Orders.Designer.xml" GeneratedCode="Orders.Designer.cs" />
+          <HostItem Name="Лист6" Code="Revaluations.cs" CanonicalName="Лист6" DisplayName="Переоценка" Blueprint="Revaluations.Designer.xml" GeneratedCode="Revaluations.Designer.cs" />
           <HostItem Name="Лист2" Code="Test.cs" CanonicalName="Лист2" DisplayName="Тест" Blueprint="Test.Designer.xml" GeneratedCode="Test.Designer.cs" />
           <HostItem Name="ThisWorkbook" Code="ThisWorkbook.cs" CanonicalName="ThisWorkbook" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.cs" />
           <HostItem Name="Лист3" Code="Transfers.cs" CanonicalName="Лист3" DisplayName="Перемещения" Blueprint="Transfers.Designer.xml" GeneratedCode="Transfers.Designer.cs" />
-          <HostItem Name="Лист6" Code="Revaluations.cs" CanonicalName="Лист6" DisplayName="Переоценка" Blueprint="Revaluations.Designer.xml" GeneratedCode="Revaluations.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>

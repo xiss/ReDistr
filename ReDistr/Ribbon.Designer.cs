@@ -34,6 +34,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon));
 			this.tab1 = this.Factory.CreateRibbonTab();
 			this.groupData = this.Factory.CreateRibbonGroup();
 			this.buttonParseData = this.Factory.CreateRibbonButton();
@@ -90,6 +91,7 @@
 			// buttonParseData
 			// 
 			this.buttonParseData.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.buttonParseData.Image = ((System.Drawing.Image)(resources.GetObject("buttonParseData.Image")));
 			this.buttonParseData.Label = "Считать данные";
 			this.buttonParseData.Name = "buttonParseData";
 			this.buttonParseData.ShowImage = true;
@@ -161,6 +163,7 @@
 			// 
 			this.buttonGetTransfers.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
 			this.buttonGetTransfers.Enabled = false;
+			this.buttonGetTransfers.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetTransfers.Image")));
 			this.buttonGetTransfers.Label = "Рассчитать";
 			this.buttonGetTransfers.Name = "buttonGetTransfers";
 			this.buttonGetTransfers.ShowImage = true;
@@ -169,6 +172,7 @@
 			// buttonMakeTransfersBook
 			// 
 			this.buttonMakeTransfersBook.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.buttonMakeTransfersBook.Image = ((System.Drawing.Image)(resources.GetObject("buttonMakeTransfersBook.Image")));
 			this.buttonMakeTransfersBook.Label = "Сформировать файлы";
 			this.buttonMakeTransfersBook.Name = "buttonMakeTransfersBook";
 			this.buttonMakeTransfersBook.ShowImage = true;
@@ -224,6 +228,7 @@
 			// 
 			this.buttonGetRevaluations.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
 			this.buttonGetRevaluations.Enabled = false;
+			this.buttonGetRevaluations.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetRevaluations.Image")));
 			this.buttonGetRevaluations.Label = "Рассчитать переоценку";
 			this.buttonGetRevaluations.Name = "buttonGetRevaluations";
 			this.buttonGetRevaluations.ShowImage = true;
