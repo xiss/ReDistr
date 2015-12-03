@@ -19,6 +19,9 @@ namespace ReDistr
 		// Категория хранения
 		public string StorageCategory;
 
+		// Свойство ЗЧ 2
+		public string Property;
+
 		// Название 
 		public string Name;
 

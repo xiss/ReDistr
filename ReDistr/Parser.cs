@@ -48,17 +48,18 @@ namespace ReDistr
 		private const string ColId1CStocks = "W"; // Код товара
 		private const string ColStorageCategoryStocks = "X"; // Категроия хранения
 		private const string ColNameStocks = "R"; // Название ЗЧ
-		private const string ColManufacturerStocks = "AB"; // Производитель
+		private const string ColManufacturerStocks = "AC"; // Производитель
 		// Книга с продажами
 		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
 		private const string RngDateSealings = "B3"; // Дата отчета
 		private const string ColStockSignSealings = "B"; // Сигнатура склада
 		private const string ColArticleSealings = "C"; // Артикул
-		private const string ColCountSealings = "AE"; // Количество продаж
-		private const string ColId1CSealings = "T"; // Код товара
+		private const string ColCountSealings = "V"; // Количество продаж
+		private const string ColId1CSealings = "W"; // Код товара
 		private const string ColManufacturerSealings = "R"; // Производитель
-		private const string ColStorageCategorySealings = "U"; // Категроия хранения
+		private const string ColStorageCategorySealings = "X"; // Категроия хранения
 		private const string ColNameSealings = "S"; // Название ЗЧ
+		private const string ColProperty = "Y"; // Свойство ЗЧ 2
 		// Книга с дополнительными параметрами
 		private const uint RowStartParameters = 2; // Строка с которой парсится дополнительная информация
 		private const string ColId1CParameters = "A"; // Колонка с кодом ЗЧ
@@ -292,6 +293,7 @@ namespace ReDistr
 				if (items.ContainsKey(sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value.ToString()) == true)
 				{
 					item = items[sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value.ToString()];
+					item.Property = sellingsWb.Worksheets[1].Range[ColProperty + curentRow].Value.ToString();
 				}
 
 				// Если не находим создаем ее
@@ -305,6 +307,7 @@ namespace ReDistr
 						StorageCategory = sellingsWb.Worksheets[1].Range[ColStorageCategorySealings + curentRow].Value.ToString(),
 						Name = sellingsWb.Worksheets[1].Range[ColNameSealings + curentRow].Value.ToString(),
 						Manufacturer = sellingsWb.Worksheets[1].Range[ColManufacturerSealings + curentRow].Value.ToString(),
+						Property = sellingsWb.Worksheets[1].Range[ColProperty + curentRow].Value.ToString(),
 					};
 
 					// Создаем склады для ЗЧ

@@ -440,12 +440,24 @@ namespace ReDistr
 			var revaluations = new List<Revaluation>();
 
 			// Перебираем ЗЧ
-			foreach (KeyValuePair<string, Item> item in items)
+			foreach (var item in items)
 			{
-				// Если ЗЧ не имеет указанных конкурентов, берем следующую ЗЧ
+				// Если ЗЧ не имеет конкурентов, берем следующую ЗЧ
 				if (item.Value.Сompetitors.Count == 0)
 				{
 					continue;
+				}
+
+				// Если производитель "Китай"
+				if (item.Value.Manufacturer == "Китай")
+				{
+					switch (item.Value.Property)
+					{
+						//Новый приход
+						case "Новый приход":
+
+							break;
+					}
 				}
 
 				// Ищем ближайшего конкурента
