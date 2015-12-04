@@ -59,6 +59,7 @@
 			this.groupRevaluations = this.Factory.CreateRibbonGroup();
 			this.buttonGetRevaluations = this.Factory.CreateRibbonButton();
 			this.button2 = this.Factory.CreateRibbonButton();
+			this.button3 = this.Factory.CreateRibbonButton();
 			this.tab1.SuspendLayout();
 			this.groupData.SuspendLayout();
 			this.groupOrders.SuspendLayout();
@@ -70,10 +71,10 @@
 			// 
 			this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
 			this.tab1.Groups.Add(this.groupData);
-			this.tab1.Groups.Add(this.groupOrders);
-			this.tab1.Groups.Add(this.groupTransfers);
 			this.tab1.Groups.Add(this.groupInfo);
+			this.tab1.Groups.Add(this.groupOrders);
 			this.tab1.Groups.Add(this.groupRevaluations);
+			this.tab1.Groups.Add(this.groupTransfers);
 			this.tab1.Label = "ReDistr";
 			this.tab1.Name = "tab1";
 			// 
@@ -138,6 +139,7 @@
 			// 
 			this.buttonGetOrder.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
 			this.buttonGetOrder.Enabled = false;
+			this.buttonGetOrder.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetOrder.Image")));
 			this.buttonGetOrder.Label = "Рассчитать заказы";
 			this.buttonGetOrder.Name = "buttonGetOrder";
 			this.buttonGetOrder.ShowImage = true;
@@ -147,6 +149,7 @@
 			// 
 			this.buttonGetOrdersLists.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
 			this.buttonGetOrdersLists.Enabled = false;
+			this.buttonGetOrdersLists.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetOrdersLists.Image")));
 			this.buttonGetOrdersLists.Label = "Рассчитать списки заказов";
 			this.buttonGetOrdersLists.Name = "buttonGetOrdersLists";
 			this.buttonGetOrdersLists.ShowImage = true;
@@ -221,6 +224,7 @@
 			// groupRevaluations
 			// 
 			this.groupRevaluations.Items.Add(this.buttonGetRevaluations);
+			this.groupRevaluations.Items.Add(this.button3);
 			this.groupRevaluations.Label = "Переоценка";
 			this.groupRevaluations.Name = "groupRevaluations";
 			// 
@@ -239,6 +243,14 @@
 			this.button2.Label = "button2";
 			this.button2.Name = "button2";
 			this.button2.ShowImage = true;
+			// 
+			// button3
+			// 
+			this.button3.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
+			this.button3.Label = "button3";
+			this.button3.Name = "button3";
+			this.button3.ShowImage = true;
 			// 
 			// Ribbon
 			// 
@@ -291,6 +303,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupRevaluations;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonGetRevaluations;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button2;
+		internal Microsoft.Office.Tools.Ribbon.RibbonButton button3;
     }
 
     partial class ThisRibbonCollection
