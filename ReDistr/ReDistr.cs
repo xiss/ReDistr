@@ -453,24 +453,24 @@ namespace ReDistr
 				{
 					switch (item.Value.Property)
 					{
-						//Новый приход
+						// Новый приход
 						case "Новый приход":
-
+							var competitor = item.Value.GetСompetitor(Config.MinStockForCompetitor);
+							if (competitor == null)
+							{
+								continue;
+							}
 							break;
 					}
 				}
 
 				// Ищем ближайшего конкурента
-				var competitor = item.Value.GetСompetitor(Config.MinStockForCompetitor);
-				if (competitor == null)
-				{
-					continue;
-				}
+
 				var revaluation = new Revaluation
 					{
 						Item = item.Value,
 						NewPrice = 0,
-						Competitor = competitor
+						//Competitor = competitor
 					};
 				revaluations.Add(revaluation);
 

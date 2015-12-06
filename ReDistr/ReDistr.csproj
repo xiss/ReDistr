@@ -262,7 +262,7 @@
     <ManifestKeyFile>ReDistr_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>42F1BFDA9751EA058548B97376C89EEFECEC6F53</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>2A294E3ACEA4F8BBDB6F443823D57C10D906A4BD</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Reval|AnyCPU' ">
     <OutputPath>bin\Revaluation\</OutputPath>
