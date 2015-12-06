@@ -190,27 +190,76 @@ namespace ReDistr
 		}
 
 		// Возвращает ближаещего конкурента с учетом исключений
-		public Сompetitor GetСompetitor(double minStock, bool withExcludes = true)
+		public Сompetitor GetСompetitor(int deliveryTime, bool withCompetitorsStocks, bool withExcludes = true)
 		{
+			// Расчитываем параметры остатков у конкуретов
+			const double minStockDays = 25;
+			const double maxStockDays = 40;
+			const int k = 70; // Коэфециент
+			var sailsPerDay = GetSumSelings() / Config.SellingPeriod;
+			int overStockDays;
+			var minPercentStock = 0.2;
+			// Если продаж не было то считаем что оверсток равен году
+			if (sailsPerDay == 0)
+			{
+				overStockDays = 365;
+			}
+			else
+			{
+				overStockDays = Convert.ToInt32(Math.Round(GetSumStocks() / sailsPerDay));
+			}
+			// Если запас более указанного уменьшаем процент
+			if (overStockDays > maxStockDays)
+			{
+				minPercentStock = (overStockDays - maxStockDays) / k;
+			}
+			// Если запас менее указанного увеличиваем процент
+			if (overStockDays < minStockDays)
+			{
+				minPercentStock = (overStockDays - minStockDays) / k;
+			}
+			
 			Сompetitors = Сompetitors.OrderBy(competitor => competitor.PositionNumber).ToList();
 
 			foreach (var competitor in Сompetitors)
 			{
-				// Проверяем список исключений если нужно
+				// Проверяем список исключений если конкуреты из этого списка переходим к следующему
 				if (Config.ListExcludeCompetitors.Contains(competitor.Id) & withExcludes)
 				{
-					return null;
+					continue;
 				}
 
-				// Проверяем остаток у конкурента
-				var count = Stocks.Where(stock => stock == Config.WholesaleStock).ToList().First().Count;
-				if (count * Config.MinStockForCompetitor > competitor.Count)
+				// Проверяем срок поставки, если не соответствует переходим к следующему
+				if (competitor.DeliveryTime > deliveryTime)
 				{
-					return null;
+					continue;
 				}
+
+				// Проверяем запас, если он меньше необходимого переходим к следующему
+				if ((competitor.Count/GetSumSelings()) < minPercentStock)
+				{
+					continue;
+				}
+
 				return competitor;
+
 			}
 			return null;
+		}
+
+		// Возвращает новую цену расчитанную опираясь на указанного конкурента
+		public double GetNewPrice(Сompetitor сompetitor, bool allowSellingLoss)
+		{
+			// Расчитываем новую цену
+			var newPrice = сompetitor.Price;
+
+			// Если новая цена ниже себестоимости, возвращаем себестоимость
+			if (newPrice < CostPrice && !allowSellingLoss)
+			{
+				newPrice = CostPrice;
+			}
+
+			return newPrice;
 		}
 	}
 }

@@ -6,16 +6,19 @@ using System.Text;
 namespace ReDistr
 {
    
-    // Переоценка
-    public class Revaluation
-    {
-        // Новая цена
-        public double NewPrice;
+	// Переоценка
+	public class Revaluation
+	{
+		// Новая цена
+		public double NewPrice;
 
-        //ЗЧ
-        public Item Item;
+		//ЗЧ
+		public Item Item;
 
 		// Выбранный конкурент
 		public Сompetitor Competitor;
-    }
+
+		// Отладочная информация
+		public string Note;
+	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
@@ -454,26 +455,35 @@ namespace ReDistr
 					switch (item.Value.Property)
 					{
 						// Новый приход
-						case "Новый приход":
-							var competitor = item.Value.GetСompetitor(Config.MinStockForCompetitor);
+#warning для теста
+						case "Нет Продаж2":
+							var competitor = item.Value.GetСompetitor(7, true);
+							// Если нет конкурента
 							if (competitor == null)
 							{
-								continue;
+								var revaluation = new Revaluation
+								{
+									Item = item.Value,
+									Note = "Нет конкурента"
+								};
+								revaluations.Add(revaluation);
+								break;
 							}
-							break;
+							// Если конкурент есть
+							else
+							{
+								var revaluation = new Revaluation
+								{
+									Item = item.Value,
+									NewPrice = item.Value.GetNewPrice(competitor, false),
+									Note = "Новый приход",
+									Competitor = competitor
+								};
+								revaluations.Add(revaluation);
+								break;
+							}
 					}
 				}
-
-				// Ищем ближайшего конкурента
-
-				var revaluation = new Revaluation
-					{
-						Item = item.Value,
-						NewPrice = 0,
-						//Competitor = competitor
-					};
-				revaluations.Add(revaluation);
-
 			}
 			return revaluations;
 		}

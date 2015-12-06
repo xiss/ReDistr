@@ -49,6 +49,7 @@ namespace ReDistr
 		private const string ColStorageCategoryStocks = "X"; // Категроия хранения
 		private const string ColNameStocks = "R"; // Название ЗЧ
 		private const string ColManufacturerStocks = "AC"; // Производитель
+		private const string ColPrice = "AA"; // Производитель
 		// Книга с продажами
 		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
 		private const string RngDateSealings = "B3"; // Дата отчета
@@ -225,6 +226,7 @@ namespace ReDistr
 						StorageCategory = stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString(),
 						Name = stocksWb.Worksheets[1].Range[ColNameStocks + curentRow].Value.ToString(),
 						Manufacturer = stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString(),
+						Price = stocksWb.Worksheets[1].Range[ColPrice + curentRow].Value,
 					};
 
 					// Создаем склады для ЗЧ
@@ -512,12 +514,6 @@ namespace ReDistr
 				if (item.CostPrice == 0)
 				{
 					item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
-				}
-				// Если цена не установлена, устанавливаем
-				var d = competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString();
-				if (item.Price == 0 & Config.IdPriceAp == competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString())
-				{
-					item.Price = competitorsWb.Worksheets[1].Range[ColPriceContributors + curentRow].Value;
 				}
 				// Создаем нового конкурента
 				var competitor = new Сompetitor

@@ -39,7 +39,7 @@ namespace ReDistr
 
 		// Определяем настройки
 		private const int StartRow = 2;
-		private const int ItemParametrsCount = 16;
+		private const int ItemParametrsCount = 14;
 		private const Excel.XlBordersIndex XlEdgeRight = Excel.XlBordersIndex.xlEdgeRight;
 		private const Excel.XlBorderWeight XlThin = Excel.XlBorderWeight.xlThin;
 		private const string CountNameStyle = "Хороший";
@@ -61,16 +61,22 @@ namespace ReDistr
 			foreach (var revaluation in revaluations)
 			{
 				resultRange[i, 0] = revaluation.Item.Id1C;
-				resultRange[i, 2] = revaluation.Item.Price;
-				resultRange[i, 7] = revaluation.Item.Article;
-				resultRange[i, 8] = revaluation.Item.Name;
-				resultRange[i, 9] = revaluation.Item.Manufacturer;
-				resultRange[i, 10] = revaluation.Item.StorageCategory;
-				resultRange[i, 11] = revaluation.Item.CostPrice;
-				resultRange[i, 12] = revaluation.NewPrice;
-				resultRange[i, 13] = revaluation.Competitor.Count;
-				resultRange[i, 14] = revaluation.Competitor.DeliveryTime;
-				resultRange[i, 15] = revaluation.Competitor.Id;
+				resultRange[i, 1] = revaluation.Item.Name;
+				resultRange[i, 2] = "'" + revaluation.Item.Article;
+				resultRange[i, 3] = revaluation.Item.Manufacturer;
+				resultRange[i, 4] = revaluation.Item.StorageCategory;
+				resultRange[i, 5] = revaluation.Item.Price;
+				resultRange[i, 6] = revaluation.Item.CostPrice;
+				resultRange[i, 7] = revaluation.NewPrice;
+				resultRange[i, 8] = revaluation.NewPrice - revaluation.Item.Price;
+				resultRange[i, 9] = "Наценка";
+				if (revaluation.Competitor != null)
+				{
+					resultRange[i, 10] = revaluation.Competitor.Count;
+					resultRange[i, 11] = revaluation.Competitor.DeliveryTime;
+					resultRange[i, 12] = revaluation.Competitor.Id;
+				}
+				resultRange[i, 13] = revaluation.Note;
 				i++;
 			}
 			// Выводим перемещение на лист
