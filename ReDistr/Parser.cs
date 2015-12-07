@@ -49,7 +49,8 @@ namespace ReDistr
 		private const string ColStorageCategoryStocks = "X"; // Категроия хранения
 		private const string ColNameStocks = "R"; // Название ЗЧ
 		private const string ColManufacturerStocks = "AC"; // Производитель
-		private const string ColPrice = "AA"; // Производитель
+		private const string ColPriceStocks = "AA"; // Производитель
+		private const string ColPropertyStocks = "AF"; // Свойство
 		// Книга с продажами
 		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
 		private const string RngDateSealings = "B3"; // Дата отчета
@@ -60,7 +61,7 @@ namespace ReDistr
 		private const string ColManufacturerSealings = "R"; // Производитель
 		private const string ColStorageCategorySealings = "X"; // Категроия хранения
 		private const string ColNameSealings = "S"; // Название ЗЧ
-		private const string ColProperty = "Y"; // Свойство ЗЧ 2
+		private const string ColPropertySealings = "Y"; // Свойство ЗЧ 2
 		// Книга с дополнительными параметрами
 		private const uint RowStartParameters = 2; // Строка с которой парсится дополнительная информация
 		private const string ColId1CParameters = "A"; // Колонка с кодом ЗЧ
@@ -226,7 +227,8 @@ namespace ReDistr
 						StorageCategory = stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString(),
 						Name = stocksWb.Worksheets[1].Range[ColNameStocks + curentRow].Value.ToString(),
 						Manufacturer = stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString(),
-						Price = stocksWb.Worksheets[1].Range[ColPrice + curentRow].Value,
+						Price = stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value,
+						Property = stocksWb.Worksheets[1].Range[ColPropertyStocks + curentRow].Value,
 					};
 
 					// Создаем склады для ЗЧ
@@ -295,7 +297,7 @@ namespace ReDistr
 				if (items.ContainsKey(sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value.ToString()) == true)
 				{
 					item = items[sellingsWb.Worksheets[1].Range[ColId1CSealings + curentRow].Value.ToString()];
-					item.Property = sellingsWb.Worksheets[1].Range[ColProperty + curentRow].Value.ToString();
+					//item.Property = sellingsWb.Worksheets[1].Range[ColPropertySealings + curentRow].Value.ToString();
 				}
 
 				// Если не находим создаем ее
@@ -309,7 +311,7 @@ namespace ReDistr
 						StorageCategory = sellingsWb.Worksheets[1].Range[ColStorageCategorySealings + curentRow].Value.ToString(),
 						Name = sellingsWb.Worksheets[1].Range[ColNameSealings + curentRow].Value.ToString(),
 						Manufacturer = sellingsWb.Worksheets[1].Range[ColManufacturerSealings + curentRow].Value.ToString(),
-						Property = sellingsWb.Worksheets[1].Range[ColProperty + curentRow].Value.ToString(),
+						//Property = sellingsWb.Worksheets[1].Range[ColPropertySealings + curentRow].Value.ToString(),
 					};
 
 					// Создаем склады для ЗЧ
