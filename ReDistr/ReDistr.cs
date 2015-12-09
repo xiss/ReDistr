@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -333,6 +334,7 @@ namespace ReDistr
 			}
 			return transfers;
 		}
+		
 		// Дает список возможных перемещений
 		public static List<Transfer> GetPossibleTransfers(IEnumerable<Stock> stocks)
 		{
@@ -449,41 +451,58 @@ namespace ReDistr
 					continue;
 				}
 
+				//// Переоценка
+				var competitor = new Сompetitor();
+				var note = "";
+				var allowSellingLoss = false;
+				var withCopmetitorsStock = false;
+
 				// Если производитель "Китай"
 				if (item.Value.Manufacturer == "Китай")
 				{
 					switch (item.Value.Property)
 					{
-						// Новый приход
-#warning для теста
-						case "Нет Продаж2":
-							var competitor = item.Value.GetСompetitor(7, true);
-							// Если нет конкурента
-							if (competitor == null)
-							{
-								var revaluation = new Revaluation
-								{
-									Item = item.Value,
-									Note = "Нет конкурента"
-								};
-								revaluations.Add(revaluation);
-								break;
-							}
-							// Если конкурент есть
-							else
-							{
-								var revaluation = new Revaluation
-								{
-									Item = item.Value,
-									NewPrice = item.Value.GetNewPrice(competitor, false),
-									Note = "Новый приход",
-									Competitor = competitor
-								};
-								revaluations.Add(revaluation);
-								break;
-							}
+						// Новый приход, Норма
+						case "Норма":
+						case "Новый приход, Норма":
+							withCopmetitorsStock = true;
+							note = "Новый приход, Норма";
+							allowSellingLoss = false;
+							break;
+						// БП 1 мес, БП 2 мес, НЛ 24, НЛ 12
+						case "БП 2 мес":
+						case "БП 1 мес":
+						case "НЛ 12":
+						case "НЛ 24":
+							// TODO Срок поставки не учитываем
+							withCopmetitorsStock = false;
+							note = "БП 1 мес, БП 2 мес, НЛ 24, НЛ 12";
+							allowSellingLoss = true;
+							break;
 					}
 				}
+				else
+				{
+					switch(item.Value.StorageCategory)
+					{
+						case "Попова":
+						case "Везде":
+						case "Нигде":
+							withCopmetitorsStock = false;
+							note = "Попова, Везде, Нигде";
+							allowSellingLoss = false;
+							break;
+						case "НЛ 12":
+						case "НЛ 24":
+							withCopmetitorsStock = false;
+							note = "НЛ 12, НЛ 24";
+							allowSellingLoss = true;
+							break;
+					}
+				}
+				competitor = item.Value.GetСompetitor(7, withCopmetitorsStock);
+				var revaluation = new Revaluation(competitor, item.Value, note, allowSellingLoss);
+				revaluations.Add(revaluation);
 			}
 			return revaluations;
 		}
@@ -527,7 +546,6 @@ namespace ReDistr
 			Globals.ThisWorkbook.Application.ScreenUpdating = true;
 		}
 
-		// Архивирует перемещения
 		public static void ArchiveTransfers()
 		{
 			// Считываем все файлы в папке с перемещениями
@@ -551,11 +569,7 @@ namespace ReDistr
 		// Преобразует логическое значение в инт
 		public static int BoolToInt(bool inPut)
 		{
-			if (inPut)
-			{
-				return 1;
-			}
-			return 0;
+			return inPut ? 1 : 0;
 		}
 	}
 }
