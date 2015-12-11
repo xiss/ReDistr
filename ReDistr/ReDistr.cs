@@ -334,7 +334,7 @@ namespace ReDistr
 			}
 			return transfers;
 		}
-		
+
 		// Дает список возможных перемещений
 		public static List<Transfer> GetPossibleTransfers(IEnumerable<Stock> stocks)
 		{
@@ -453,54 +453,63 @@ namespace ReDistr
 
 				//// Переоценка
 				var competitor = new Сompetitor();
-				var note = "";
+				var note = "Не прописано правило";
 				var allowSellingLoss = false;
 				var withCopmetitorsStock = false;
+				var deliveryTime = 7;
+				var withDeliveryTime = true;
 
 				// Если производитель "Китай"
 				if (item.Value.Manufacturer == "Китай")
 				{
 					switch (item.Value.Property)
 					{
-						// Новый приход, Норма
 						case "Норма":
-						case "Новый приход, Норма":
+						case "НП":
 							withCopmetitorsStock = true;
-							note = "Новый приход, Норма";
+							note = "Новый приход, Норма (остатки, срок доставки(7))";
 							allowSellingLoss = false;
+							deliveryTime = 7;
+							withDeliveryTime = true;
 							break;
-						// БП 1 мес, БП 2 мес, НЛ 24, НЛ 12
 						case "БП 2 мес":
 						case "БП 1 мес":
 						case "НЛ 12":
 						case "НЛ 24":
-							// TODO Срок поставки не учитываем
+						case "ОС 2":
+						case "ОС 3":
 							withCopmetitorsStock = false;
-							note = "БП 1 мес, БП 2 мес, НЛ 24, НЛ 12";
+							withDeliveryTime = false;
+							note = "БП 1 мес, БП 2 мес, НЛ 24, НЛ 12, ОС 2, ОС 3 (в минус)";
 							allowSellingLoss = true;
 							break;
 					}
 				}
 				else
 				{
-					switch(item.Value.StorageCategory)
+					switch (item.Value.StorageCategory)
 					{
 						case "Попова":
 						case "Везде":
 						case "Нигде":
+						case "МинЗапас":
 							withCopmetitorsStock = false;
-							note = "Попова, Везде, Нигде";
+							note = "Попова, Везде, Нигде, МинЗапас (срок доставки(7))";
 							allowSellingLoss = false;
+							withDeliveryTime = true;
+							deliveryTime = 7;
 							break;
-						case "НЛ 12":
-						case "НЛ 24":
+						case "НЛ12":
+						case "НЛ24":
 							withCopmetitorsStock = false;
-							note = "НЛ 12, НЛ 24";
+							note = "НЛ 12, НЛ 24 (в минус)";
 							allowSellingLoss = true;
+							withDeliveryTime = false;
 							break;
 					}
 				}
-				competitor = item.Value.GetСompetitor(7, withCopmetitorsStock);
+				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime);
+				note += " " + item.Value.OverStockDaysForAllStocks;
 				var revaluation = new Revaluation(competitor, item.Value, note, allowSellingLoss);
 				revaluations.Add(revaluation);
 			}
@@ -517,7 +526,7 @@ namespace ReDistr
 			// Отключаем предупреждение и обновление экрана
 			Starting(false, false);
 			// Сохраняем книгу
-			var fullPath = Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.FolderTransfers, bookName);
+			var fullPath = Path.Combine(Globals.ThisWorkbook.Path, "..\\", folder, bookName);
 			impot1CBook.SaveAs(fullPath, XlFileFormat.xlWorkbookNormal);
 			impot1CBook.Close();
 
@@ -546,16 +555,16 @@ namespace ReDistr
 			Globals.ThisWorkbook.Application.ScreenUpdating = true;
 		}
 
-		public static void ArchiveTransfers()
+		public static void ArchiveBooks(string inputFolder, string outputFolder)
 		{
 			// Считываем все файлы в папке с перемещениями
-			var fullPath = Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.FolderTransfers);
-			var arrayOfTransferBooks = Directory.GetFiles(fullPath);
+			var fullPath = Path.Combine(Globals.ThisWorkbook.Path, "..\\", inputFolder);
+			var arrayOfBooks = Directory.GetFiles(fullPath);
 			// Перемещаем все файлы в архив
-			foreach (var transferBook in arrayOfTransferBooks)
+			foreach (var transferBook in arrayOfBooks)
 			{
 				// Определяем новый путь
-				var destFileName = Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.FolderArchiveTransfers, Path.GetFileName(transferBook));
+				var destFileName = Path.Combine(Globals.ThisWorkbook.Path, "..\\", outputFolder, Path.GetFileName(transferBook));
 				// Если такой файл есть в конечной папке, удаляем его
 				if (File.Exists(destFileName))
 				{

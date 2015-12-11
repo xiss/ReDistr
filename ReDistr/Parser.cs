@@ -38,6 +38,8 @@ namespace ReDistr
 		private const string RngMinStockForCompetitor = "B25";
 		private const string RngWholesaleStock = "B26";
 		private const string RngIdPriceAp = "B27";
+		private const string RngNameFolderRevaluations = "B28";
+		private const string RngNameFolderArchiveRevaluations = "B29";
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
 		private const string RngDateStocks = "B3"; // Ячейка содержащая дату отчета
@@ -138,6 +140,8 @@ namespace ReDistr
 			Config.WholesaleStock = SimpleStockFactory.CurrentFactory.GetStock(Globals.Control.Range[RngWholesaleStock].Value2);
 			Config.MinStockForCompetitor = Globals.Control.Range[RngMinStockForCompetitor].Value2;
 			Config.IdPriceAp = Globals.Control.Range[RngIdPriceAp].Value2;
+			Config.FolderArchiveRevaluations = Globals.Control.Range[RngNameFolderArchiveRevaluations].Value2;
+			Config.FolderRevaluations = Globals.Control.Range[RngNameFolderRevaluations].Value2;
 			// Категории для перемещения на указанный склад полностью
 			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
 			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();

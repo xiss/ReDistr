@@ -43,6 +43,9 @@ namespace ReDistr
 		// Стоимость
 		public double Price = 0;
 
+		// Колличество дней перезатарки сумарно по всем складам
+		public double OverStockDaysForAllStocks;
+
 		// Комментарий, почему установлена RequiredAvailability
 		public string NoteRequiredAvailability;
 
@@ -190,35 +193,44 @@ namespace ReDistr
 		}
 
 		// Возвращает ближаещего конкурента с учетом исключений
-		public Сompetitor GetСompetitor(int deliveryTime, bool withCompetitorsStocks, bool withExcludes = true)
+		public Сompetitor GetСompetitor(bool withDeliveryTime, bool withCompetitorsStocks, bool withExcludes = true, int deliveryTime = 0)
 		{
 			// Расчитываем параметры остатков у конкуретов
 			const double minStockDays = 25;
 			const double maxStockDays = 40;
-			const int k = 70; // Коэфециент
 			var sailsPerDay = GetSumSelings() / Config.SellingPeriod;
-			int overStockDays;
+
+			var sumStocks = GetSumStocks();
 			var minPercentStock = 0.2;
 			// Если продаж не было то считаем что оверсток равен году
 			if (sailsPerDay == 0)
 			{
-				overStockDays = 365;
+				OverStockDaysForAllStocks = 365;
 			}
 			else
 			{
-				overStockDays = Convert.ToInt32(Math.Round(GetSumStocks() / sailsPerDay));
+				OverStockDaysForAllStocks = Convert.ToInt32(Math.Round(sumStocks / sailsPerDay));
 			}
 			// Если запас более указанного уменьшаем процент
-			if (overStockDays > maxStockDays)
+			if (OverStockDaysForAllStocks > maxStockDays)
 			{
-				minPercentStock = (overStockDays - maxStockDays) / k;
+				minPercentStock = (maxStockDays / OverStockDaysForAllStocks) * 0.2;
 			}
 			// Если запас менее указанного увеличиваем процент
-			if (overStockDays < minStockDays)
+			else
 			{
-				minPercentStock = (overStockDays - minStockDays) / k;
+				minPercentStock = 0.65;
 			}
-			
+			// minPercentStock должен быть между 0 и 1
+			if (minPercentStock > 1)
+			{
+				minPercentStock = 1;
+			}
+			if (minPercentStock < 0)
+			{
+				minPercentStock = 0;
+			}
+
 			Сompetitors = Сompetitors.OrderBy(competitor => competitor.PositionNumber).ToList();
 
 			foreach (var competitor in Сompetitors)
@@ -230,19 +242,18 @@ namespace ReDistr
 				}
 
 				// Проверяем срок поставки, если не соответствует переходим к следующему
-				if (competitor.DeliveryTime > deliveryTime)
+				if (competitor.DeliveryTime > deliveryTime & withDeliveryTime)
 				{
 					continue;
 				}
 
 				// Проверяем запас, если он меньше необходимого переходим к следующему
-				if ((competitor.Count/GetSumSelings()) < minPercentStock)
+				if ((competitor.Count / sumStocks) < minPercentStock & withCompetitorsStocks)
 				{
 					continue;
 				}
 
 				return competitor;
-
 			}
 			return null;
 		}
@@ -251,15 +262,86 @@ namespace ReDistr
 		public double GetNewPrice(Сompetitor сompetitor, bool allowSellingLoss)
 		{
 			// Расчитываем новую цену
-			var newPrice = сompetitor.Price;
+			double newPrice = 0;
+			// Если конкурент есть
+			if (сompetitor != null)
+			{
+				if (Manufacturer != "Китай")
+				{
+					switch (StorageCategory)
+					{
+						case "Попова":
+						case "Везде":
+						case "Нигде":
+						case "МинЗапас":
+							newPrice = CostPrice * 1.4;
+							break;
+						default:
+							newPrice = сompetitor.Price * 0.87;
+							break;
+					}
+				}
+				else
+				{
+					newPrice = сompetitor.Price * 0.87;
+				}
+			}
+			// Если конкурента нет
+			else
+			{
+				// Если производитель "Китай"
+				if (Manufacturer == "Китай")
+				{
+					switch (Property)
+					{
+						case "Норма":
+						case "НП":
+							newPrice = CostPrice * 2;
+							break;
+						case "БП 2 мес":
+							newPrice = CostPrice;
+							break;
+						case "БП 1 мес":
+							newPrice = CostPrice * 0.9;
+							break;
+						case "НЛ 12":
+							newPrice = CostPrice * 0.95;
+							break;
+						case "НЛ 24":
+							newPrice = CostPrice * 0.7;
+							break;
+						case "ОС 2":
+						case "ОС 3":
+							newPrice = CostPrice;
+							break;
+					}
+				}
+				else
+				{
+					switch (StorageCategory)
+					{
+						case "Попова":
+						case "Везде":
+						case "Нигде":
+						case "МинЗапас":
+							newPrice = CostPrice * 1.4;
+							break;
+						case "НЛ12":
+							newPrice = CostPrice * 0.95;
+							break;
+						case "НЛ24":
+							newPrice = CostPrice * 0.7;
+							break;
+					}
+				}
 
+			}
 			// Если новая цена ниже себестоимости, возвращаем себестоимость
 			if (newPrice < CostPrice && !allowSellingLoss)
 			{
 				newPrice = CostPrice;
 			}
-
-			return newPrice;
+			return Math.Round(newPrice);
 		}
 	}
 }

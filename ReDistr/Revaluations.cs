@@ -39,7 +39,7 @@ namespace ReDistr
 
 		// Определяем настройки
 		private const int StartRow = 2;
-		private const int ItemParametrsCount = 15;
+		private const int ItemParametrsCount = 18;
 		private const Excel.XlBordersIndex XlEdgeRight = Excel.XlBordersIndex.xlEdgeRight;
 		private const Excel.XlBorderWeight XlThin = Excel.XlBorderWeight.xlThin;
 		private const string CountNameStyle = "Хороший";
@@ -65,19 +65,22 @@ namespace ReDistr
 				resultRange[i, 2] = "'" + revaluation.Item.Article;
 				resultRange[i, 3] = revaluation.Item.Manufacturer;
 				resultRange[i, 4] = revaluation.Item.StorageCategory;
-				resultRange[i, 5] = revaluation.Item.Property;
-				resultRange[i, 6] = revaluation.Item.Price;
-				resultRange[i, 7] = revaluation.Item.CostPrice;
-				resultRange[i, 8] = revaluation.NewPrice;
-				resultRange[i, 9] = revaluation.NewPrice - revaluation.Item.Price;
-				resultRange[i, 10] = "Наценка";
+				resultRange[i, 5] = revaluation.Item.GetSumStocks();
+				resultRange[i, 6] = revaluation.Item.Property;
+				resultRange[i, 7] = revaluation.Item.Price;
+				resultRange[i, 8] = revaluation.Item.CostPrice;
+				resultRange[i, 9] = revaluation.NewPrice;
+				resultRange[i, 10] = revaluation.NewPrice - revaluation.Item.Price;
+				resultRange[i, 11] = (revaluation.NewPrice - revaluation.Item.CostPrice) / revaluation.Item.CostPrice;
 				if (revaluation.Competitor != null)
 				{
-					resultRange[i, 11] = revaluation.Competitor.Count;
-					resultRange[i, 12] = revaluation.Competitor.DeliveryTime;
-					resultRange[i, 13] = revaluation.Competitor.Id;
+					resultRange[i, 12] = revaluation.Competitor.Price;
+					resultRange[i, 13] = revaluation.Competitor.Count;
+					resultRange[i, 14] = revaluation.Competitor.DeliveryTime;
+					resultRange[i, 15] = revaluation.Competitor.Id;
+					resultRange[i, 16] = revaluation.Competitor.PositionNumber;
 				}
-				resultRange[i, 14] = revaluation.Note;
+				resultRange[i, 17] = revaluation.Note;
 				i++;
 			}
 			// Выводим перемещение на лист
@@ -95,6 +98,24 @@ namespace ReDistr
 */
 
 
+		}
+
+		// Создает книгу с переоценкой
+		public void MakeImportRevaluation()
+		{
+			var firstRow = StartRow;
+			var bookName = DateTime.Now.ToShortDateString() + ".xls";
+			// Определяем последнюю строку
+			var i = 1;
+			do
+			{
+				i++;
+			}
+			while (Range["A" + i].Value2 != null);
+			var lastRow = i;
+
+			var selectionRange = Application.Union(Range["A" + firstRow + ":" + "A" + lastRow], Range["F" + firstRow + ":" + "F" + lastRow], Range["J" + firstRow + ":" + "J" + lastRow]);
+			ReDistr.MakeImpot1CBook(selectionRange, bookName, Config.FolderRevaluations);
 		}
 	}
 }

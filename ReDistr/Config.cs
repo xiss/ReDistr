@@ -37,6 +37,12 @@ namespace ReDistr
 		// Папка с архивом перемещений
 		public static string FolderArchiveTransfers = "Перемещения\\Архив\\";
 
+		// Папка с переоценками
+		public static string FolderRevaluations = "Переоценки\\";
+
+		// Папка с архивом переоценками
+		public static string FolderArchiveRevaluations = "Переоценки\\Архив\\";
+
 		// Имя книги с параметрами
 		public static string NameOfParametersWb;
 

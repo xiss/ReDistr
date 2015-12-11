@@ -38,19 +38,22 @@ namespace ReDistr
 			// TODO Доделать с остальными
 			if (Config.ParsedStocks & Config.ParsedSealings & Config.ParsedAdditionalParameters)
 			{
+#if(!REVAL)
 				buttonGetOrder.Enabled = true;
 				buttonGetOrdersLists.Enabled = true;
 				buttonGetTransfers.Enabled = true;
-
+				buttonMakeTransfersBook.Enabled = true;
+#endif
 			}
 			if (Config.ParsedStocks & Config.ParsedSealings & Config.ParsedAdditionalParameters & Config.ParsedCompetitors)
 			{
 				buttonGetRevaluations.Enabled = true;
+				buttonMakeRevaluationBook.Enabled = true;
 			}
 
 		}
 
-#if(!REVAL)
+
 		// Сформировать списки для заказа
 		private void buttonGetOrderLists_Click(object sender, RibbonControlEventArgs e)
 		{
@@ -69,7 +72,7 @@ namespace ReDistr
 			Globals.Test.FillListStocks(items);
 
 			// Обновляем параметры
-			this.UpdateInfo();
+			UpdateInfo();
 
 			// Составляем список для заказа
 			var orderRequiredItems = ReDistr.GetOrderRequiredItems(items);
@@ -96,7 +99,7 @@ namespace ReDistr
 			Globals.Test.FillListStocks(items);
 
 			// Обновляем параметры
-			this.UpdateInfo();
+			UpdateInfo();
 
 			// Формирует заказы
 			var orders = new List<Order>();
@@ -112,7 +115,7 @@ namespace ReDistr
 		private void buttonMakeTransfersBook_Click(object sender, RibbonControlEventArgs e)
 		{
 			// Архивируем предыдущие перемещения
-			ReDistr.ArchiveTransfers();
+			ReDistr.ArchiveBooks(Config.FolderTransfers, Config.FolderArchiveTransfers);
 
 			// Создаем книги для импорта в Excel
 			Globals.Transfers.MakeImportTransfers();
@@ -160,12 +163,12 @@ namespace ReDistr
 			Globals.Transfers.FillList(transfers);
 
 			// Обновляем параметры
-			this.UpdateInfo();
+			UpdateInfo();
 
 			// Выбираем лист с перемещениями
 			Globals.Transfers.Select();
 		}
-#endif
+
 		// Парсим данные
 		private void buttonParseData_Click(object sender, RibbonControlEventArgs e)
 		{
@@ -177,12 +180,6 @@ namespace ReDistr
 			this.UpdateInfo();
 		}
 
-		// Для теста
-		private void button1_Click(object sender, RibbonControlEventArgs e)
-		{
-			button1.Label = Globals.ThisWorkbook.items.Count.ToString();
-		}
-
 		// Сформировать переоценку
 		private void buttonGetRevaluations_Click(object sender, RibbonControlEventArgs e)
 		{
@@ -190,6 +187,16 @@ namespace ReDistr
 
 			// Заполняем лист с переоценкой
 			Globals.Revaluations.FillList(revaluation);
+		}
+
+		// Архивирует переоценку, создает новую
+		private void buttonMakeRevaluationBook_Click(object sender, RibbonControlEventArgs e)
+		{
+			// Архивирует предыдущие переоценки
+			ReDistr.ArchiveBooks(Config.FolderRevaluations, Config.FolderArchiveRevaluations);
+
+			// Создает книги для импорта в Excel
+			Globals.Revaluations.MakeImportRevaluation();
 		}
 
 	}

@@ -37,18 +37,10 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ribbon));
 			this.tab1 = this.Factory.CreateRibbonTab();
 			this.groupData = this.Factory.CreateRibbonGroup();
-			this.buttonParseData = this.Factory.CreateRibbonButton();
-			this.button1 = this.Factory.CreateRibbonButton();
 			this.separator2 = this.Factory.CreateRibbonSeparator();
 			this.checkBoxIncludeSellings = this.Factory.CreateRibbonCheckBox();
 			this.checkBoxIncludeAdditionalParameters = this.Factory.CreateRibbonCheckBox();
 			this.checkBoxIncludeCompetitorsFromAP = this.Factory.CreateRibbonCheckBox();
-			this.groupOrders = this.Factory.CreateRibbonGroup();
-			this.buttonGetOrder = this.Factory.CreateRibbonButton();
-			this.buttonGetOrdersLists = this.Factory.CreateRibbonButton();
-			this.groupTransfers = this.Factory.CreateRibbonGroup();
-			this.buttonGetTransfers = this.Factory.CreateRibbonButton();
-			this.buttonMakeTransfersBook = this.Factory.CreateRibbonButton();
 			this.groupInfo = this.Factory.CreateRibbonGroup();
 			this.label1 = this.Factory.CreateRibbonLabel();
 			this.labelPeriodSelling = this.Factory.CreateRibbonLabel();
@@ -56,16 +48,23 @@
 			this.separator1 = this.Factory.CreateRibbonSeparator();
 			this.label2 = this.Factory.CreateRibbonLabel();
 			this.labelStockDate = this.Factory.CreateRibbonLabel();
+			this.groupOrders = this.Factory.CreateRibbonGroup();
 			this.groupRevaluations = this.Factory.CreateRibbonGroup();
-			this.buttonGetRevaluations = this.Factory.CreateRibbonButton();
+			this.groupTransfers = this.Factory.CreateRibbonGroup();
 			this.button2 = this.Factory.CreateRibbonButton();
-			this.button3 = this.Factory.CreateRibbonButton();
+			this.buttonParseData = this.Factory.CreateRibbonButton();
+			this.buttonGetOrder = this.Factory.CreateRibbonButton();
+			this.buttonGetOrdersLists = this.Factory.CreateRibbonButton();
+			this.buttonGetRevaluations = this.Factory.CreateRibbonButton();
+			this.buttonMakeRevaluationBook = this.Factory.CreateRibbonButton();
+			this.buttonGetTransfers = this.Factory.CreateRibbonButton();
+			this.buttonMakeTransfersBook = this.Factory.CreateRibbonButton();
 			this.tab1.SuspendLayout();
 			this.groupData.SuspendLayout();
-			this.groupOrders.SuspendLayout();
-			this.groupTransfers.SuspendLayout();
 			this.groupInfo.SuspendLayout();
+			this.groupOrders.SuspendLayout();
 			this.groupRevaluations.SuspendLayout();
+			this.groupTransfers.SuspendLayout();
 			// 
 			// tab1
 			// 
@@ -81,28 +80,12 @@
 			// groupData
 			// 
 			this.groupData.Items.Add(this.buttonParseData);
-			this.groupData.Items.Add(this.button1);
 			this.groupData.Items.Add(this.separator2);
 			this.groupData.Items.Add(this.checkBoxIncludeSellings);
 			this.groupData.Items.Add(this.checkBoxIncludeAdditionalParameters);
 			this.groupData.Items.Add(this.checkBoxIncludeCompetitorsFromAP);
 			this.groupData.Label = "Данные";
 			this.groupData.Name = "groupData";
-			// 
-			// buttonParseData
-			// 
-			this.buttonParseData.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-			this.buttonParseData.Image = ((System.Drawing.Image)(resources.GetObject("buttonParseData.Image")));
-			this.buttonParseData.Label = "Считать данные";
-			this.buttonParseData.Name = "buttonParseData";
-			this.buttonParseData.ShowImage = true;
-			this.buttonParseData.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonParseData_Click);
-			// 
-			// button1
-			// 
-			this.button1.Label = "button1";
-			this.button1.Name = "button1";
-			this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
 			// 
 			// separator2
 			// 
@@ -127,59 +110,6 @@
 			this.checkBoxIncludeCompetitorsFromAP.Description = "Книга с конкурентами из П+";
 			this.checkBoxIncludeCompetitorsFromAP.Label = "Конкуренты П+";
 			this.checkBoxIncludeCompetitorsFromAP.Name = "checkBoxIncludeCompetitorsFromAP";
-			// 
-			// groupOrders
-			// 
-			this.groupOrders.Items.Add(this.buttonGetOrder);
-			this.groupOrders.Items.Add(this.buttonGetOrdersLists);
-			this.groupOrders.Label = "Заказы";
-			this.groupOrders.Name = "groupOrders";
-			// 
-			// buttonGetOrder
-			// 
-			this.buttonGetOrder.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-			this.buttonGetOrder.Enabled = false;
-			this.buttonGetOrder.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetOrder.Image")));
-			this.buttonGetOrder.Label = "Рассчитать заказы";
-			this.buttonGetOrder.Name = "buttonGetOrder";
-			this.buttonGetOrder.ShowImage = true;
-			this.buttonGetOrder.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetOrders_Click);
-			// 
-			// buttonGetOrdersLists
-			// 
-			this.buttonGetOrdersLists.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-			this.buttonGetOrdersLists.Enabled = false;
-			this.buttonGetOrdersLists.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetOrdersLists.Image")));
-			this.buttonGetOrdersLists.Label = "Рассчитать списки заказов";
-			this.buttonGetOrdersLists.Name = "buttonGetOrdersLists";
-			this.buttonGetOrdersLists.ShowImage = true;
-			this.buttonGetOrdersLists.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetOrderLists_Click);
-			// 
-			// groupTransfers
-			// 
-			this.groupTransfers.Items.Add(this.buttonGetTransfers);
-			this.groupTransfers.Items.Add(this.buttonMakeTransfersBook);
-			this.groupTransfers.Label = "Перемещения";
-			this.groupTransfers.Name = "groupTransfers";
-			// 
-			// buttonGetTransfers
-			// 
-			this.buttonGetTransfers.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-			this.buttonGetTransfers.Enabled = false;
-			this.buttonGetTransfers.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetTransfers.Image")));
-			this.buttonGetTransfers.Label = "Рассчитать";
-			this.buttonGetTransfers.Name = "buttonGetTransfers";
-			this.buttonGetTransfers.ShowImage = true;
-			this.buttonGetTransfers.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetTransfers_Click);
-			// 
-			// buttonMakeTransfersBook
-			// 
-			this.buttonMakeTransfersBook.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-			this.buttonMakeTransfersBook.Image = ((System.Drawing.Image)(resources.GetObject("buttonMakeTransfersBook.Image")));
-			this.buttonMakeTransfersBook.Label = "Сформировать файлы";
-			this.buttonMakeTransfersBook.Name = "buttonMakeTransfersBook";
-			this.buttonMakeTransfersBook.ShowImage = true;
-			this.buttonMakeTransfersBook.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonMakeTransfersBook_Click);
 			// 
 			// groupInfo
 			// 
@@ -221,12 +151,61 @@
 			this.labelStockDate.Label = " ";
 			this.labelStockDate.Name = "labelStockDate";
 			// 
+			// groupOrders
+			// 
+			this.groupOrders.Items.Add(this.buttonGetOrder);
+			this.groupOrders.Items.Add(this.buttonGetOrdersLists);
+			this.groupOrders.Label = "Заказы";
+			this.groupOrders.Name = "groupOrders";
+			// 
 			// groupRevaluations
 			// 
 			this.groupRevaluations.Items.Add(this.buttonGetRevaluations);
-			this.groupRevaluations.Items.Add(this.button3);
+			this.groupRevaluations.Items.Add(this.buttonMakeRevaluationBook);
 			this.groupRevaluations.Label = "Переоценка";
 			this.groupRevaluations.Name = "groupRevaluations";
+			// 
+			// groupTransfers
+			// 
+			this.groupTransfers.Items.Add(this.buttonGetTransfers);
+			this.groupTransfers.Items.Add(this.buttonMakeTransfersBook);
+			this.groupTransfers.Label = "Перемещения";
+			this.groupTransfers.Name = "groupTransfers";
+			// 
+			// button2
+			// 
+			this.button2.Label = "button2";
+			this.button2.Name = "button2";
+			this.button2.ShowImage = true;
+			// 
+			// buttonParseData
+			// 
+			this.buttonParseData.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.buttonParseData.Image = ((System.Drawing.Image)(resources.GetObject("buttonParseData.Image")));
+			this.buttonParseData.Label = "Считать данные";
+			this.buttonParseData.Name = "buttonParseData";
+			this.buttonParseData.ShowImage = true;
+			this.buttonParseData.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonParseData_Click);
+			// 
+			// buttonGetOrder
+			// 
+			this.buttonGetOrder.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.buttonGetOrder.Enabled = false;
+			this.buttonGetOrder.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetOrder.Image")));
+			this.buttonGetOrder.Label = "Рассчитать заказы";
+			this.buttonGetOrder.Name = "buttonGetOrder";
+			this.buttonGetOrder.ShowImage = true;
+			this.buttonGetOrder.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetOrders_Click);
+			// 
+			// buttonGetOrdersLists
+			// 
+			this.buttonGetOrdersLists.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.buttonGetOrdersLists.Enabled = false;
+			this.buttonGetOrdersLists.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetOrdersLists.Image")));
+			this.buttonGetOrdersLists.Label = "Рассчитать списки заказов";
+			this.buttonGetOrdersLists.Name = "buttonGetOrdersLists";
+			this.buttonGetOrdersLists.ShowImage = true;
+			this.buttonGetOrdersLists.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetOrderLists_Click);
 			// 
 			// buttonGetRevaluations
 			// 
@@ -238,19 +217,35 @@
 			this.buttonGetRevaluations.ShowImage = true;
 			this.buttonGetRevaluations.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetRevaluations_Click);
 			// 
-			// button2
+			// buttonMakeRevaluationBook
 			// 
-			this.button2.Label = "button2";
-			this.button2.Name = "button2";
-			this.button2.ShowImage = true;
+			this.buttonMakeRevaluationBook.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.buttonMakeRevaluationBook.Enabled = false;
+			this.buttonMakeRevaluationBook.Image = ((System.Drawing.Image)(resources.GetObject("buttonMakeRevaluationBook.Image")));
+			this.buttonMakeRevaluationBook.Label = "Сформировать файл";
+			this.buttonMakeRevaluationBook.Name = "buttonMakeRevaluationBook";
+			this.buttonMakeRevaluationBook.ShowImage = true;
+			this.buttonMakeRevaluationBook.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonMakeRevaluationBook_Click);
 			// 
-			// button3
+			// buttonGetTransfers
 			// 
-			this.button3.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-			this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
-			this.button3.Label = "button3";
-			this.button3.Name = "button3";
-			this.button3.ShowImage = true;
+			this.buttonGetTransfers.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.buttonGetTransfers.Enabled = false;
+			this.buttonGetTransfers.Image = ((System.Drawing.Image)(resources.GetObject("buttonGetTransfers.Image")));
+			this.buttonGetTransfers.Label = "Рассчитать";
+			this.buttonGetTransfers.Name = "buttonGetTransfers";
+			this.buttonGetTransfers.ShowImage = true;
+			this.buttonGetTransfers.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonGetTransfers_Click);
+			// 
+			// buttonMakeTransfersBook
+			// 
+			this.buttonMakeTransfersBook.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+			this.buttonMakeTransfersBook.Enabled = false;
+			this.buttonMakeTransfersBook.Image = ((System.Drawing.Image)(resources.GetObject("buttonMakeTransfersBook.Image")));
+			this.buttonMakeTransfersBook.Label = "Сформировать файлы";
+			this.buttonMakeTransfersBook.Name = "buttonMakeTransfersBook";
+			this.buttonMakeTransfersBook.ShowImage = true;
+			this.buttonMakeTransfersBook.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.buttonMakeTransfersBook_Click);
 			// 
 			// Ribbon
 			// 
@@ -266,14 +261,14 @@
 			this.tab1.PerformLayout();
 			this.groupData.ResumeLayout(false);
 			this.groupData.PerformLayout();
-			this.groupOrders.ResumeLayout(false);
-			this.groupOrders.PerformLayout();
-			this.groupTransfers.ResumeLayout(false);
-			this.groupTransfers.PerformLayout();
 			this.groupInfo.ResumeLayout(false);
 			this.groupInfo.PerformLayout();
+			this.groupOrders.ResumeLayout(false);
+			this.groupOrders.PerformLayout();
 			this.groupRevaluations.ResumeLayout(false);
 			this.groupRevaluations.PerformLayout();
+			this.groupTransfers.ResumeLayout(false);
+			this.groupTransfers.PerformLayout();
 
         }
 
@@ -298,12 +293,11 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox checkBoxIncludeSellings;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox checkBoxIncludeAdditionalParameters;
-        internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox checkBoxIncludeCompetitorsFromAP;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
+		internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox checkBoxIncludeCompetitorsFromAP;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupRevaluations;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonGetRevaluations;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button2;
-		internal Microsoft.Office.Tools.Ribbon.RibbonButton button3;
+		internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonMakeRevaluationBook;
     }
 
     partial class ThisRibbonCollection

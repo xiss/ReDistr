@@ -24,17 +24,17 @@ namespace ReDistr
 		// Конструктор
 		public Revaluation(Сompetitor competitor, Item item, String note, bool allowSellingLoss)
 		{
+			NewPrice = item.GetNewPrice(competitor, allowSellingLoss);
+			Item = item;
+
 			// Если нет конкурента
 			if (competitor == null)
 			{
-				Item = item;
 				Note = "Нет конкурента";
 			}
 			// Если конкурент есть
 			else
 			{
-				Item = item;
-				NewPrice = item.GetNewPrice(competitor, allowSellingLoss);
 				Note = note;
 				Competitor = competitor;
 			}
