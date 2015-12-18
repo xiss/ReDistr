@@ -45,13 +45,14 @@ namespace ReDistr
 		private const string CountNameStyle = "Хороший";
 		private const string HeaderNameStyle = "Заголовок 1";
 		private const string NumberFormatText = "@";
+		private const string NumberFormatPersent = "0%";
 
 		// Выводит на лист заказы сгруппированные по поставщику
 		public void FillList(List<Revaluation> revaluations)
 		{
 			// Очищаем лист
 			// TODO /5 Подумать как сделать это проще, сейчас становятся активными лишние ячейки
-			Range["A2:Z1500"].Clear();
+			Range["A2:Z15000"].Clear();
 
 			var curentRow = StartRow;
 
@@ -60,7 +61,7 @@ namespace ReDistr
 			// Добавляем ЗЧ в массив 
 			foreach (var revaluation in revaluations)
 			{
-				resultRange[i, 0] = revaluation.Item.Id1C;
+				resultRange[i, 0] = "'" + revaluation.Item.Id1C;
 				resultRange[i, 1] = revaluation.Item.Name;
 				resultRange[i, 2] = "'" + revaluation.Item.Article;
 				resultRange[i, 3] = revaluation.Item.Manufacturer;
@@ -84,20 +85,10 @@ namespace ReDistr
 				i++;
 			}
 			// Выводим перемещение на лист
-			Range[Cells[curentRow, 1], Cells[curentRow + revaluations.Count, ItemParametrsCount]].Value2 = resultRange;
+			Range[Cells[StartRow, 1], Cells[revaluations.Count, ItemParametrsCount]].Value2 = resultRange;
 
 			// Применяем стили и форматирование
-			/*Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4]].Style = HeaderNameStyle;
-			Range[Cells[curentRow, ItemParametrsCount], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].Style = CountNameStyle;
-			Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].NumberFormat = NumberFormatText;
-			// Границы колонок
-			Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 2]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 3]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 4]].Borders(XlEdgeRight).Weight = XlThin;
-*/
-
-
+			Range["L2:L" + i].NumberFormat = NumberFormatPersent;
 		}
 
 		// Создает книгу с переоценкой

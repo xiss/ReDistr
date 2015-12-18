@@ -46,13 +46,14 @@ namespace ReDistr
 		private const string ColStockSignStocks = "B"; // Колонка содержащая сигнатуру склада
 		private const string ColArticleStocks = "C"; // Артикул
 		private const string ColCountStocks = "U"; // Остаток
-		private const string ColInReserveStocks = "V"; // Резерв
-		private const string ColId1CStocks = "W"; // Код товара
-		private const string ColStorageCategoryStocks = "X"; // Категроия хранения
+		private const string ColInReserveStocks = "W"; // Резерв
+		private const string ColId1CStocks = "X"; // Код товара
+		private const string ColStorageCategoryStocks = "Y"; // Категроия хранения
 		private const string ColNameStocks = "R"; // Название ЗЧ
-		private const string ColManufacturerStocks = "AC"; // Производитель
-		private const string ColPriceStocks = "AA"; // Производитель
-		private const string ColPropertyStocks = "AF"; // Свойство
+		private const string ColManufacturerStocks = "AD"; // Производитель
+		private const string ColPriceStocks = "AB"; // Интерет цена
+		private const string ColPropertyStocks = "AG"; // Свойство
+		private const string ColCostPriceStocks = "V"; // Себестоимость
 		// Книга с продажами
 		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
 		private const string RngDateSealings = "B3"; // Дата отчета
@@ -201,6 +202,13 @@ namespace ReDistr
 					itemCount = stocksWb.Worksheets[1].Range[ColCountStocks + curentRow].Value;
 				}
 
+				// Определяем себестоимость
+				double itemCostPrice = 0;
+				if (stocksWb.Worksheets[1].Range[ColCostPriceStocks + curentRow].Value is string != true & itemCount != 0)
+				{
+					itemCostPrice = stocksWb.Worksheets[1].Range[ColCostPriceStocks + curentRow].Value / itemCount;
+				}
+
 				// Определяем резерв
 				double reserveCount = 0;
 				if (stocksWb.Worksheets[1].Range[ColInReserveStocks + curentRow].Value is string != true)
@@ -219,6 +227,12 @@ namespace ReDistr
 				if (items.ContainsKey(stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value.ToString()))
 				{
 					item = items[stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value.ToString()];
+
+					// Если СС не установлена, устанавливаем
+					if (item.CostPrice == 0)
+					{
+						item.CostPrice = itemCostPrice;
+					}
 				}
 
 				// Если не находим, создаем ее
@@ -233,6 +247,7 @@ namespace ReDistr
 						Manufacturer = stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString(),
 						Price = stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value,
 						Property = stocksWb.Worksheets[1].Range[ColPropertyStocks + curentRow].Value,
+						CostPrice = itemCostPrice,
 					};
 
 					// Создаем склады для ЗЧ
@@ -484,6 +499,21 @@ namespace ReDistr
 
 				curentRow++;
 			}
+
+			// Цены
+			curentRow = RowStartParameters;
+			while (parametersWb.Worksheets[6].Range[ColId1CParameters + curentRow].Value2 != null)
+			{
+				// Ищем запчасть по 1С коду в массиве запчастей
+				if (items.ContainsKey(parametersWb.Worksheets[6].Range[ColId1CParameters + curentRow].Value))
+				{
+					// Если нашли, проставляем кратность
+					Item item = items[parametersWb.Worksheets[6].Range[ColId1CParameters + curentRow].Value];
+					item.PrePrice = parametersWb.Worksheets[6].Range[ColStartParamsParameters + curentRow].Value;
+				}
+
+				curentRow++;
+			}
 			parametersWb.Close();
 		}
 
@@ -517,10 +547,10 @@ namespace ReDistr
 					continue;
 				}
 				// Если себестоимость еще не установлена, устанавливаем
-				if (item.CostPrice == 0)
-				{
-					item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
-				}
+				//if (item.CostPrice == 0)
+				//{
+				//	item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
+				//}
 				// Создаем нового конкурента
 				var competitor = new Сompetitor
 				{

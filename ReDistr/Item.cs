@@ -55,6 +55,9 @@ namespace ReDistr
 		// Конкуренты в Питерплюсе
 		public List<Сompetitor> Сompetitors = new List<Сompetitor>();
 
+		// Предустановленная цена
+		public double PrePrice = 0;
+
 		// Возвращает список всех возможных доноров, отсортированный по убыванию. Если задан список перемещений, то доноры выдаются из этого списка
 		public List<Stock> GetListOfPossibleDonors(List<Transfer> existTransfers = null)
 		{
@@ -263,6 +266,13 @@ namespace ReDistr
 		{
 			// Расчитываем новую цену
 			double newPrice = 0;
+
+			// Если есть предустановленная цена, используем ее
+			if (PrePrice != 0)
+			{
+				return PrePrice;
+			}
+
 			// Если конкурент есть
 			if (сompetitor != null)
 			{
@@ -276,6 +286,26 @@ namespace ReDistr
 						case "МинЗапас":
 							newPrice = CostPrice * 1.4;
 							break;
+						case "НЛ12":
+							if (сompetitor.Price * 0.87 > CostPrice * 0.95)
+							{
+								newPrice = CostPrice * 0.95;
+							}
+							else
+							{
+								newPrice = сompetitor.Price * 0.87;
+							}
+							break;
+						case "НЛ24":
+							if (сompetitor.Price * 0.87 > CostPrice * 0.7)
+							{
+								newPrice = CostPrice * 0.7;
+							}
+							else
+							{
+								newPrice = сompetitor.Price * 0.87;
+							}
+							break;
 						default:
 							newPrice = сompetitor.Price * 0.87;
 							break;
@@ -283,7 +313,41 @@ namespace ReDistr
 				}
 				else
 				{
-					newPrice = сompetitor.Price * 0.87;
+					switch (Property)
+					{
+						case "НЛ 12":
+							if (сompetitor.Price * 0.87 > CostPrice * 0.95)
+							{
+								newPrice = CostPrice * 0.95;
+							}
+							else
+							{
+								newPrice = сompetitor.Price * 0.87;
+							}
+							break;
+						case "НЛ 24":
+							if (сompetitor.Price * 0.87 > CostPrice * 0.7)
+							{
+								newPrice = CostPrice * 0.7;
+							}
+							else
+							{
+								newPrice = сompetitor.Price * 0.87;
+							}
+							break;
+						case "БП 1 мес":
+							newPrice = (сompetitor.Price * 0.87) * 0.9;
+							break;
+						case "БП 2 мес":
+							newPrice = (сompetitor.Price * 0.87) * 0.8;
+							break;
+						case "ОС 2":
+							newPrice = (сompetitor.Price * 0.87) * 0.9;
+							break;
+						default:
+							newPrice = (сompetitor.Price * 0.87) * 0.87;
+							break;
+					}
 				}
 			}
 			// Если конкурента нет
@@ -299,10 +363,10 @@ namespace ReDistr
 							newPrice = CostPrice * 2;
 							break;
 						case "БП 2 мес":
-							newPrice = CostPrice;
+							newPrice = CostPrice * 0.8;
 							break;
 						case "БП 1 мес":
-							newPrice = CostPrice * 0.9;
+							newPrice = CostPrice * 1.1;
 							break;
 						case "НЛ 12":
 							newPrice = CostPrice * 0.95;
@@ -312,7 +376,7 @@ namespace ReDistr
 							break;
 						case "ОС 2":
 						case "ОС 3":
-							newPrice = CostPrice;
+							newPrice = CostPrice * 1.05;
 							break;
 					}
 				}
@@ -334,7 +398,6 @@ namespace ReDistr
 							break;
 					}
 				}
-
 			}
 			// Если новая цена ниже себестоимости, возвращаем себестоимость
 			if (newPrice < CostPrice && !allowSellingLoss)

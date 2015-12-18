@@ -177,7 +177,7 @@ namespace ReDistr
 			Globals.ThisWorkbook.items = parser.Parse(checkBoxIncludeSellings.Checked, checkBoxIncludeAdditionalParameters.Checked, checkBoxIncludeCompetitorsFromAP.Checked);
 
 			// Обновляем параметры
-			this.UpdateInfo();
+			UpdateInfo();
 		}
 
 		// Сформировать переоценку
@@ -187,6 +187,7 @@ namespace ReDistr
 
 			// Заполняем лист с переоценкой
 			Globals.Revaluations.FillList(revaluation);
+			Globals.Revaluations.Select();
 		}
 
 		// Архивирует переоценку, создает новую

@@ -450,6 +450,11 @@ namespace ReDistr
 				{
 					continue;
 				}
+				// Если остатка нет, берем следующую
+				if (item.Value.GetSumStocks() == 0)
+				{
+					continue;
+				}
 
 				//// Переоценка
 				var competitor = new Сompetitor();
