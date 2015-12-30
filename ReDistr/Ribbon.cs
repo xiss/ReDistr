@@ -187,6 +187,9 @@ namespace ReDistr
 
 			// Заполняем лист с переоценкой
 			Globals.Revaluations.FillList(revaluation);
+
+			Globals.Test.FillListStocks(Globals.ThisWorkbook.items);
+
 			Globals.Revaluations.Select();
 		}
 

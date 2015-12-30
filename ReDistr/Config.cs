@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace ReDistr
 {
@@ -108,6 +109,12 @@ namespace ReDistr
 			PossibleTransfers = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks()).ToList();
 			CountPossibleTransfers = PossibleTransfers.Count;
 		}
+
+		// ТЕСТ
+		//public static string Test()
+		//{
+		//	return XmlSerializer.
+		//}
 			
 
 	}

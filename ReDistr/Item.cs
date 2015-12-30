@@ -235,6 +235,7 @@ namespace ReDistr
 			}
 
 			Сompetitors = Сompetitors.OrderBy(competitor => competitor.PositionNumber).ToList();
+			
 
 			foreach (var competitor in Сompetitors)
 			{
@@ -345,7 +346,7 @@ namespace ReDistr
 							newPrice = (сompetitor.Price * 0.87) * 0.9;
 							break;
 						default:
-							newPrice = (сompetitor.Price * 0.87) * 0.87;
+							newPrice = сompetitor.Price * 0.87;
 							break;
 					}
 				}
