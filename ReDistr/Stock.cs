@@ -43,6 +43,9 @@ namespace ReDistr
 		// Приоритет, в спорных ситуациях используется для определения реципиента. 
 		public uint Priority;
 
+		// Себестоимость
+		public double CostPrice = 0;
+
 		// Свободный остаток, который можно перемещать с данного склада, 
 		// если свободный остаток отличен от 0, склад может быть донором. 
 		// Не может быть меньше 0, если minStock отличен от нуля
@@ -66,7 +69,7 @@ namespace ReDistr
 		}
 
 		// Признак обязательного наличия ЗЧ на данном складе
-		public bool RequiredAvailability;
+		//public bool RequiredAvailability;
 
 		// Перегруженный оператор ==
 		public static bool operator ==(Stock a, Stock b)
@@ -194,7 +197,7 @@ namespace ReDistr
 			var minStock = Math.Ceiling((sailsPerDay * DefaultPeriodMinStock) / item.InKit) * item.InKit;
 
 			// Если установлена RequiredAvailability и расчитанный минимальный остаток меньше кратности, проставлем кратность остаток равным одному комплекту
-			if (RequiredAvailability && minStock < item.InKit)
+			if (item.RequiredAvailability && minStock < item.InKit)
 			{
 				minStock = item.InKit;
 			}
@@ -210,7 +213,7 @@ namespace ReDistr
 			var maxStock = Math.Ceiling((sailsPerDay * DefaultPeriodMaxStock) / item.InKit) * item.InKit;
 
 			// Если установлена RequiredAvailability и расчитанный максимальный остаток меньше кратности, проставлем остаток равным одному комплекту
-			if (RequiredAvailability && maxStock < item.InKit)
+			if (item.RequiredAvailability && maxStock < item.InKit)
 			{
 				maxStock = item.InKit;
 			}

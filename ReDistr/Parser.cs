@@ -66,6 +66,11 @@ namespace ReDistr
 		private const string ColNameSealings = "S"; // Название ЗЧ
 		private const string ColPropertySealings = "Y"; // Свойство ЗЧ 2
 		// Книга с дополнительными параметрами
+		private const uint ListExcludesParameters = 1; // Исключения из перемещений
+		private const uint ListInKitParameters = 2; // Кратность
+		private const uint ListInBundleParameters = 3; // В упаковке
+		private const uint ListSupplierParameters = 4; // Поставщик
+		private const uint ListPriceParameters = 5; // Принудительные цены
 		private const uint RowStartParameters = 2; // Строка с которой парсится дополнительная информация
 		private const string ColId1CParameters = "A"; // Колонка с кодом ЗЧ
 		private const string ColArticleParameters = "B";
@@ -84,7 +89,7 @@ namespace ReDistr
 		private const string ColCostPriceContributors = "L"; // Себестоимость
 		private const string ColCountContributors = "D"; // Остаток у конкурента
 
-		
+
 		// Диалоговые окна
 		private const string MessegeBoxQuestion = "Дата снятия отчета с остатком не соответствует сегодняшней, продолжить?";
 		private const string MessegeBoxCaption = "Предупреждение";
@@ -119,7 +124,7 @@ namespace ReDistr
 
 			// Конкуренты-исключения
 			curentRow = RowStartExcludeCompetitors;
-			var list = new List<string>() ;
+			var list = new List<string>();
 			while (Globals.Control.Range[ColExcludeCompetitors + curentRow].Value != null)
 			{
 				list.Add(Globals.Control.Range[ColExcludeCompetitors + curentRow].Value.ToString());
@@ -185,7 +190,8 @@ namespace ReDistr
 			var curentRow = RowStartStocks;
 			var curentStockSignature = String.Empty;
 
-			while (stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value != null || stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value != null)
+			while (stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value != null ||
+				   stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value != null)
 			{
 				// Определяем строку с сигнатурой текущего склада
 				if (stocksWb.Worksheets[1].Range[ColStockSignStocks + curentRow].Value != null)
@@ -216,6 +222,16 @@ namespace ReDistr
 					reserveCount = stocksWb.Worksheets[1].Range[ColInReserveStocks + curentRow].Value;
 				}
 
+				// Определяем обязательное наличие
+				bool requiredAvailability = false;
+				if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value is string)
+				{
+					if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString() == Config.NameOfStorageCatRequiredAvailability)
+					{
+						requiredAvailability = true;
+					}
+				}
+
 				// Если резерв отрицателен, округляем его до 0
 				if (reserveCount < 0)
 				{
@@ -229,10 +245,10 @@ namespace ReDistr
 					item = items[stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value.ToString()];
 
 					// Если СС не установлена, устанавливаем
-					if (item.CostPrice == 0)
-					{
-						item.CostPrice = itemCostPrice;
-					}
+					//if (item.CostPrice == 0)
+					//{
+					//	item.CostPrice = itemCostPrice;
+					//}
 				}
 
 				// Если не находим, создаем ее
@@ -247,7 +263,8 @@ namespace ReDistr
 						Manufacturer = stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString(),
 						Price = stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value,
 						Property = stocksWb.Worksheets[1].Range[ColPropertyStocks + curentRow].Value,
-						CostPrice = itemCostPrice,
+						//CostPrice = itemCostPrice,
+						RequiredAvailability = requiredAvailability,
 					};
 
 					// Создаем склады для ЗЧ
@@ -268,6 +285,7 @@ namespace ReDistr
 				{
 					stock.SetOriginCount(itemCount);
 					stock.InReserve = reserveCount;
+					stock.CostPrice = itemCostPrice;
 				}
 				curentRow++;
 			}
@@ -369,74 +387,75 @@ namespace ReDistr
 			var stockList = new List<string>();
 			for (var i = 1; i <= Config.StockCount; i++)
 			{
-				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value.ToLower());
+				stockList.Add(parametersWb.Worksheets[ListExcludesParameters].Cells[1, 4 + i].Value.ToLower());
 			}
 
-			// Считываем обязательное наличие
 			var curentRow = RowStartParameters;
+			// Считываем обязательное наличие
+			/*			
 
-			while (parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value != null)
-			{
-				// Ищем запчасть по 1С коду в массиве запчастей
-				// Если не находим создаем необходимую ЗЧ
-				string curenId1C = parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value2;
-				if (!items.ContainsKey(curenId1C))
-				{
-					var item = new Item
-					{
-						Id1C = parametersWb.Worksheets[4].Range[ColId1CParameters + curentRow].Value.ToString(),
-						Article = parametersWb.Worksheets[4].Range[ColArticleParameters + curentRow].Value,
-						//StorageCategory = parametersWb.Worksheets[4].Range[ColStorageCategorySealings + curentRow].Value.ToString(),
-						Name = parametersWb.Worksheets[4].Range[ColNameParameters + curentRow].Value.ToString(),
-						Manufacturer = parametersWb.Worksheets[4].Range[ColManufacturerParameters + curentRow].Value.ToString()
-					};
+						while (parametersWb.Worksheets[ListSupplierParameters].Range[ColId1CParameters + curentRow].Value != null)
+						{
+							// Ищем запчасть по 1С коду в массиве запчастей
+							// Если не находим создаем необходимую ЗЧ
+							string curenId1C = parametersWb.Worksheets[ListSupplierParameters].Range[ColId1CParameters + curentRow].Value2;
+							if (!items.ContainsKey(curenId1C))
+							{
+								var item = new Item
+								{
+									Id1C = parametersWb.Worksheets[ListSupplierParameters].Range[ColId1CParameters + curentRow].Value.ToString(),
+									Article = parametersWb.Worksheets[ListSupplierParameters].Range[ColArticleParameters + curentRow].Value,
+									//StorageCategory = parametersWb.Worksheets[ListSupplierParameters].Range[ColStorageCategorySealings + curentRow].Value.ToString(),
+									Name = parametersWb.Worksheets[ListSupplierParameters].Range[ColNameParameters + curentRow].Value.ToString(),
+									Manufacturer = parametersWb.Worksheets[ListSupplierParameters].Range[ColManufacturerParameters + curentRow].Value.ToString()
+								};
 
-					// Создаем склады для ЗЧ
-					var newStocks = SimpleStockFactory.CurrentFactory.GetAllStocks();
-					foreach (var newStock in newStocks)
-					{
-						item.Stocks.Add(newStock);
-					}
+								// Создаем склады для ЗЧ
+								var newStocks = SimpleStockFactory.CurrentFactory.GetAllStocks();
+								foreach (var newStock in newStocks)
+								{
+									item.Stocks.Add(newStock);
+								}
 
-					items.Add(item.Id1C, item);
-				}
-				// Проставляем обязательное наличие у найденной ЗЧ
-				foreach (var curentStock in stockList)
-				{
-					// Проверим, есть ли у текущей ЗЧ текущей склад
-					var stock = items[curenId1C].Stocks.Find(s => s.Signature.Contains(curentStock));
-					// Если такой склад уже есть, работаем с ним, если нет переходим к следующему складу
-					if (stock != null && parametersWb.Worksheets[4].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value2 == 1)
-					{
-						stock.RequiredAvailability = true;
-					}
-				}
-				// Проставляем комментарий
-				if (items[curenId1C].IsRequiredAvailability())
-				{
-					items[curenId1C].NoteRequiredAvailability =
-						parametersWb.Worksheets[4].Cells[curentRow, 5 + Config.StockCount].Value2;
-				}
+								items.Add(item.Id1C, item);
+							}
+							// Проставляем обязательное наличие у найденной ЗЧ
+							foreach (var curentStock in stockList)
+							{
+								// Проверим, есть ли у текущей ЗЧ текущей склад
+								var stock = items[curenId1C].Stocks.Find(s => s.Signature.Contains(curentStock));
+								// Если такой склад уже есть, работаем с ним, если нет переходим к следующему складу
+								if (stock != null && parametersWb.Worksheets[ListSupplierParameters].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value2 == 1)
+								{
+									stock.RequiredAvailability = true;
+								}
+							}
+							// Проставляем комментарий
+							if (items[curenId1C].IsRequiredAvailability())
+							{
+								items[curenId1C].NoteRequiredAvailability =
+									parametersWb.Worksheets[ListSupplierParameters].Cells[curentRow, 5 + Config.StockCount].Value2;
+							}
 
-				curentRow++;
-			}
-			
+							curentRow++;
+						}*/
+
 			// Исключения из перемещений
 			// Составляем список складов с листа исключений
 			stockList = new List<string>();
 			for (var i = 1; i <= Config.StockCount; i++)
 			{
-				stockList.Add(parametersWb.Worksheets[1].Cells[1, 4 + i].Value2.ToLower());
+				stockList.Add(parametersWb.Worksheets[ListExcludesParameters].Cells[1, 4 + i].Value2.ToLower());
 			}
 
 			// Считываем исключения из перемещений
 			curentRow = RowStartParameters;
 
-			while (parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value2 != null)
+			while (parametersWb.Worksheets[ListExcludesParameters].Range[ColId1CParameters + curentRow].Value2 != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
 				// Если не находим переходим к следующей строке
-				string curenId1C = parametersWb.Worksheets[1].Range[ColId1CParameters + curentRow].Value2;
+				string curenId1C = parametersWb.Worksheets[ListExcludesParameters].Range[ColId1CParameters + curentRow].Value2;
 				if (items.ContainsKey(curenId1C))
 				{
 					// Проставляем исключения у найденной ЗЧ
@@ -445,7 +464,7 @@ namespace ReDistr
 						// Проверим, есть ли у текущей ЗЧ текущей склад
 						var stock = items[curenId1C].Stocks.Find(s => s.Signature.Contains(curentStock));
 						// Если такой склад уже есть, работаем с ним, если нет переходим к следующему складу
-						if (stock != null && parametersWb.Worksheets[1].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value == 1)
+						if (stock != null && parametersWb.Worksheets[ListExcludesParameters].Cells[curentRow, 5 + stockList.IndexOf(curentStock)].Value == 1)
 						{
 							stock.ExcludeFromMoovings = true;
 						}
@@ -457,14 +476,14 @@ namespace ReDistr
 
 			// Кратность запчастей
 			curentRow = RowStartParameters;
-			while (parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value2 != null)
+			while (parametersWb.Worksheets[ListInKitParameters].Range[ColId1CParameters + curentRow].Value2 != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
-				if (items.ContainsKey(parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value))
+				if (items.ContainsKey(parametersWb.Worksheets[ListInKitParameters].Range[ColId1CParameters + curentRow].Value))
 				{
 					// Если нашли, проставляем кратность
-					Item item = items[parametersWb.Worksheets[2].Range[ColId1CParameters + curentRow].Value];
-					item.InKit = parametersWb.Worksheets[2].Range[ColStartParamsParameters + curentRow].Value;
+					Item item = items[parametersWb.Worksheets[ListInKitParameters].Range[ColId1CParameters + curentRow].Value];
+					item.InKit = parametersWb.Worksheets[ListInKitParameters].Range[ColStartParamsParameters + curentRow].Value;
 				}
 
 				curentRow++;
@@ -472,29 +491,29 @@ namespace ReDistr
 
 			// Количество ЗЧ в упаковке
 			curentRow = RowStartParameters;
-			while (parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value2 != null)
+			while (parametersWb.Worksheets[ListInBundleParameters].Range[ColId1CParameters + curentRow].Value2 != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
-				if (items.ContainsKey(parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value))
+				if (items.ContainsKey(parametersWb.Worksheets[ListInBundleParameters].Range[ColId1CParameters + curentRow].Value))
 				{
 					// Если нашли, проставляем количество в упаковке
-					Item item = items[parametersWb.Worksheets[3].Range[ColId1CParameters + curentRow].Value];
-					item.InBundle = parametersWb.Worksheets[3].Range[ColStartParamsParameters + curentRow].Value;
+					Item item = items[parametersWb.Worksheets[ListInBundleParameters].Range[ColId1CParameters + curentRow].Value];
+					item.InBundle = parametersWb.Worksheets[ListInBundleParameters].Range[ColStartParamsParameters + curentRow].Value;
 				}
 
 				curentRow++;
 			}
-			
+
 			// Поставщик ЗЧ
 			curentRow = RowStartParameters;
-			while (parametersWb.Worksheets[5].Range[ColId1CParameters + curentRow].Value2 != null)
+			while (parametersWb.Worksheets[ListSupplierParameters].Range[ColId1CParameters + curentRow].Value2 != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
-				if (items.ContainsKey(parametersWb.Worksheets[5].Range[ColId1CParameters + curentRow].Value))
+				if (items.ContainsKey(parametersWb.Worksheets[ListSupplierParameters].Range[ColId1CParameters + curentRow].Value))
 				{
 					// Если нашли, проставляем количество в упаковке
-					Item item = items[parametersWb.Worksheets[5].Range[ColId1CParameters + curentRow].Value];
-					item.Supplier = parametersWb.Worksheets[5].Range[ColStartParamsParameters + curentRow].Value;
+					Item item = items[parametersWb.Worksheets[ListSupplierParameters].Range[ColId1CParameters + curentRow].Value];
+					item.Supplier = parametersWb.Worksheets[ListSupplierParameters].Range[ColStartParamsParameters + curentRow].Value;
 				}
 
 				curentRow++;
@@ -502,14 +521,14 @@ namespace ReDistr
 
 			// Цены
 			curentRow = RowStartParameters;
-			while (parametersWb.Worksheets[6].Range[ColId1CParameters + curentRow].Value2 != null)
+			while (parametersWb.Worksheets[ListPriceParameters].Range[ColId1CParameters + curentRow].Value2 != null)
 			{
 				// Ищем запчасть по 1С коду в массиве запчастей
-				if (items.ContainsKey(parametersWb.Worksheets[6].Range[ColId1CParameters + curentRow].Value))
+				if (items.ContainsKey(parametersWb.Worksheets[ListPriceParameters].Range[ColId1CParameters + curentRow].Value))
 				{
 					// Если нашли, проставляем кратность
-					Item item = items[parametersWb.Worksheets[6].Range[ColId1CParameters + curentRow].Value];
-					item.PrePrice = parametersWb.Worksheets[6].Range[ColStartParamsParameters + curentRow].Value;
+					Item item = items[parametersWb.Worksheets[ListPriceParameters].Range[ColId1CParameters + curentRow].Value];
+					item.PrePrice = parametersWb.Worksheets[ListPriceParameters].Range[ColStartParamsParameters + curentRow].Value;
 				}
 
 				curentRow++;
@@ -541,7 +560,7 @@ namespace ReDistr
 					item = items[competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value.ToString()];
 				}
 				// Если не находим то ничего не делаем
-				else 
+				else
 				{
 					curentRow++;
 					continue;
@@ -606,14 +625,14 @@ namespace ReDistr
 				GetAdditionalParameters(items);
 				Config.ParsedAdditionalParameters = true;
 			}
-			
+
 			// Добавляем конкурентов
 			if (includeCompetitorsFromAp)
 			{
 				GetCompetitorsFromAP(items);
 				Config.ParsedCompetitors = true;
 			}
-			
+
 			// Настраиваем конфиг
 			SetConfig(items);
 

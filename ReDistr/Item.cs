@@ -38,7 +38,7 @@ namespace ReDistr
 		public double InBundle = 1;
 
 		// Себестоимость
-		public double CostPrice = 0;
+		// public double GetAVGCostPrice() = 0;
 
 		// Стоимость
 		public double Price = 0;
@@ -47,7 +47,7 @@ namespace ReDistr
 		public double OverStockDaysForAllStocks;
 
 		// Комментарий, почему установлена RequiredAvailability
-		public string NoteRequiredAvailability;
+		// public string NoteRequiredAvailability;
 
 		// Остатки на складах
 		public List<Stock> Stocks = new List<Stock>();
@@ -57,6 +57,9 @@ namespace ReDistr
 
 		// Предустановленная цена
 		public double PrePrice = 0;
+
+		// Признак обязательного наличия ЗЧ на данном складе
+		public bool RequiredAvailability;
 
 		// Возвращает список всех возможных доноров, отсортированный по убыванию. Если задан список перемещений, то доноры выдаются из этого списка
 		public List<Stock> GetListOfPossibleDonors(List<Transfer> existTransfers = null)
@@ -152,6 +155,15 @@ namespace ReDistr
 			return sumStocks;
 		}
 
+		// Возвращает среднюю себестоимость
+		public double GetAVGCostPrice()
+		{
+			var a = Stocks.Sum(stock => stock.CostPrice);
+			var b = GetSumStocks(false);
+			var c = Math.Round(Stocks.Sum(stock => stock.CostPrice * stock.Count) / GetSumStocks(false), 2);
+			return Math.Round(Stocks.Sum(stock => stock.CostPrice * stock.Count) / GetSumStocks(false), 2);
+		}
+
 		// Возвращает общий минимальный остаток
 		public double GetSumMinStocks()
 		{
@@ -190,10 +202,10 @@ namespace ReDistr
 		}
 
 		// Проверяет, имеет ли хоть один склад директиву RequiredAvailability True
-		public bool IsRequiredAvailability()
-		{
-			return Stocks.Any(stock => stock.RequiredAvailability);
-		}
+		//		public bool IsRequiredAvailability()
+		//		{
+		//			return Stocks.Any(stock => stock.RequiredAvailability);
+		//		}
 
 		// Возвращает ближаещего конкурента с учетом исключений
 		public Сompetitor GetСompetitor(bool withDeliveryTime, bool withCompetitorsStocks, bool withExcludes = true, int deliveryTime = 0)
@@ -235,7 +247,7 @@ namespace ReDistr
 			}
 
 			Сompetitors = Сompetitors.OrderBy(competitor => competitor.PositionNumber).ToList();
-			
+
 
 			foreach (var competitor in Сompetitors)
 			{
@@ -277,6 +289,7 @@ namespace ReDistr
 			// Если конкурент есть
 			if (сompetitor != null)
 			{
+				//Если не Китай
 				if (Manufacturer != "Китай")
 				{
 					switch (StorageCategory)
@@ -285,12 +298,19 @@ namespace ReDistr
 						case "Везде":
 						case "Нигде":
 						case "МинЗапас":
-							newPrice = CostPrice * 1.4;
+							if (сompetitor.Price * 0.87 < GetAVGCostPrice() * 1.4)
+							{
+								newPrice = GetAVGCostPrice() * 1.4;
+							}
+							else
+							{
+								newPrice = сompetitor.Price * 0.87;
+							}
 							break;
 						case "НЛ12":
-							if (сompetitor.Price * 0.87 > CostPrice * 0.95)
+							if (сompetitor.Price * 0.87 > GetAVGCostPrice() * 0.95)
 							{
-								newPrice = CostPrice * 0.95;
+								newPrice = GetAVGCostPrice() * 0.95;
 							}
 							else
 							{
@@ -298,9 +318,9 @@ namespace ReDistr
 							}
 							break;
 						case "НЛ24":
-							if (сompetitor.Price * 0.87 > CostPrice * 0.7)
+							if (сompetitor.Price * 0.87 > GetAVGCostPrice() * 0.7)
 							{
-								newPrice = CostPrice * 0.7;
+								newPrice = GetAVGCostPrice() * 0.7;
 							}
 							else
 							{
@@ -312,14 +332,15 @@ namespace ReDistr
 							break;
 					}
 				}
+				//Если Китай
 				else
 				{
 					switch (Property)
 					{
 						case "НЛ 12":
-							if (сompetitor.Price * 0.87 > CostPrice * 0.95)
+							if (сompetitor.Price * 0.87 > GetAVGCostPrice() * 0.95)
 							{
-								newPrice = CostPrice * 0.95;
+								newPrice = GetAVGCostPrice() * 0.95;
 							}
 							else
 							{
@@ -327,9 +348,9 @@ namespace ReDistr
 							}
 							break;
 						case "НЛ 24":
-							if (сompetitor.Price * 0.87 > CostPrice * 0.7)
+							if (сompetitor.Price * 0.87 > GetAVGCostPrice() * 0.7)
 							{
-								newPrice = CostPrice * 0.7;
+								newPrice = GetAVGCostPrice() * 0.7;
 							}
 							else
 							{
@@ -343,7 +364,7 @@ namespace ReDistr
 							newPrice = (сompetitor.Price * 0.87) * 0.8;
 							break;
 						case "ОС 2":
-							newPrice = (сompetitor.Price * 0.87) * 0.9;
+							newPrice = сompetitor.Price * 0.87;
 							break;
 						default:
 							newPrice = сompetitor.Price * 0.87;
@@ -361,23 +382,23 @@ namespace ReDistr
 					{
 						case "Норма":
 						case "НП":
-							newPrice = CostPrice * 2;
+							newPrice = GetAVGCostPrice() * 3;
 							break;
 						case "БП 2 мес":
-							newPrice = CostPrice * 0.8;
+							newPrice = GetAVGCostPrice() * 0.8;
 							break;
 						case "БП 1 мес":
-							newPrice = CostPrice * 1.1;
+							newPrice = GetAVGCostPrice() * 1.1;
 							break;
 						case "НЛ 12":
-							newPrice = CostPrice * 0.95;
+							newPrice = GetAVGCostPrice() * 0.95;
 							break;
 						case "НЛ 24":
-							newPrice = CostPrice * 0.7;
+							newPrice = GetAVGCostPrice() * 0.7;
 							break;
 						case "ОС 2":
 						case "ОС 3":
-							newPrice = CostPrice * 1.05;
+							newPrice = GetAVGCostPrice() * 3;
 							break;
 					}
 				}
@@ -389,21 +410,21 @@ namespace ReDistr
 						case "Везде":
 						case "Нигде":
 						case "МинЗапас":
-							newPrice = CostPrice * 1.4;
+							newPrice = GetAVGCostPrice() * 1.4;
 							break;
 						case "НЛ12":
-							newPrice = CostPrice * 0.95;
+							newPrice = GetAVGCostPrice() * 0.95;
 							break;
 						case "НЛ24":
-							newPrice = CostPrice * 0.7;
+							newPrice = GetAVGCostPrice() * 0.7;
 							break;
 					}
 				}
 			}
 			// Если новая цена ниже себестоимости, возвращаем себестоимость
-			if (newPrice < CostPrice && !allowSellingLoss)
+			if (newPrice < GetAVGCostPrice() && !allowSellingLoss)
 			{
-				newPrice = CostPrice;
+				newPrice = GetAVGCostPrice() * 1.01;
 			}
 			return Math.Round(newPrice);
 		}

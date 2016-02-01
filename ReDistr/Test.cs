@@ -102,7 +102,7 @@ namespace ReDistr
 				resultRange[curentRow, 5] = item.Value.StorageCategory;
 				resultRange[curentRow, 6] = item.Value.InBundle;
 				resultRange[curentRow, 7] = item.Value.InKit;
-				resultRange[curentRow, 8] = item.Value.CostPrice;
+				resultRange[curentRow, 8] = item.Value.GetAVGCostPrice();
 				resultRange[curentRow, 9] = item.Value.Price;
 
 
@@ -119,7 +119,7 @@ namespace ReDistr
 					resultRange[curentRow, curentColumn += stockCount] = stock.MaxStock;
 					resultRange[curentRow, curentColumn += stockCount] = stock.Priority;
 					resultRange[curentRow, curentColumn += stockCount] = ReDistr.BoolToInt(stock.ExcludeFromMoovings);
-					resultRange[curentRow, curentColumn += stockCount] = ReDistr.BoolToInt(stock.RequiredAvailability);
+					resultRange[curentRow, curentColumn += stockCount] = ReDistr.BoolToInt(item.Value.RequiredAvailability);
 					
 					curentColumn = ArrayColumnFirstFillNumber;
 					curentColumn += curentStock;

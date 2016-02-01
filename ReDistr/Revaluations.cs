@@ -69,10 +69,10 @@ namespace ReDistr
 				resultRange[i, 5] = revaluation.Item.GetSumStocks();
 				resultRange[i, 6] = revaluation.Item.Property;
 				resultRange[i, 7] = revaluation.Item.Price;
-				resultRange[i, 8] = revaluation.Item.CostPrice;
+				resultRange[i, 8] = revaluation.Item.GetAVGCostPrice();
 				resultRange[i, 9] = revaluation.NewPrice;
 				resultRange[i, 10] = revaluation.NewPrice - revaluation.Item.Price;
-				resultRange[i, 11] = (revaluation.NewPrice - revaluation.Item.CostPrice) / revaluation.Item.CostPrice;
+				resultRange[i, 11] = (revaluation.NewPrice - revaluation.Item.GetAVGCostPrice()) / revaluation.Item.GetAVGCostPrice();
 				if (revaluation.Competitor != null)
 				{
 					resultRange[i, 12] = revaluation.Competitor.Price;

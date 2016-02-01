@@ -102,7 +102,7 @@ namespace ReDistr
 				resultRange[curentRow, 5] = order.Item.StorageCategory;
 				resultRange[curentRow, 6] = order.Item.InBundle;
 				resultRange[curentRow, 7] = order.Item.InKit;
-				resultRange[curentRow, 8] = order.Item.NoteRequiredAvailability;
+				resultRange[curentRow, 8] = "";
 
 
 				// Выводим информацию по складам
@@ -115,7 +115,7 @@ namespace ReDistr
 					resultRange[curentRow, curentColumn += stockCount] = stock.CountSelings;
 					resultRange[curentRow, curentColumn += stockCount] = stock.SailPersent;
 					resultRange[curentRow, curentColumn += stockCount] = ReDistr.BoolToInt(stock.ExcludeFromMoovings);
-					resultRange[curentRow, curentColumn += stockCount] = ReDistr.BoolToInt(stock.RequiredAvailability);
+					resultRange[curentRow, curentColumn += stockCount] = ReDistr.BoolToInt(order.Item.RequiredAvailability);
 					// Если order содержит данный склад, выводим новый параметр RequiredAvailability
 					if (order.OrderRequiredStocks.Contains(stock))
 					{

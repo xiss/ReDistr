@@ -43,7 +43,7 @@ namespace ReDistr
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения и установлен ли у ЗЧ параметр RequiredAvailability, 
 					// в последнем случае перемещение все равно делаем
-					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !stock.RequiredAvailability)
+					if (!Config.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !item.Value.RequiredAvailability)
 					{
 						continue;
 					}
@@ -311,7 +311,7 @@ namespace ReDistr
 					}
 
 					// Если на данном складе установлено обязательное наличие, Переходим к следующему
-					if (stock.RequiredAvailability)
+					if (item.Value.RequiredAvailability)
 					{
 						continue;
 					}
@@ -366,7 +366,7 @@ namespace ReDistr
 				var requiredStocks = new List<Stock>();
 				var requiredItem = new OrderRequiredItem();
 				// Если ЗЧ имеет RequiredAvailability, добавляем ее в список
-				if (item.Value.IsRequiredAvailability())
+				if (item.Value.RequiredAvailability)
 				{
 					requiredItem.Item = item.Value;
 
@@ -408,7 +408,7 @@ namespace ReDistr
 				//}
 
 				// Делаем заказ только для запчастей имеющих директиву RequiredAvailability
-				if (!item.Value.IsRequiredAvailability())
+				if (!item.Value.RequiredAvailability)
 				{
 					continue;
 				}
@@ -481,12 +481,17 @@ namespace ReDistr
 						case "БП 1 мес":
 						case "НЛ 12":
 						case "НЛ 24":
+							withCopmetitorsStock = false;
+							withDeliveryTime = false;
+							note = "БП 1 мес, БП 2 мес, НЛ 24, НЛ 12, ОС 2, ОС 3 (в минус)";
+							allowSellingLoss = true;
+							break;
 						case "ОС 2":
 						case "ОС 3":
 							withCopmetitorsStock = false;
 							withDeliveryTime = false;
 							note = "БП 1 мес, БП 2 мес, НЛ 24, НЛ 12, ОС 2, ОС 3 (в минус)";
-							allowSellingLoss = true;
+							allowSellingLoss = false;
 							break;
 					}
 				}

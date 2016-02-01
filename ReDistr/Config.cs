@@ -56,6 +56,9 @@ namespace ReDistr
 		// Список возможных перемещений
 		public static List<Transfer> PossibleTransfers;
 
+		// Категория обязательного наличия
+		public static string NameOfStorageCatRequiredAvailability = "МинЗапас";
+
 		// Показывать отчет со всеми ЗЧ
 		// TODO /1 учитывать
 		public static bool ShowReport = true;
