@@ -210,41 +210,43 @@ namespace ReDistr
 		// Возвращает ближаещего конкурента с учетом исключений
 		public Сompetitor GetСompetitor(bool withDeliveryTime, bool withCompetitorsStocks, bool withExcludes = true, int deliveryTime = 0)
 		{
-			// Расчитываем параметры остатков у конкуретов
-			const double minStockDays = 25;
-			const double maxStockDays = 40;
-			var sailsPerDay = GetSumSelings() / Config.SellingPeriod;
+			/*			// Расчитываем параметры остатков у конкуретов
+						const double minStockDays = 25;
+						const double maxStockDays = 367;
+						var sailsPerDay = GetSumSelings() / Config.SellingPeriod;
 
+						var sumStocks = GetSumStocks();
+						var minPercentStock = 0.2;
+						// Если продаж не было то считаем что оверсток равен году
+						if (sailsPerDay == 0)
+						{
+							OverStockDaysForAllStocks = 365;
+						}
+						else
+						{
+							OverStockDaysForAllStocks = Convert.ToInt32(Math.Round(sumStocks / sailsPerDay));
+						}
+						// Если запас более указанного уменьшаем процент
+						if (OverStockDaysForAllStocks > maxStockDays)
+						{
+							minPercentStock = (maxStockDays / OverStockDaysForAllStocks) * 0.2;
+						}
+						// Если запас менее указанного увеличиваем процент
+						else
+						{
+							minPercentStock = 0.65;
+						}
+						// minPercentStock должен быть между 0 и 1
+						if (minPercentStock > 1)
+						{
+							minPercentStock = 1;
+						}
+						if (minPercentStock < 0)
+						{
+							minPercentStock = 0;
+						}*/
 			var sumStocks = GetSumStocks();
-			var minPercentStock = 0.2;
-			// Если продаж не было то считаем что оверсток равен году
-			if (sailsPerDay == 0)
-			{
-				OverStockDaysForAllStocks = 365;
-			}
-			else
-			{
-				OverStockDaysForAllStocks = Convert.ToInt32(Math.Round(sumStocks / sailsPerDay));
-			}
-			// Если запас более указанного уменьшаем процент
-			if (OverStockDaysForAllStocks > maxStockDays)
-			{
-				minPercentStock = (maxStockDays / OverStockDaysForAllStocks) * 0.2;
-			}
-			// Если запас менее указанного увеличиваем процент
-			else
-			{
-				minPercentStock = 0.65;
-			}
-			// minPercentStock должен быть между 0 и 1
-			if (minPercentStock > 1)
-			{
-				minPercentStock = 1;
-			}
-			if (minPercentStock < 0)
-			{
-				minPercentStock = 0;
-			}
+
 
 			Сompetitors = Сompetitors.OrderBy(competitor => competitor.PositionNumber).ToList();
 
@@ -264,7 +266,7 @@ namespace ReDistr
 				}
 
 				// Проверяем запас, если он меньше необходимого переходим к следующему
-				if ((competitor.Count / sumStocks) < minPercentStock & withCompetitorsStocks)
+				if (competitor.Count < sumStocks / 10 & withCompetitorsStocks)
 				{
 					continue;
 				}
@@ -382,7 +384,7 @@ namespace ReDistr
 					{
 						case "Норма":
 						case "НП":
-							newPrice = GetAVGCostPrice() * 3;
+							newPrice = GetAVGCostPrice() * 2;
 							break;
 						case "БП 2 мес":
 							newPrice = GetAVGCostPrice() * 0.8;
@@ -398,7 +400,7 @@ namespace ReDistr
 							break;
 						case "ОС 2":
 						case "ОС 3":
-							newPrice = GetAVGCostPrice() * 3;
+							newPrice = GetAVGCostPrice() * 2;
 							break;
 					}
 				}
@@ -422,9 +424,9 @@ namespace ReDistr
 				}
 			}
 			// Если новая цена ниже себестоимости, возвращаем себестоимость
-			if (newPrice < GetAVGCostPrice() && !allowSellingLoss)
+			if (newPrice < (GetAVGCostPrice() * 1.1) && !allowSellingLoss)
 			{
-				newPrice = GetAVGCostPrice() * 1.01;
+				newPrice = GetAVGCostPrice() * 1.1;
 			}
 			return Math.Round(newPrice);
 		}
