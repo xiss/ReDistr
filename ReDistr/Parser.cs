@@ -589,6 +589,7 @@ namespace ReDistr
 			competitorsWb.Close();
 
 		}
+
 		// Добавляем параметры в конфиг
 		public void SetConfig(Dictionary<string, Item> items)
 		{

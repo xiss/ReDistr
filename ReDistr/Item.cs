@@ -210,46 +210,9 @@ namespace ReDistr
 		// Возвращает ближаещего конкурента с учетом исключений
 		public Сompetitor GetСompetitor(bool withDeliveryTime, bool withCompetitorsStocks, bool withExcludes = true, int deliveryTime = 0)
 		{
-			/*			// Расчитываем параметры остатков у конкуретов
-						const double minStockDays = 25;
-						const double maxStockDays = 367;
-						var sailsPerDay = GetSumSelings() / Config.SellingPeriod;
-
-						var sumStocks = GetSumStocks();
-						var minPercentStock = 0.2;
-						// Если продаж не было то считаем что оверсток равен году
-						if (sailsPerDay == 0)
-						{
-							OverStockDaysForAllStocks = 365;
-						}
-						else
-						{
-							OverStockDaysForAllStocks = Convert.ToInt32(Math.Round(sumStocks / sailsPerDay));
-						}
-						// Если запас более указанного уменьшаем процент
-						if (OverStockDaysForAllStocks > maxStockDays)
-						{
-							minPercentStock = (maxStockDays / OverStockDaysForAllStocks) * 0.2;
-						}
-						// Если запас менее указанного увеличиваем процент
-						else
-						{
-							minPercentStock = 0.65;
-						}
-						// minPercentStock должен быть между 0 и 1
-						if (minPercentStock > 1)
-						{
-							minPercentStock = 1;
-						}
-						if (minPercentStock < 0)
-						{
-							minPercentStock = 0;
-						}*/
 			var sumStocks = GetSumStocks();
 
-
 			Сompetitors = Сompetitors.OrderBy(competitor => competitor.PositionNumber).ToList();
-
 
 			foreach (var competitor in Сompetitors)
 			{
@@ -270,7 +233,6 @@ namespace ReDistr
 				{
 					continue;
 				}
-
 				return competitor;
 			}
 			return null;
@@ -428,7 +390,7 @@ namespace ReDistr
 			{
 				newPrice = GetAVGCostPrice() * 1.1;
 			}
-			return Math.Round(newPrice);
+			return newPrice;
 		}
 	}
 }
