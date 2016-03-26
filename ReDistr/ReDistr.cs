@@ -477,18 +477,18 @@ namespace ReDistr
 							deliveryTime = 7;
 							withDeliveryTime = true;
 							break;
-						case "БП 1 мес":
+						case "БП 2 мес":
 						case "НЛ 12":
 						case "НЛ 24":
 							withCopmetitorsStock = false;
 							withDeliveryTime = false;
-							note = "БП 1 мес, НЛ 24, НЛ 12, (в минус)";
+							note = "БП 2 мес, НЛ 24, НЛ 12, (в минус)";
 							allowSellingLoss = true;
 							break;
-						case "БП 2 мес":
+						case "БП 1 мес":
 							withCopmetitorsStock = false;
 							withDeliveryTime = false;
-							note = "БП 2 мес";
+							note = "БП 1 мес";
 							allowSellingLoss = false;
 							break;
 						case "ОС 2":

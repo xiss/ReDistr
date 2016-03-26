@@ -20,32 +20,33 @@ namespace ReDistr
 			get
 			{
 				var oldPrice = _price;
-				_price = _price / 0.87;
+				double price = 0;
+				//_price = _price / 0.87;
 				if (oldPrice > 0 && oldPrice < 999)
 				{
-					_price = _price * 0.8764;
+					price = _price * 0.872;
 				}
 				if (oldPrice > 1001 && oldPrice < 1999)
 				{
-					_price = _price * 0.8817;
+					price = _price * 0.873;
 				}
 				if (oldPrice > 2000 && oldPrice < 3999)
 				{
-					_price = _price * 0.8871;
+					price = _price * 0.8871;
 				}
 				if (oldPrice > 4000 && oldPrice < 5999)
 				{
-					_price = _price * 0.8953;
+					price = _price * 0.8953;
 				}
 				if (oldPrice > 6000 && oldPrice < 7999)
 				{
-					_price = _price * 0.8981;
+					price = _price * 0.8981;
 				}
 				if (oldPrice > 8000 && oldPrice < 99999999)
 				{
-					_price = _price * 0.9036;
+					price = _price * 0.9036;
 				}
-				return _price;
+				return price;
 			}
 			set { _price = value; }
 		}

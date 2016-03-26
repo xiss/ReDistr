@@ -262,37 +262,37 @@ namespace ReDistr
 						case "Везде":
 						case "Нигде":
 						case "МинЗапас":
-							if (сompetitor.Price * 0.87 < GetAVGCostPrice() * 1.4)
+							if (сompetitor.Price < GetAVGCostPrice() * 1.4)
 							{
 								newPrice = GetAVGCostPrice() * 1.4;
 							}
 							else
 							{
-								newPrice = сompetitor.Price * 0.87;
+								newPrice = сompetitor.Price;
 							}
 							break;
 						case "НЛ12":
-							if (сompetitor.Price * 0.87 > GetAVGCostPrice() * 0.95)
+							if (сompetitor.Price > GetAVGCostPrice() * 0.95)
 							{
 								newPrice = GetAVGCostPrice() * 0.95;
 							}
 							else
 							{
-								newPrice = сompetitor.Price * 0.87;
+								newPrice = сompetitor.Price;
 							}
 							break;
 						case "НЛ24":
-							if (сompetitor.Price * 0.87 > GetAVGCostPrice() * 0.7)
+							if (сompetitor.Price > GetAVGCostPrice() * 0.7)
 							{
 								newPrice = GetAVGCostPrice() * 0.7;
 							}
 							else
 							{
-								newPrice = сompetitor.Price * 0.87;
+								newPrice = сompetitor.Price;
 							}
 							break;
 						default:
-							newPrice = сompetitor.Price * 0.87;
+							newPrice = сompetitor.Price;
 							break;
 					}
 				}
@@ -302,36 +302,36 @@ namespace ReDistr
 					switch (Property)
 					{
 						case "НЛ 12":
-							if (сompetitor.Price * 0.87 > GetAVGCostPrice() * 0.95)
+							if (сompetitor.Price > GetAVGCostPrice() * 0.95)
 							{
 								newPrice = GetAVGCostPrice() * 0.95;
 							}
 							else
 							{
-								newPrice = сompetitor.Price * 0.87;
+								newPrice = сompetitor.Price;
 							}
 							break;
 						case "НЛ 24":
-							if (сompetitor.Price * 0.87 > GetAVGCostPrice() * 0.7)
+							if (сompetitor.Price > GetAVGCostPrice() * 0.7)
 							{
 								newPrice = GetAVGCostPrice() * 0.7;
 							}
 							else
 							{
-								newPrice = сompetitor.Price * 0.87;
+								newPrice = сompetitor.Price;
 							}
 							break;
 						case "БП 1 мес":
-							newPrice = (сompetitor.Price * 0.87) * 0.9;
+							newPrice = (сompetitor.Price);
 							break;
 						case "БП 2 мес":
-							newPrice = (сompetitor.Price * 0.87) * 0.8;
+							newPrice = (сompetitor.Price);
 							break;
 						case "ОС 2":
-							newPrice = сompetitor.Price * 0.87;
+							newPrice = сompetitor.Price;
 							break;
 						default:
-							newPrice = сompetitor.Price * 0.87;
+							newPrice = сompetitor.Price;
 							break;
 					}
 				}
@@ -390,7 +390,7 @@ namespace ReDistr
 			{
 				newPrice = GetAVGCostPrice() * 1.1;
 			}
-			return newPrice;
+			return Math.Round(newPrice, 2);
 		}
 	}
 }

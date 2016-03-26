@@ -75,7 +75,7 @@ namespace ReDistr
 				resultRange[i, 11] = (revaluation.NewPrice - revaluation.Item.GetAVGCostPrice()) / revaluation.Item.GetAVGCostPrice();
 				if (revaluation.Competitor != null)
 				{
-					resultRange[i, 12] = revaluation.Competitor.Price;
+					resultRange[i, 12] = Math.Round(revaluation.Competitor.Price,2);
 					resultRange[i, 13] = revaluation.Competitor.Count;
 					resultRange[i, 14] = revaluation.Competitor.DeliveryTime;
 					resultRange[i, 15] = revaluation.Competitor.Id;
