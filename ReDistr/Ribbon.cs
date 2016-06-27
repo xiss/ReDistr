@@ -17,10 +17,10 @@ namespace ReDistr
 			var parser = new Parser();
 			Globals.ThisWorkbook.items = parser.Parse(true, true, true);
 
-			var revaluation = ReDistr.GetRevaluations(Globals.ThisWorkbook.items);
+			//var revaluation = ReDistr.GetRevaluations(Globals.ThisWorkbook.items);
 			// Заполняем лист с переоценкой
-			Globals.Revaluations.FillList(revaluation);
-			Globals.Test.FillListStocks(Globals.ThisWorkbook.items);
+			//Globals.Revaluations.FillList(revaluation);
+			//Globals.Test.FillListStocks(Globals.ThisWorkbook.items);
 
 			// Обновляем параметры
 			UpdateInfo();
