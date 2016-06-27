@@ -577,8 +577,9 @@ namespace ReDistr
 					Count = competitorsWb.Worksheets[1].Range[ColCountContributors + curentRow].Value,
 					Id = competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString(),
 					PositionNumber = competitorsWb.Worksheets[1].Range[ColPositionNumberContributors + curentRow].Value,
-					Price = competitorsWb.Worksheets[1].Range[ColPriceContributors + curentRow].Value,
-					Region = competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value
+					PriceWithoutAdd = competitorsWb.Worksheets[1].Range[ColPriceContributors + curentRow].Value,
+					Region = competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value,
+					Item = item
 				};
 
 				item.Сompetitors.Add(competitor);

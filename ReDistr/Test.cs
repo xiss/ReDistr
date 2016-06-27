@@ -67,7 +67,7 @@ namespace ReDistr
 			resultRange[0, 6] = "inBundle";
 			resultRange[0, 7] = "inKit";
 			resultRange[0, 8] = "CostPrice";
-			resultRange[0, 9] = "Price";
+			resultRange[0, 9] = "PriceWithoutAdd";
 
 			// Выводим заголовки для параметров
 			resultRange[0, curentColumn] = "Count";

@@ -39,7 +39,7 @@ namespace ReDistr
 
 		// Определяем настройки
 		private const int StartRow = 2;
-		private const int ItemParametrsCount = 18;
+		private const int ItemParametrsCount = 20;
 		private const Excel.XlBordersIndex XlEdgeRight = Excel.XlBordersIndex.xlEdgeRight;
 		private const Excel.XlBorderWeight XlThin = Excel.XlBorderWeight.xlThin;
 		private const string CountNameStyle = "Хороший";
@@ -53,8 +53,6 @@ namespace ReDistr
 			// Очищаем лист
 			// TODO /5 Подумать как сделать это проще, сейчас становятся активными лишние ячейки
 			Range["A2:Z15000"].Clear();
-
-			var curentRow = StartRow;
 
 			var resultRange = new dynamic[revaluations.Count + 1, ItemParametrsCount];
 			var i = 0;
@@ -73,18 +71,20 @@ namespace ReDistr
 				resultRange[i, 9] = revaluation.NewPrice;
 				resultRange[i, 10] = revaluation.NewPrice - revaluation.Item.Price;
 				resultRange[i, 11] = (revaluation.NewPrice - revaluation.Item.GetAVGCostPrice()) / revaluation.Item.GetAVGCostPrice();
+				resultRange[i, 12] = revaluation.Item.GetPricePortalWithAdd();
 				if (revaluation.Competitor != null)
 				{
-					resultRange[i, 12] = Math.Round(revaluation.Competitor.Price,2);
-					resultRange[i, 13] = revaluation.Competitor.Count;
-					resultRange[i, 14] = revaluation.Competitor.DeliveryTime;
-					resultRange[i, 15] = revaluation.Competitor.Id;
-					resultRange[i, 16] = revaluation.Competitor.PositionNumber;
+					resultRange[i, 13] = Math.Round(revaluation.Competitor.PriceWithAdd, 2);
+					resultRange[i, 14] = revaluation.Competitor.Count;
+					resultRange[i, 15] = revaluation.Competitor.DeliveryTime;
+					resultRange[i, 16] = revaluation.Competitor.Id;
+					resultRange[i, 17] = revaluation.Competitor.PositionNumber;
+					resultRange[i, 18] = revaluation.Competitor.Region;
 				}
-				resultRange[i, 17] = revaluation.Note;
+				resultRange[i, 19] = revaluation.Note;
 				i++;
 			}
-			// Выводим перемещение на лист
+			// Выводим переоценку на лист
 			Range[Cells[StartRow, 1], Cells[revaluations.Count, ItemParametrsCount]].Value2 = resultRange;
 
 			// Применяем стили и форматирование

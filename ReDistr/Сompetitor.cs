@@ -9,46 +9,52 @@ namespace ReDistr
 	// Конкуренты на порталах
 	public class Сompetitor
 	{
+		// ЗЧ
+		public Item Item;
 
 		// Срок поставки
 		public double DeliveryTime;
 
 		// Цена
 		private double _price;
-		public double Price
+		public double PriceWithoutAdd
 		{
 			get
 			{
-				var oldPrice = _price;
 				double price = 0;
-				//_price = _price / 0.87;
-				if (oldPrice > 0 && oldPrice < 999)
+				double ratio;
+				// Вычисляем наценку конкурента
+				// Проверяем есть ли у нас данные по прошлой цене в П+, если данных нет, используем шаблон
+				if (Item.Сompetitors.Exists(competitor => competitor.Id == "Наш прайс"))
 				{
-					price = _price * 0.872;
+					// Определяем реальную наценку конкурента
+					double ourPrice = Item.Сompetitors.Find(competitor => competitor.Id == "Наш прайс")._price;
+					ratio = ourPrice / Item.Price;
+					// Проверка на максимум
+					if (ratio > 1.14)
+					{
+						ratio = 1.14;
+					}
+					// Проверка на минимум
+					if (ratio < 1.11)
+					{
+						ratio = 1.11;
+					}
 				}
-				if (oldPrice > 1001 && oldPrice < 1999)
+				else
 				{
-					price = _price * 0.873;
+					ratio = 1.13;
 				}
-				if (oldPrice > 2000 && oldPrice < 3999)
-				{
-					price = _price * 0.8871;
-				}
-				if (oldPrice > 4000 && oldPrice < 5999)
-				{
-					price = _price * 0.8953;
-				}
-				if (oldPrice > 6000 && oldPrice < 7999)
-				{
-					price = _price * 0.8981;
-				}
-				if (oldPrice > 8000 && oldPrice < 99999999)
-				{
-					price = _price * 0.9036;
-				}
+				price = _price / ratio;
+
 				return price;
 			}
 			set { _price = value; }
+		}
+
+		public double PriceWithAdd
+		{
+			get { return _price; }
 		}
 
 		// Код поставщика

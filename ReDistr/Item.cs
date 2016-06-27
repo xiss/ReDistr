@@ -40,7 +40,9 @@ namespace ReDistr
 		// Себестоимость
 		// public double GetAVGCostPrice() = 0;
 
-		// Стоимость
+		/// <summary>
+		/// Стоимость в ИМ
+		/// </summary>
 		public double Price = 0;
 
 		// Колличество дней перезатарки сумарно по всем складам
@@ -229,7 +231,12 @@ namespace ReDistr
 				}
 
 				// Проверяем запас, если он меньше необходимого переходим к следующему
-				if (competitor.Count < sumStocks / 10 & withCompetitorsStocks)
+				if (competitor.Count < sumStocks / 20 & withCompetitorsStocks)
+				{
+					continue;
+				}
+				// Проверяем чтобы регион не содержал слово уценка
+				if (competitor.Region.Contains("Уценка"))
 				{
 					continue;
 				}
@@ -238,6 +245,16 @@ namespace ReDistr
 			return null;
 		}
 
+		///<summary>Возвращает нашу цену на портале с наценкой</summary>
+		public double GetPricePortalWithAdd()
+		{
+			double pricePortalWithAdd = 0;
+			if (Сompetitors.Exists(competitor => competitor.Id == "Наш прайс"))
+			{
+				pricePortalWithAdd = Сompetitors.Find(competitor => competitor.Id == "Наш прайс").PriceWithAdd;
+			}
+			return pricePortalWithAdd;
+		}
 		// Возвращает новую цену расчитанную опираясь на указанного конкурента
 		public double GetNewPrice(Сompetitor сompetitor, bool allowSellingLoss)
 		{
@@ -262,37 +279,37 @@ namespace ReDistr
 						case "Везде":
 						case "Нигде":
 						case "МинЗапас":
-							if (сompetitor.Price < GetAVGCostPrice() * 1.4)
+							if (сompetitor.PriceWithoutAdd < GetAVGCostPrice() * 1.4)
 							{
 								newPrice = GetAVGCostPrice() * 1.4;
 							}
 							else
 							{
-								newPrice = сompetitor.Price;
+								newPrice = сompetitor.PriceWithoutAdd * 0.997;
 							}
 							break;
 						case "НЛ12":
-							if (сompetitor.Price > GetAVGCostPrice() * 0.95)
+							if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.95)
 							{
 								newPrice = GetAVGCostPrice() * 0.95;
 							}
 							else
 							{
-								newPrice = сompetitor.Price;
+								newPrice = сompetitor.PriceWithoutAdd * 0.997;
 							}
 							break;
 						case "НЛ24":
-							if (сompetitor.Price > GetAVGCostPrice() * 0.7)
+							if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.7)
 							{
 								newPrice = GetAVGCostPrice() * 0.7;
 							}
 							else
 							{
-								newPrice = сompetitor.Price;
+								newPrice = сompetitor.PriceWithoutAdd * 0.997;
 							}
 							break;
 						default:
-							newPrice = сompetitor.Price;
+							newPrice = сompetitor.PriceWithoutAdd * 0.997;
 							break;
 					}
 				}
@@ -302,36 +319,41 @@ namespace ReDistr
 					switch (Property)
 					{
 						case "НЛ 12":
-							if (сompetitor.Price > GetAVGCostPrice() * 0.95)
+							if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.95)
 							{
 								newPrice = GetAVGCostPrice() * 0.95;
 							}
 							else
 							{
-								newPrice = сompetitor.Price;
+								newPrice = сompetitor.PriceWithoutAdd * 0.997;
 							}
 							break;
 						case "НЛ 24":
-							if (сompetitor.Price > GetAVGCostPrice() * 0.7)
+							if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.7)
 							{
 								newPrice = GetAVGCostPrice() * 0.7;
 							}
 							else
 							{
-								newPrice = сompetitor.Price;
+								newPrice = сompetitor.PriceWithoutAdd * 0.997;
 							}
 							break;
 						case "БП 1 мес":
-							newPrice = (сompetitor.Price);
+							newPrice = (сompetitor.PriceWithoutAdd) * 0.997;
 							break;
 						case "БП 2 мес":
-							newPrice = (сompetitor.Price);
+							newPrice = (сompetitor.PriceWithoutAdd) * 0.997;
+							//Стас попросил добавить условия по макс наценке
+							if (newPrice > GetAVGCostPrice() * 1.5)
+							{
+								newPrice = GetAVGCostPrice() * 1.5;
+							}
 							break;
 						case "ОС 2":
-							newPrice = сompetitor.Price;
+							newPrice = сompetitor.PriceWithoutAdd * 0.997;
 							break;
 						default:
-							newPrice = сompetitor.Price;
+							newPrice = сompetitor.PriceWithoutAdd * 0.997;
 							break;
 					}
 				}
@@ -386,9 +408,9 @@ namespace ReDistr
 				}
 			}
 			// Если новая цена ниже себестоимости, возвращаем себестоимость
-			if (newPrice < (GetAVGCostPrice() * 1.1) && !allowSellingLoss)
+			if (newPrice < (GetAVGCostPrice() * 1.05) && !allowSellingLoss)
 			{
-				newPrice = GetAVGCostPrice() * 1.1;
+				newPrice = GetAVGCostPrice() * 1.05;
 			}
 			return Math.Round(newPrice, 2);
 		}

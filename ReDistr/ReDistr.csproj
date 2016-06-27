@@ -218,6 +218,7 @@
     <None Include="ReDistr_1_TemporaryKey.pfx" />
     <None Include="ReDistr_2_TemporaryKey.pfx" />
     <None Include="ReDistr_3_TemporaryKey.pfx" />
+    <None Include="ReDistr_4_TemporaryKey.pfx" />
     <None Include="ReDistr_TemporaryKey.pfx" />
     <None Include="ThisWorkbook.Designer.xml">
       <DependentUpon>ThisWorkbook.cs</DependentUpon>
@@ -261,10 +262,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ReDistr_3_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ReDistr_4_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>3BEAFB99B8006841E6C70D55A8821A6F158A5637</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>40337180E9A22A4BAA8F70638FE643C88E617B20</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Reval|AnyCPU' ">
     <OutputPath>bin\Revaluation\</OutputPath>
