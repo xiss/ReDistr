@@ -261,12 +261,13 @@ namespace ReDistr
 						StorageCategory = stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString(),
 						Name = stocksWb.Worksheets[1].Range[ColNameStocks + curentRow].Value.ToString(),
 						Manufacturer = stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString(),
-						Price = stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value,
+                        // Проверка, если в место цены строка то цена нулевая
+                        Price = stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value is string ? 0 : stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value,
 						Property = stocksWb.Worksheets[1].Range[ColPropertyStocks + curentRow].Value,
 						//CostPrice = itemCostPrice,
 						RequiredAvailability = requiredAvailability,
 					};
-
+                    
 					// Создаем склады для ЗЧ
 					var newStocks = SimpleStockFactory.CurrentFactory.GetAllStocks();
 					foreach (var newStock in newStocks)

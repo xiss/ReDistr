@@ -53,8 +53,8 @@ namespace ReDistr
 		public void FillList(List<Transfer> transfers)
 		{
 			// Очищаем лист
-			Range["A3:Z1500"].ClearContents();
-			Range["A3:Z1500"].Style = DefaultNameStyle;
+			Range["A3:AZ1500"].ClearContents();
+			Range["A3:AZ1500"].Style = DefaultNameStyle;
 			Range["A3:E1500"].NumberFormat = "@";
 
 			// Список возможных направлений перемещений
