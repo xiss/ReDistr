@@ -82,6 +82,9 @@ namespace ReDistr
 		// Категории хранения товара для перемещения
 		public static List<string> ListStorageCategoryToTransfers;
 
+        // Свойства ЗЧ для обязательного наличия, синоним мин. остатка (свойство ЗЧ1)
+        public static List<string> ListPropertyRequiredAvailability;
+
 		// Список конкурентов исключений
 		public static List<string> ListExcludeCompetitors;
 

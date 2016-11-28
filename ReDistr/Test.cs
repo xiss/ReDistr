@@ -43,7 +43,7 @@ namespace ReDistr
 		// Строка с которой начинается заполненеие данными
 		private const uint ArrayRowFirstFillNumber = 2;
 		// Первая колонка с которой выводятся параметры складов
-		private const uint ArrayColumnFirstFillNumber = 10;
+		private const uint ArrayColumnFirstFillNumber = 11;
 		// Количество параметров для склада
 		private const uint StockParametrsCount = 9;
 
@@ -58,16 +58,17 @@ namespace ReDistr
 			Cells.ClearContents();
 
 			// Заполняем заголовки ЗЧ
-			resultRange[0, 0] = "Id1C";
-			resultRange[0, 1] = "Name";
-			resultRange[0, 2] = "Article";
-			resultRange[0, 3] = "Manufacturer";
-			resultRange[0, 4] = "Supplier";
-			resultRange[0, 5] = "StorageCat";
-			resultRange[0, 6] = "inBundle";
-			resultRange[0, 7] = "inKit";
-			resultRange[0, 8] = "CostPrice";
-			resultRange[0, 9] = "PriceWithoutAdd";
+			resultRange[1, 0] = "Id1C";
+			resultRange[1, 1] = "Name";
+			resultRange[1, 2] = "Article";
+			resultRange[1, 3] = "Manufacturer";
+			resultRange[1, 4] = "Supplier";
+			resultRange[1, 5] = "StorageCat";
+			resultRange[1, 6] = "inBundle";
+			resultRange[1, 7] = "inKit";
+			resultRange[1, 8] = "CostPrice";
+			resultRange[1, 9] = "PriceWithoutAdd";
+            resultRange[1, 10] = "Property1";
 
 			// Выводим заголовки для параметров
 			resultRange[0, curentColumn] = "Count";
@@ -104,6 +105,7 @@ namespace ReDistr
 				resultRange[curentRow, 7] = item.Value.InKit;
 				resultRange[curentRow, 8] = item.Value.GetAVGCostPrice();
 				resultRange[curentRow, 9] = item.Value.Price;
+                resultRange[curentRow, 10] = item.Value.Property1;
 
 
 				// Выводим информацию по складам

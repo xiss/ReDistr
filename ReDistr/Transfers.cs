@@ -86,7 +86,7 @@ namespace ReDistr
 
 				var resultRange = new dynamic[transferList.Count + 1, ItemParametrsCount + Config.StockCount * 4 + Config.CountPossibleTransfers];
 				// Заполняем массив перемещениями
-				resultRange[0, 0] = transferList.First().StockFrom.Name + " - " + transferList.First().StockTo.Name;
+			    resultRange[0, 0] = transferList.First().StockFrom.Name + " - " + transferList.First().StockTo.Name + " (" + transferList.Count + ")";
 				var i = 1;
 				foreach (var curentTransfer in transferList)
 				{

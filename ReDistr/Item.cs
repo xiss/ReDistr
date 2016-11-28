@@ -22,6 +22,9 @@ namespace ReDistr
 		// Свойство ЗЧ 2
 		public string Property;
 
+        // Свойство ЗЧ 1
+        public string Property1;
+
 		// Название 
 		public string Name;
 

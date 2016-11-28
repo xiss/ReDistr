@@ -40,6 +40,7 @@ namespace ReDistr
 		private const string RngIdPriceAp = "B27";
 		private const string RngNameFolderRevaluations = "B28";
 		private const string RngNameFolderArchiveRevaluations = "B29";
+        private const string RngNameListPropertyRequiredAvailability = "B30";
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
 		private const string RngDateStocks = "B3"; // Ячейка содержащая дату отчета
@@ -53,6 +54,7 @@ namespace ReDistr
 		private const string ColManufacturerStocks = "AD"; // Производитель
 		private const string ColPriceStocks = "AB"; // Интерет цена
 		private const string ColPropertyStocks = "AG"; // Свойство
+        private const string ColProperty1Stocks = "AF"; // Свойство
 		private const string ColCostPriceStocks = "V"; // Себестоимость
 		// Книга с продажами
 		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
@@ -151,6 +153,9 @@ namespace ReDistr
 			// Категории для перемещения на указанный склад полностью
 			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
 			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
+            // Свойства ЗЧ для обязательного перемещения
+		    string stringPropertyRequiredAvailability = Globals.Control.Range[RngNameListPropertyRequiredAvailability].Value2;
+            Config.ListPropertyRequiredAvailability = stringPropertyRequiredAvailability.Split(new[] { ';' }).ToList();  
 			// Категории для перемещения
 			string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
 			Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
@@ -226,7 +231,7 @@ namespace ReDistr
 				bool requiredAvailability = false;
 				if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value is string)
 				{
-					if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString() == Config.NameOfStorageCatRequiredAvailability)
+					if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString() == Config.NameOfStorageCatRequiredAvailability || Config.ListPropertyRequiredAvailability.Contains( stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString()) )
 					{
 						requiredAvailability = true;
 					}
@@ -264,6 +269,7 @@ namespace ReDistr
                         // Проверка, если в место цены строка то цена нулевая
                         Price = stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value is string ? 0 : stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value,
 						Property = stocksWb.Worksheets[1].Range[ColPropertyStocks + curentRow].Value,
+                        Property1 = stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value,
 						//CostPrice = itemCostPrice,
 						RequiredAvailability = requiredAvailability,
 					};
