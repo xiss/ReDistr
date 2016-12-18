@@ -56,6 +56,7 @@ namespace ReDistr
 		private const string ColPropertyStocks = "AG"; // Свойство
         private const string ColProperty1Stocks = "AF"; // Свойство
 		private const string ColCostPriceStocks = "V"; // Себестоимость
+        private const string ColInKitStocks = "AH"; // Кратность
 		// Книга с продажами
 		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
 		private const string RngDateSealings = "B3"; // Дата отчета
@@ -220,6 +221,16 @@ namespace ReDistr
 					itemCostPrice = stocksWb.Worksheets[1].Range[ColCostPriceStocks + curentRow].Value / itemCount;
 				}
 
+                // Определяем кратность
+                double itemInKit = 1;
+                if (stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value is string != true )
+                {
+                    if (stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value > 1)
+                    {
+                        itemInKit = stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value;
+                    }
+                }
+
 				// Определяем резерв
 				double reserveCount = 0;
 				if (stocksWb.Worksheets[1].Range[ColInReserveStocks + curentRow].Value is string != true)
@@ -272,6 +283,7 @@ namespace ReDistr
                         Property1 = stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value,
 						//CostPrice = itemCostPrice,
 						RequiredAvailability = requiredAvailability,
+                        InKit = itemInKit
 					};
                     
 					// Создаем склады для ЗЧ
