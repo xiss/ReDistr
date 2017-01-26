@@ -375,29 +375,64 @@ namespace ReDistr
 				// Если производитель "Китай"
 				if (Manufacturer == "Китай")
 				{
-					switch (Property)
-					{
-						case "Норма":
-						case "НП":
-							newPrice = GetAVGCostPrice() * 2;
-							break;
-						case "БП 2 мес":
-							newPrice = GetAVGCostPrice() * 0.8;
-							break;
-						case "БП 1 мес":
-							newPrice = GetAVGCostPrice() * 1.1;
-							break;
-						case "НЛ 12":
-							newPrice = GetAVGCostPrice() * 0.95;
-							break;
-						case "НЛ 24":
-							newPrice = GetAVGCostPrice() * 0.7;
-							break;
-						case "ОС 2":
-						case "ОС 3":
-							newPrice = GetAVGCostPrice() * 2;
-							break;
-					}
+                    // Вариант со свойствами
+                    //switch (Property)
+                    //{
+                    //    case "Норма":
+                    //    case "НП":
+                    //        newPrice = GetAVGCostPrice() * 2;
+                    //        break;
+                    //    case "БП 2 мес":
+                    //        newPrice = GetAVGCostPrice() * 0.8;
+                    //        break;
+                    //    case "БП 1 мес":
+                    //        newPrice = GetAVGCostPrice() * 1.1;
+                    //        break;
+                    //    case "НЛ 12":
+                    //        newPrice = GetAVGCostPrice() * 0.95;
+                    //        break;
+                    //    case "НЛ 24":
+                    //        newPrice = GetAVGCostPrice() * 0.7;
+                    //        break;
+                    //    case "ОС 2":
+                    //    case "ОС 3":
+                    //        newPrice = GetAVGCostPrice() * 2;
+                    //        break;
+                    //}
+
+                    // Вариант с лесницей по себестоимости
+				    if (GetAVGCostPrice() > 0 & GetAVGCostPrice() < 200)
+				    {
+				        newPrice = GetAVGCostPrice()*5;
+				    }
+                    else if (GetAVGCostPrice() > 201 & GetAVGCostPrice() < 500)
+                    {
+                        newPrice = GetAVGCostPrice() * 4;
+                    }
+                    else if (GetAVGCostPrice() > 501 & GetAVGCostPrice() < 1000)
+                    {
+                        newPrice = GetAVGCostPrice() * 3;
+                    }
+                    else if (GetAVGCostPrice() > 1001 & GetAVGCostPrice() < 2000)
+                    {
+                        newPrice = GetAVGCostPrice() * 2.5;
+                    }
+                    else if (GetAVGCostPrice() > 2001 & GetAVGCostPrice() < 4000)
+                    {
+                        newPrice = GetAVGCostPrice() * 2.2;
+                    }
+                    else if (GetAVGCostPrice() > 4001 & GetAVGCostPrice() < 8000)
+                    {
+                        newPrice = GetAVGCostPrice() * 2;
+                    }
+                    else if (GetAVGCostPrice() > 8001 & GetAVGCostPrice() < 15000)
+                    {
+                        newPrice = GetAVGCostPrice() * 1.5;
+                    }
+                    else if (GetAVGCostPrice() > 15001 & GetAVGCostPrice() < 1000000000)
+                    {
+                        newPrice = GetAVGCostPrice() * 1.2;
+                    }
 				}
 				else
 				{
