@@ -321,42 +321,50 @@ namespace ReDistr
 				{
 					switch (Property)
 					{
-						case "НЛ 12":
-							if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.95)
-							{
-								newPrice = GetAVGCostPrice() * 0.95;
-							}
-							else
-							{
-								newPrice = сompetitor.PriceWithoutAdd * 0.997;
-							}
-							break;
-						case "НЛ 24":
-							if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.7)
-							{
-								newPrice = GetAVGCostPrice() * 0.7;
-							}
-							else
-							{
-								newPrice = сompetitor.PriceWithoutAdd * 0.997;
-							}
-							break;
-						case "БП 1 мес":
-							newPrice = (сompetitor.PriceWithoutAdd) * 0.997;
-							break;
-						case "БП 2 мес":
-							newPrice = (сompetitor.PriceWithoutAdd) * 0.997;
-							//Стас попросил добавить условия по макс наценке
-							if (newPrice > GetAVGCostPrice() * 1.5)
-							{
-								newPrice = GetAVGCostPrice() * 1.5;
-							}
-							break;
-						case "ОС 2":
-							newPrice = сompetitor.PriceWithoutAdd * 0.997;
-							break;
+                        //case "НЛ 12":
+                        //    if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.95)
+                        //    {
+                        //        newPrice = GetAVGCostPrice() * 0.95;
+                        //    }
+                        //    else
+                        //    {
+                        //        newPrice = сompetitor.PriceWithoutAdd * 0.997;
+                        //    }
+                        //    break;
+                        //case "НЛ 24":
+                        //    if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.7)
+                        //    {
+                        //        newPrice = GetAVGCostPrice() * 0.7;
+                        //    }
+                        //    else
+                        //    {
+                        //        newPrice = сompetitor.PriceWithoutAdd * 0.997;
+                        //    }
+                        //    break;
+                        //case "БП 1 мес":
+                        //    newPrice = (сompetitor.PriceWithoutAdd) * 0.997;
+                        //    break;
+                        //case "БП 2 мес":
+                        //    newPrice = (сompetitor.PriceWithoutAdd) * 0.997;
+                        //    //Стас попросил добавить условия по макс наценке
+                        //    if (newPrice > GetAVGCostPrice() * 1.5)
+                        //    {
+                        //        newPrice = GetAVGCostPrice() * 1.5;
+                        //    }
+                        //    break;
+                        //case "ОС 2":
+                        //    newPrice = сompetitor.PriceWithoutAdd * 0.997;
+                        //    break;
 						default:
 							newPrice = сompetitor.PriceWithoutAdd * 0.997;
+					        if (newPrice < GetAVGCostPrice()*0.9)
+					        {
+					            newPrice = GetAVGCostPrice()*0.9;
+					        }
+					        if (newPrice > GetAVGCostPrice()*3)
+					        {
+                                newPrice = GetAVGCostPrice() * 3;
+					        }
 							break;
 					}
 				}
