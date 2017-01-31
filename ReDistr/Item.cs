@@ -356,10 +356,10 @@ namespace ReDistr
                         //    newPrice = сompetitor.PriceWithoutAdd * 0.997;
                         //    break;
 						default:
-							newPrice = сompetitor.PriceWithoutAdd * 0.997;
-					        if (newPrice < GetAVGCostPrice()*0.9)
+							newPrice = сompetitor.PriceWithoutAdd * 0.98;
+                            if (newPrice < GetAVGCostPrice() * 1.05)
 					        {
-					            newPrice = GetAVGCostPrice()*0.9;
+					            newPrice = GetAVGCostPrice()*1.05;
 					        }
 					        if (newPrice > GetAVGCostPrice()*3)
 					        {

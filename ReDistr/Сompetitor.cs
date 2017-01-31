@@ -49,45 +49,45 @@ namespace ReDistr
                 //price = _price / ratio;
 
                 // Вариант с порогами
-			    if (price > 0 & price < 6)
+			    if (_price > 0 & _price < 7)
 			    {
-			        price = price * 0.852;
+			        price = _price / 1.148;
 			    }
-                else if (price > 7 & price < 990)
+                else if (_price > 8 & _price < 1136)
 			    {
-                    price = price * 0.853;
+                    price = _price / 1.147;
 			    }
-                else if (price > 991 & price < 1950)
+                else if (_price > 1135 & _price < 2222)
                 {
-                    price = price * 0.860;
+                    price = _price / 1.140;
                 }
-                else if (price > 1950 & price < 3950)
+                else if (_price > 2221 & _price < 4473)
                 {
-                    price = price * 0.867;
+                    price = _price / 1.133;
                 }
-                else if (price > 3951 & price < 4950)
+                else if (_price > 4474 & _price < 5570)
                 {
-                    price = price * 0.874;
+                    price = _price / 1.126;
                 }
-                else if (price > 4951 & price < 5950)
+                else if (_price > 5569 & _price < 6673)
                 {
-                    price = price * 0.878;
+                    price = _price / 1.122;
                 }
-                else if (price > 5951 & price < 6950)
+                else if (_price > 6672 & _price < 7770)
                 {
-                    price = price * 0.882;
+                    price = _price / 1.118;
                 }
-                else if (price > 6951 & price < 7950)
+                else if (_price > 7769 & _price < 8860)
                 {
-                    price = price * 0.885;
+                    price = _price / 1.115;
                 }
-                else if (price > 7951 & price < 15000)
+                else if (_price > 8859 & _price < 16663)
                 {
-                    price = price * 0.889;
+                    price = _price / 1.111;
                 }
-                else if (price > 15001 & price < 100000000)
+                else if (_price > 16663 & _price < 100000000)
                 {
-                    price = price * 0.9;
+                    price = _price / 1.104;
                 }
 				return price;
 			}
