@@ -57,7 +57,7 @@ namespace ReDistr
 		public static List<Transfer> PossibleTransfers;
 
 		// Категория обязательного наличия
-		public static string NameOfStorageCatRequiredAvailability = "МинЗапас";
+		public static  string NameOfStorageCatRequiredAvailability = "МинЗапас;Везде";
 
 		// Показывать отчет со всеми ЗЧ
 		// TODO /1 учитывать
@@ -108,6 +108,9 @@ namespace ReDistr
 
 		// Процент остатка от нашего склада для рассмотрения его как конкурента
 		public static double MinStockForCompetitor;
+
+        // Наш срок поставки
+	    public static double OurDeliveryTime;
 
 		// Устанавливает список возможных перемещений и их количество
 		public static void SetPossibleTransfers()

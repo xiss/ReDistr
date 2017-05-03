@@ -448,7 +448,7 @@ namespace ReDistr
 				// Если ЗЧ не имеет конкурентов, берем следующую ЗЧ
 				if (item.Value.Сompetitors.Count == 0)
 				{
-					continue;
+					//continue;
 				}
 				// Если остатка нет, берем следующую
 				if (item.Value.GetSumStocks() == 0)
@@ -461,8 +461,11 @@ namespace ReDistr
 				var note = "Не прописано правило";
 				var allowSellingLoss = false;
 				var withCopmetitorsStock = false;
-				var deliveryTime = 7;
+				double deliveryTime = 7;
 				var withDeliveryTime = true;
+			    var checkDumping = false;
+			    var dumpingPersent = 0.03;
+			    var maxCompetitorsToMiss = 0;
 
 				// Если производитель "Китай"
 				if (item.Value.Manufacturer == "Китай")
@@ -499,10 +502,13 @@ namespace ReDistr
                         //    allowSellingLoss = false;
                         //    break;
                         default:
-                            withCopmetitorsStock = false;
+                            withCopmetitorsStock = true;
 							withDeliveryTime = true;
 							note = "Правило по умолчанию для всего китая";
 							allowSellingLoss = true;
+					        checkDumping = true;
+					        deliveryTime = Config.OurDeliveryTime + 2;
+					        maxCompetitorsToMiss = 3;
                             break;
 					}
 				}
@@ -529,8 +535,8 @@ namespace ReDistr
 							break;
 					}
 				}
-				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime);
-				note += " " + item.Value.OverStockDaysForAllStocks;
+				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime, checkDumping, dumpingPersent, maxCompetitorsToMiss);
+				note += item.Value.OverStockDaysForAllStocks + "\n" + item.Value.NoteReval;
 				var revaluation = new Revaluation(competitor, item.Value, note, allowSellingLoss);
 				revaluations.Add(revaluation);
 			}

@@ -85,10 +85,11 @@ namespace ReDistr
 				i++;
 			}
 			// Выводим переоценку на лист
-			Range[Cells[StartRow, 1], Cells[revaluations.Count, ItemParametrsCount]].Value2 = resultRange;
+			Range[Cells[StartRow, 1], Cells[revaluations.Count + 1, ItemParametrsCount]].Value2 = resultRange;
 
 			// Применяем стили и форматирование
 			Range["L2:L" + i].NumberFormat = NumberFormatPersent;
+            Range["T2:T" + i].WrapText = false;
 		}
 
 		// Создает книгу с переоценкой

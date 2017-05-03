@@ -28,6 +28,7 @@ namespace ReDistr
 		private const string RngNameListSelectedStorageCategoryToTransfer = "B22";
 		private const string RngNameStockToTransferSelectedStorageCategory = "B23";
 		private const string RngNameOfContributorsWb = "B24";
+        private const string RngNameOurDeliveryTime = "B31";
 		private const uint RowStartStockCfg = 4; // Строка с которой считываются склады в настройках
 		private const string ColStockNameCfg = "A";
 		private const string ColStockMinCfg = "B";
@@ -151,6 +152,7 @@ namespace ReDistr
 			Config.IdPriceAp = Globals.Control.Range[RngIdPriceAp].Value2;
 			Config.FolderArchiveRevaluations = Globals.Control.Range[RngNameFolderArchiveRevaluations].Value2;
 			Config.FolderRevaluations = Globals.Control.Range[RngNameFolderRevaluations].Value2;
+            Config.OurDeliveryTime = Globals.Control.Range[RngNameOurDeliveryTime].Value2;
 			// Категории для перемещения на указанный склад полностью
 			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
 			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
@@ -242,7 +244,10 @@ namespace ReDistr
 				bool requiredAvailability = false;
 				if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value is string)
 				{
-					if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString() == Config.NameOfStorageCatRequiredAvailability || Config.ListPropertyRequiredAvailability.Contains( stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString()) )
+                    // Если категория хранения входит в список обязательных либо если свойство ЗЧ1 входит в список обязательных, но если это не Китай
+                    if ((Config.NameOfStorageCatRequiredAvailability.Split(new[] { ';' }).ToList().Contains(stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString()) 
+                        && stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString() != "Китай" )
+                        || Config.ListPropertyRequiredAvailability.Contains( stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString())) 
 					{
 						requiredAvailability = true;
 					}

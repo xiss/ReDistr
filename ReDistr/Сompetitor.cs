@@ -53,23 +53,23 @@ namespace ReDistr
 			    {
 			        price = _price / 1.148;
 			    }
-                else if (_price > 8 & _price < 1136)
+                else if (_price > 7 & _price < 1136)
 			    {
                     price = _price / 1.147;
 			    }
-                else if (_price > 1135 & _price < 2222)
+                else if (_price > 1136 & _price < 2222)
                 {
                     price = _price / 1.140;
                 }
-                else if (_price > 2221 & _price < 4473)
+                else if (_price > 2222 & _price < 4473)
                 {
                     price = _price / 1.133;
                 }
-                else if (_price > 4474 & _price < 5570)
+                else if (_price > 4473 & _price < 5570)
                 {
                     price = _price / 1.126;
                 }
-                else if (_price > 5569 & _price < 6673)
+                else if (_price > 5570 & _price < 6673)
                 {
                     price = _price / 1.122;
                 }
@@ -77,11 +77,11 @@ namespace ReDistr
                 {
                     price = _price / 1.118;
                 }
-                else if (_price > 7769 & _price < 8860)
+                else if (_price > 7770 & _price < 8860)
                 {
                     price = _price / 1.115;
                 }
-                else if (_price > 8859 & _price < 16663)
+                else if (_price > 8860 & _price < 16663)
                 {
                     price = _price / 1.111;
                 }

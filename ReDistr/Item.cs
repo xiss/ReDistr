@@ -40,6 +40,9 @@ namespace ReDistr
 		// Количество товара в упаковке
 		public double InBundle = 1;
 
+        // Коментарий по переоценке
+	    public string NoteReval = "";
+
 		// Себестоимость
 		// public double GetAVGCostPrice() = 0;
 
@@ -213,40 +216,75 @@ namespace ReDistr
 		//		}
 
 		// Возвращает ближаещего конкурента с учетом исключений
-		public Сompetitor GetСompetitor(bool withDeliveryTime, bool withCompetitorsStocks, bool withExcludes = true, int deliveryTime = 0)
+        public Сompetitor GetСompetitor(bool withDeliveryTime, bool withCompetitorsStocks, bool withExcludes = true, double deliveryTime = 0, bool checkDumping = false, double dumpingPersent = 0, int maxCompetitorsToMiss = 0)
 		{
 			var sumStocks = GetSumStocks();
 
 			Сompetitors = Сompetitors.OrderBy(competitor => competitor.PositionNumber).ToList();
 
-			foreach (var competitor in Сompetitors)
+            var i = 0;
+
+			for (int k = 0 ; k < Сompetitors.Count; k++)
 			{
 				// Проверяем список исключений если конкуреты из этого списка переходим к следующему
-				if (Config.ListExcludeCompetitors.Contains(competitor.Id) & withExcludes)
+				if (Config.ListExcludeCompetitors.Contains(Сompetitors[k].Id) & withExcludes)
 				{
+                    NoteReval = NoteReval + k + " В списке исключений " + Сompetitors[k].Id + "\n";
 					continue;
 				}
+                i++;
+
+                // Проверяем на демпинг
+                // Проверяем есть ли следующий конурент
+			    if (Сompetitors.Exists(competitor => competitor.PositionNumber == Сompetitors[k].PositionNumber + 1))
+			    {
+                    //только первого конкурента
+                    if (checkDumping & i == 1 & Сompetitors[k].PriceWithAdd * (1 + dumpingPersent) < Сompetitors[k + 1].PriceWithAdd & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
+                    {
+                        NoteReval = NoteReval + k + " Демпинг " + Сompetitors[k].Id + "\n";
+                        continue;
+                    }   
+			    }
 
 				// Проверяем срок поставки, если не соответствует переходим к следующему
-				if (competitor.DeliveryTime > deliveryTime & withDeliveryTime)
+                if (Сompetitors[k].DeliveryTime > deliveryTime & withDeliveryTime & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
 				{
+                    NoteReval = NoteReval + k + " Большой срок поставки " + Сompetitors[k].Id + "\n";
 					continue;
 				}
 
 				// Проверяем запас, если он меньше необходимого переходим к следующему
-				if (competitor.Count < sumStocks / 20 & withCompetitorsStocks)
+                if (Сompetitors[k].Count < sumStocks / 20 & withCompetitorsStocks & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
 				{
+                    NoteReval = NoteReval + k + " Остаток " + Сompetitors[k].Id + "\n";
 					continue;
 				}
 				// Проверяем чтобы регион не содержал слово уценка
-				if (competitor.Region.Contains("Уценка"))
+				if (Сompetitors[k].Region.Contains("Уценка"))
 				{
+                    NoteReval = NoteReval + k + " Регион содержит слово (Уценка) " + Сompetitors[k].Id + "\n";
 					continue;
 				}
-				return competitor;
+                // Проверяем чтобы он не был первым
+                if (Сompetitors[k].PositionNumber == 1)
+                {
+                    //continue;
+                }
+				return Сompetitors[k];
 			}
 			return null;
 		}
+
+	    ///<summary>Возвращает наш срок поставки</summary>
+	    public double GetOurDeliveryTime()
+	    {
+            double ourDeliveryTime = 0;
+            if (Сompetitors.Exists(competitor => competitor.Id == "Наш прайс"))
+            {
+                ourDeliveryTime = Сompetitors.Find(competitor => competitor.Id == "Наш прайс").DeliveryTime;
+            }
+            return ourDeliveryTime;
+	    }
 
 		///<summary>Возвращает нашу цену на портале с наценкой</summary>
 		public double GetPricePortalWithAdd()
@@ -356,14 +394,14 @@ namespace ReDistr
                         //    newPrice = сompetitor.PriceWithoutAdd * 0.997;
                         //    break;
 						default:
-							newPrice = сompetitor.PriceWithoutAdd * 0.98;
+							newPrice = сompetitor.PriceWithoutAdd * 0.995;
                             if (newPrice < GetAVGCostPrice() * 1.05)
 					        {
-					            newPrice = GetAVGCostPrice()*1.05;
+                                newPrice = GetAVGCostPrice() * 1.05;
 					        }
-					        if (newPrice > GetAVGCostPrice()*3)
+					        if (newPrice > GetAVGCostPrice()*2)
 					        {
-                                newPrice = GetAVGCostPrice() * 3;
+                                //newPrice = GetAVGCostPrice() * 2;
 					        }
 							break;
 					}
@@ -401,29 +439,33 @@ namespace ReDistr
                     //}
 
                     // Вариант с лесницей по себестоимости
-				    if (GetAVGCostPrice() > 0 & GetAVGCostPrice() < 200)
-				    {
-				        newPrice = GetAVGCostPrice()*5;
-				    }
-                    else if (GetAVGCostPrice() > 201 & GetAVGCostPrice() < 500)
+                    if (GetAVGCostPrice() > 0 & GetAVGCostPrice() < 80)
                     {
                         newPrice = GetAVGCostPrice() * 4;
                     }
-                    else if (GetAVGCostPrice() > 501 & GetAVGCostPrice() < 1000)
+				    else if (GetAVGCostPrice() > 80 & GetAVGCostPrice() < 200)
+				    {
+				        newPrice = GetAVGCostPrice() * 3.5;
+				    }
+                    else if (GetAVGCostPrice() > 201 & GetAVGCostPrice() < 500)
                     {
                         newPrice = GetAVGCostPrice() * 3;
                     }
-                    else if (GetAVGCostPrice() > 1001 & GetAVGCostPrice() < 2000)
+                    else if (GetAVGCostPrice() > 501 & GetAVGCostPrice() < 1000)
                     {
                         newPrice = GetAVGCostPrice() * 2.5;
                     }
+                    else if (GetAVGCostPrice() > 1001 & GetAVGCostPrice() < 2000)
+                    {
+                        newPrice = GetAVGCostPrice() * 2.3;
+                    }
                     else if (GetAVGCostPrice() > 2001 & GetAVGCostPrice() < 4000)
                     {
-                        newPrice = GetAVGCostPrice() * 2.2;
+                        newPrice = GetAVGCostPrice() * 2.1;
                     }
                     else if (GetAVGCostPrice() > 4001 & GetAVGCostPrice() < 8000)
                     {
-                        newPrice = GetAVGCostPrice() * 2;
+                        newPrice = GetAVGCostPrice() * 1.8;
                     }
                     else if (GetAVGCostPrice() > 8001 & GetAVGCostPrice() < 15000)
                     {
@@ -431,7 +473,7 @@ namespace ReDistr
                     }
                     else if (GetAVGCostPrice() > 15001 & GetAVGCostPrice() < 1000000000)
                     {
-                        newPrice = GetAVGCostPrice() * 1.2;
+                        newPrice = GetAVGCostPrice() * 1.3;
                     }
 				}
 				else
