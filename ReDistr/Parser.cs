@@ -42,6 +42,11 @@ namespace ReDistr
 		private const string RngNameFolderRevaluations = "B28";
 		private const string RngNameFolderArchiveRevaluations = "B29";
         private const string RngNameListPropertyRequiredAvailability = "B30";
+        private const string RngNameListPropertyDumpingPersent = "B32";
+        private const string RngNameListPropertyDeltaDeliveryTime = "B35";
+        private const string RngNameListPropertyDeltaCompetitorStock = "B33";
+        private const string RngNameListPropertyMaxCompetitorsToMiss = "B34";
+
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
 		private const string RngDateStocks = "B3"; // Ячейка содержащая дату отчета
@@ -153,6 +158,10 @@ namespace ReDistr
 			Config.FolderArchiveRevaluations = Globals.Control.Range[RngNameFolderArchiveRevaluations].Value2;
 			Config.FolderRevaluations = Globals.Control.Range[RngNameFolderRevaluations].Value2;
             Config.OurDeliveryTime = Globals.Control.Range[RngNameOurDeliveryTime].Value2;
+            Config.DumpingPersent = Globals.Control.Range[RngNameListPropertyDumpingPersent].Value2;
+            Config.DeltaDeliveryTime = Globals.Control.Range[RngNameListPropertyDeltaDeliveryTime].Value2;
+            Config.DeltaCompetitorStock = Globals.Control.Range[RngNameListPropertyDeltaCompetitorStock].Value2;
+            Config.MaxCompetitorsToMiss = Globals.Control.Range[RngNameListPropertyMaxCompetitorsToMiss].Value2;
 			// Категории для перемещения на указанный склад полностью
 			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
 			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();

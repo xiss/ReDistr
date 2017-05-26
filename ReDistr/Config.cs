@@ -112,6 +112,18 @@ namespace ReDistr
         // Наш срок поставки
 	    public static double OurDeliveryTime;
 
+        // Процент для выявления демпинга
+	    public static double DumpingPersent;
+
+        // Допустимая разница в сроке доставки между нами и конкурентом
+	    public static double DeltaDeliveryTime;
+
+        // Отношение остатков конкурента к нашему
+	    public static double DeltaCompetitorStock;
+
+        // Максимально можно пропустить конкурентов
+        public static double MaxCompetitorsToMiss;
+
 		// Устанавливает список возможных перемещений и их количество
 		public static void SetPossibleTransfers()
 		{

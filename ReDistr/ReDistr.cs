@@ -464,8 +464,7 @@ namespace ReDistr
 				double deliveryTime = 7;
 				var withDeliveryTime = true;
 			    var checkDumping = false;
-			    var dumpingPersent = 0.03;
-			    var maxCompetitorsToMiss = 0;
+                double maxCompetitorsToMiss = 0;
 
 				// Если производитель "Китай"
 				if (item.Value.Manufacturer == "Китай")
@@ -507,8 +506,8 @@ namespace ReDistr
 							note = "Правило по умолчанию для всего китая";
 							allowSellingLoss = true;
 					        checkDumping = true;
-					        deliveryTime = Config.OurDeliveryTime + 2;
-					        maxCompetitorsToMiss = 3;
+					        deliveryTime = Config.OurDeliveryTime + Config.DeltaDeliveryTime;
+					        maxCompetitorsToMiss = Config.MaxCompetitorsToMiss;
                             break;
 					}
 				}
@@ -535,7 +534,7 @@ namespace ReDistr
 							break;
 					}
 				}
-				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime, checkDumping, dumpingPersent, maxCompetitorsToMiss);
+				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime, checkDumping, Config.DumpingPersent, maxCompetitorsToMiss);
 				note += item.Value.OverStockDaysForAllStocks + "\n" + item.Value.NoteReval;
 				var revaluation = new Revaluation(competitor, item.Value, note, allowSellingLoss);
 				revaluations.Add(revaluation);

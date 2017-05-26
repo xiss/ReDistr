@@ -216,7 +216,7 @@ namespace ReDistr
 		//		}
 
 		// Возвращает ближаещего конкурента с учетом исключений
-        public Сompetitor GetСompetitor(bool withDeliveryTime, bool withCompetitorsStocks, bool withExcludes = true, double deliveryTime = 0, bool checkDumping = false, double dumpingPersent = 0, int maxCompetitorsToMiss = 0)
+        public Сompetitor GetСompetitor(bool withDeliveryTime, bool withCompetitorsStocks, bool withExcludes = true, double deliveryTime = 0, bool checkDumping = false, double dumpingPersent = 0, double maxCompetitorsToMiss = 0)
 		{
 			var sumStocks = GetSumStocks();
 
@@ -254,7 +254,7 @@ namespace ReDistr
 				}
 
 				// Проверяем запас, если он меньше необходимого переходим к следующему
-                if (Сompetitors[k].Count < sumStocks / 20 & withCompetitorsStocks & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
+                if (Сompetitors[k].Count < sumStocks * Config.DeltaCompetitorStock & withCompetitorsStocks & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
 				{
                     NoteReval = NoteReval + k + " Остаток " + Сompetitors[k].Id + "\n";
 					continue;
@@ -305,6 +305,7 @@ namespace ReDistr
 			// Если есть предустановленная цена, используем ее
 			if (PrePrice != 0)
 			{
+			    NoteReval = NoteReval + "\n Предустановленная цена";
 				return PrePrice;
 			}
 
