@@ -124,6 +124,9 @@ namespace ReDistr
         // Максимально можно пропустить конкурентов
         public static double MaxCompetitorsToMiss;
 
+        // типа конкурента
+	    public static int TypeCompetitor;
+
 		// Устанавливает список возможных перемещений и их количество
 		public static void SetPossibleTransfers()
 		{

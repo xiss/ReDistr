@@ -46,6 +46,7 @@ namespace ReDistr
         private const string RngNameListPropertyDeltaDeliveryTime = "B35";
         private const string RngNameListPropertyDeltaCompetitorStock = "B33";
         private const string RngNameListPropertyMaxCompetitorsToMiss = "B34";
+        private const string RngNameListPropertyTypeCompetitor = "B36";
 
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
@@ -162,6 +163,7 @@ namespace ReDistr
             Config.DeltaDeliveryTime = Globals.Control.Range[RngNameListPropertyDeltaDeliveryTime].Value2;
             Config.DeltaCompetitorStock = Globals.Control.Range[RngNameListPropertyDeltaCompetitorStock].Value2;
             Config.MaxCompetitorsToMiss = Globals.Control.Range[RngNameListPropertyMaxCompetitorsToMiss].Value2;
+            Config.TypeCompetitor = (int)Globals.Control.Range[RngNameListPropertyTypeCompetitor].Value2;
 			// Категории для перемещения на указанный склад полностью
 			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
 			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
@@ -577,6 +579,7 @@ namespace ReDistr
 			var competitorsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			var curentRow = RowStartContributors;
+		    string region = ""; 
 
 			while (competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value != null)
 			{
@@ -603,6 +606,11 @@ namespace ReDistr
 				//{
 				//	item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
 				//}
+                // Проверяем регион на пустое значение
+			    if (competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value != null)
+			    {
+			        region = competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value;
+			    }
 				// Создаем нового конкурента
 				var competitor = new Сompetitor
 				{
@@ -611,7 +619,7 @@ namespace ReDistr
 					Id = competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString(),
 					PositionNumber = competitorsWb.Worksheets[1].Range[ColPositionNumberContributors + curentRow].Value,
 					PriceWithoutAdd = competitorsWb.Worksheets[1].Range[ColPriceContributors + curentRow].Value,
-					Region = competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value,
+                    Region = region,
 					Item = item
 				};
 
