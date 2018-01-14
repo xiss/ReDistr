@@ -35,7 +35,7 @@ namespace ReDistr
 			// Если конкурент есть
 			else
 			{
-				Note = note;
+				Note = note + Item.NoteReval;
 				Competitor = competitor;
 			}
 		}

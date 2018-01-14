@@ -305,7 +305,7 @@ namespace ReDistr
 			// Если есть предустановленная цена, используем ее
 			if (PrePrice != 0)
 			{
-			    NoteReval = NoteReval + "\n Предустановленная цена";
+			    NoteReval = NoteReval + "\n Предустановленная цена (" + PrePrice + ")";
 				return PrePrice;
 			}
 
@@ -396,9 +396,9 @@ namespace ReDistr
                         //    break;
 						default:
 							newPrice = сompetitor.PriceWithoutAdd * 0.995;
-                            if (newPrice < GetAVGCostPrice() * 1.05)
+                            if (newPrice < GetAVGCostPrice() * 1.01)
 					        {
-                                newPrice = GetAVGCostPrice() * 1.05;
+                                newPrice = GetAVGCostPrice() * 1.01;
 					        }
 					        if (newPrice > GetAVGCostPrice()*2)
 					        {
@@ -446,35 +446,35 @@ namespace ReDistr
                     }
 				    else if (GetAVGCostPrice() > 80 & GetAVGCostPrice() < 200)
 				    {
-				        newPrice = GetAVGCostPrice() * 3.5;
+				        newPrice = GetAVGCostPrice() * 3;
 				    }
                     else if (GetAVGCostPrice() > 201 & GetAVGCostPrice() < 500)
                     {
-                        newPrice = GetAVGCostPrice() * 3;
+                        newPrice = GetAVGCostPrice() * 2;
                     }
                     else if (GetAVGCostPrice() > 501 & GetAVGCostPrice() < 1000)
                     {
-                        newPrice = GetAVGCostPrice() * 2.5;
+                        newPrice = GetAVGCostPrice() * 1.9;
                     }
                     else if (GetAVGCostPrice() > 1001 & GetAVGCostPrice() < 2000)
                     {
-                        newPrice = GetAVGCostPrice() * 2.3;
+                        newPrice = GetAVGCostPrice() * 1.7;
                     }
                     else if (GetAVGCostPrice() > 2001 & GetAVGCostPrice() < 4000)
                     {
-                        newPrice = GetAVGCostPrice() * 2.1;
+                        newPrice = GetAVGCostPrice() * 1.5;
                     }
                     else if (GetAVGCostPrice() > 4001 & GetAVGCostPrice() < 8000)
                     {
-                        newPrice = GetAVGCostPrice() * 1.8;
+                        newPrice = GetAVGCostPrice() * 1.2;
                     }
                     else if (GetAVGCostPrice() > 8001 & GetAVGCostPrice() < 15000)
                     {
-                        newPrice = GetAVGCostPrice() * 1.5;
+                        newPrice = GetAVGCostPrice() * 1.15;
                     }
                     else if (GetAVGCostPrice() > 15001 & GetAVGCostPrice() < 1000000000)
                     {
-                        newPrice = GetAVGCostPrice() * 1.3;
+                        newPrice = GetAVGCostPrice() * 1.1;
                     }
 				}
 				else
@@ -497,9 +497,9 @@ namespace ReDistr
 				}
 			}
 			// Если новая цена ниже себестоимости, возвращаем себестоимость
-			if (newPrice < (GetAVGCostPrice() * 1.05) && !allowSellingLoss)
+			if (newPrice < (GetAVGCostPrice() * 1.01) && !allowSellingLoss)
 			{
-				newPrice = GetAVGCostPrice() * 1.05;
+				newPrice = GetAVGCostPrice() * 1.01;
 			}
 			return Math.Round(newPrice, 2);
 		}
