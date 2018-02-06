@@ -46,6 +46,9 @@ namespace ReDistr
 		// Себестоимость
 		public double CostPrice = 0;
 
+		// Список основных производителей для поддержания остатка
+		public List<string> MainManufacturers;
+
 		// Свободный остаток, который можно перемещать с данного склада, 
 		// если свободный остаток отличен от 0, склад может быть донором. 
 		// Не может быть меньше 0, если minStock отличен от нуля
@@ -139,7 +142,7 @@ namespace ReDistr
 		{
 			// Получаем общее колличество ЗЧ без учета резервов
 			var sumStocks = item.GetSumStocks();
-			var need = Math.Floor(Math.Abs(sumStocks * SailPersent) / item.InKit) * item.InKit - Count;
+			var need = Math.Floor(Math.Abs(sumStocks * (MaxStock / sumStocks)) / item.InKit) * item.InKit - Count;
 
 			// Итоговое количество не должно быть больше максимального остатка
 			if ((need + Count) > MaxStock)
@@ -219,6 +222,25 @@ namespace ReDistr
 			}
 
 			MaxStock = maxStock;
+		}
+
+		// Расчитывает максимальный остаток с учетом основнх брендов, расчитывать после расчета максимальных остатков по уходимости
+		// Переносит излишки на склад бренда
+		public void UpdateMaxStockWithMainManufacturer(Item item)
+		{
+			if (MainManufacturers == null) return;
+			if (!MainManufacturers.Contains(item.Manufacturer)) return;
+
+			var newMaxStock = item.GetSumStocks(false) - item.GetSumMaxStocks();
+			if (newMaxStock > MaxStock)
+			{
+				MaxStock = MaxStock + newMaxStock;
+			}
+			// Если мин остаток 0 то ставим еденицу чтобы спровоцировать перемещение
+			if (MinStock == 0)
+			{
+				MinStock = 1;
+			}
 		}
 
 		// Расчитывает свободный остаток для указанного склада, вычислять после расчета мин остатка

@@ -34,6 +34,7 @@ namespace ReDistr
 		private const string ColStockMinCfg = "B";
 		private const string ColStockMaxCfg = "C";
 		private const string ColStockSignCfg = "D";
+		private const string ColStockMainManufacturerCfg = "E";
 		private const uint RowStartExcludeCompetitors = 4;
 		private const string ColExcludeCompetitors = "G";
 		private const string RngMinStockForCompetitor = "B25";
@@ -123,8 +124,14 @@ namespace ReDistr
 				var minimum = (uint)(Globals.Control.Range[ColStockMinCfg + curentRow].Value);
 				var maximum = (uint)(Globals.Control.Range[ColStockMaxCfg + curentRow].Value);
 				string signature = Globals.Control.Range[ColStockSignCfg + curentRow].Value.ToString();
-
-				SimpleStockFactory.CurrentFactory.SetStockParams(name, minimum, maximum, signature, priority);
+				string stringMainManufacturers = Globals.Control.Range[ColStockMainManufacturerCfg + curentRow].Value;
+				List<string> mainManufacturers = null;
+				if (stringMainManufacturers != null)
+				{
+					mainManufacturers = stringMainManufacturers.Split(';').ToList();
+				}
+				
+				SimpleStockFactory.CurrentFactory.SetStockParams(name, minimum, maximum, signature, priority, mainManufacturers);
 				curentRow++;
 				priority++;
 				count++;
@@ -165,14 +172,26 @@ namespace ReDistr
             Config.MaxCompetitorsToMiss = Globals.Control.Range[RngNameListPropertyMaxCompetitorsToMiss].Value2;
             Config.TypeCompetitor = (int)Globals.Control.Range[RngNameListPropertyTypeCompetitor].Value2;
 			// Категории для перемещения на указанный склад полностью
+			Config.ListSelectedStorageCategoryToTransfer = null;
 			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
-			Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
-            // Свойства ЗЧ для обязательного перемещения
-		    string stringPropertyRequiredAvailability = Globals.Control.Range[RngNameListPropertyRequiredAvailability].Value2;
-            Config.ListPropertyRequiredAvailability = stringPropertyRequiredAvailability.Split(new[] { ';' }).ToList();  
+			if (stringSelectedCategory != null)
+			{
+				Config.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
+			}
+			// Свойства ЗЧ для обязательного перемещения
+			Config.ListPropertyRequiredAvailability = null;
+			string stringPropertyRequiredAvailability = Globals.Control.Range[RngNameListPropertyRequiredAvailability].Value2;
+			if (stringPropertyRequiredAvailability != null)
+			{
+				Config.ListPropertyRequiredAvailability = stringPropertyRequiredAvailability.Split(new[] { ';' }).ToList();
+			}
 			// Категории для перемещения
+			Config.ListStorageCategoryToTransfers = null;
 			string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
-			Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
+			if (stringCategory != null)
+			{
+				Config.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
+			}
 		}
 
 		// Получаем остатки по складам из книги с остатками

@@ -37,7 +37,8 @@ namespace ReDistr
 					Name = curentParams.Name,
 					DefaultPeriodMaxStock = curentParams.Maximum,
 					DefaultPeriodMinStock = curentParams.Minimum,
-					Priority = curentParams.Priority
+					Priority = curentParams.Priority,
+					MainManufacturers = curentParams.MainManufacturers
 				};
 				return stock;
 			}
@@ -64,10 +65,10 @@ namespace ReDistr
 			return foundStock;
 		}
 
-		public bool SetStockParams(string stockName, uint minimum, uint maximum, string signature, uint priority)
+		public bool SetStockParams(string stockName, uint minimum, uint maximum, string signature, uint priority, List<string> mainManufacturers)
 		{
 			if(_paramsList.Exists(s => s.Signature == signature)) return false;
-			_paramsList.Add(new StockParams() { Maximum = maximum, Minimum = minimum, Name = stockName, Signature = signature, Priority = priority });
+			_paramsList.Add(new StockParams() { Maximum = maximum, Minimum = minimum, Name = stockName, Signature = signature, Priority = priority, MainManufacturers = mainManufacturers });
 			return true;
 		}
 
@@ -90,6 +91,7 @@ namespace ReDistr
 			public uint Maximum;
 			public uint Minimum;
 			public uint Priority;
+			public List<string> MainManufacturers;
 		}
 		
 	}

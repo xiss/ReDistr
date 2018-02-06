@@ -24,6 +24,11 @@ namespace ReDistr
 					stock.UpdateMinStock(item.Value);
 					stock.UpdateMaxStock(item.Value);
 				}
+				foreach (var stock in item.Value.Stocks)
+				{
+					// Обновляем максимальные остатки с учетом брендов для складов
+					stock.UpdateMaxStockWithMainManufacturer(item.Value);
+				}
 			}
 		}
 
