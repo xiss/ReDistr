@@ -149,19 +149,23 @@
 						break;
 					// Партком
 					case 3:
-						if (_price > 0 & _price <= 70)
+						if (_price > 0 & _price <= 68)
 						{
-							price = _price / 2;
+							price = _price / 3.4;
 						}
-						else if (_price >= 70.01 & _price <= 150)
+						else if (_price >= 69 & _price <= 100)
 						{
-							price = _price / 1.35;
+							price = _price / 2.04;
 						}
-						else if (_price >= 150.01 & _price <= 5634)
+						else if (_price >= 101 & _price <= 136)
 						{
-							price = _price / 1.140;
+							price = _price / 1.9;
 						}
-						else if (_price >= 5634.01 & _price <= 100000000)
+						else if (_price >= 137 & _price <= 5634)
+						{
+							price = _price / 1.14;
+						}
+						else if (_price >= 5635 & _price <= 100000000)
 						{
 							price = _price / 1.1;
 						}
