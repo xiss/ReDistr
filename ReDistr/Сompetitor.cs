@@ -58,39 +58,50 @@
 				{
 					// Автопитер
 					case 1:
-						if (_price > 0 & _price <= 23)
+						if (_price > 0 & _price <= 15)
 						{
-							price = _price / 1.45;
+							price = _price / 1.3;
 						}
-						else if (_price >= 24 & _price <= 1330)
+						if (_price > 16 & _price <= 60)
 						{
-							price = _price / 1.34;
+							price = _price / 1.231;
 						}
-						else if (_price >= 1331 & _price <= 2620)
+						else if (_price >= 61 & _price <= 129)
 						{
-							price = _price / 1.32;
+							price = _price / 1.196;
 						}
-						else if (_price >= 2621 & _price <= 5200)
+						else if (_price >= 130 & _price <= 1172)
 						{
-							price = _price / 1.31;
+							price = _price / 1.182;
 						}
-						else if (_price >= 5201 & _price <= 6450)
+						else if (_price >= 1173 & _price <= 2328)
 						{
-							price = _price / 1.29;
+							price = _price / 1.173;
 						}
-						else if (_price >= 6451 & _price <= 7700)
+						else if (_price >= 2329 & _price <= 4624)
 						{
-							price = _price / 1.28;
+							price = _price / 1.165;
 						}
-						else if (_price >= 7701 & _price <= 10000)
+						else if (_price >= 4625 & _price <= 5760)
 						{
-							price = _price / 1.27;
+							price = _price / 1.156;
 						}
-						else if (_price >= 10001 & _price <= 100000)
+						else if (_price >= 5761 & _price <= 6888)
 						{
-							price = _price / 1.26;
+							price = _price / 1.152;
 						}
-
+						else if (_price >= 6889 & _price <= 8008)
+						{
+							price = _price / 1.148;
+						}
+						else if (_price >= 8009 & _price <= 9120)
+						{
+							price = _price / 1.144;
+						}
+						else if (_price >= 6960 & _price <= 1000000)
+						{
+							price = _price / 1.14;
+						}
 						//if (_price > 0 & _price <= 1146.49)
 						//{
 						//    price = _price/1.1581;

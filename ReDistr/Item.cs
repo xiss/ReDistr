@@ -396,9 +396,9 @@ namespace ReDistr
                         //    break;
 						default:
 							newPrice = сompetitor.PriceWithoutAdd * 0.995;
-                            if (newPrice < GetAVGCostPrice() * 1.01)
+                            if (newPrice < GetAVGCostPrice() * 1.05)
 					        {
-                                newPrice = GetAVGCostPrice() * 1.01;
+                                newPrice = GetAVGCostPrice() * 1.05;
 					        }
 					        if (newPrice > GetAVGCostPrice()*2)
 					        {
@@ -475,7 +475,7 @@ namespace ReDistr
                     else if (GetAVGCostPrice() > 15001 & GetAVGCostPrice() < 1000000000)
                     {
                         newPrice = GetAVGCostPrice() * 1.1;
-                    }
+					}
 				}
 				else
 				{
@@ -497,9 +497,9 @@ namespace ReDistr
 				}
 			}
 			// Если новая цена ниже себестоимости, возвращаем себестоимость
-			if (newPrice < (GetAVGCostPrice() * 1.01) && !allowSellingLoss)
+			if (newPrice < (GetAVGCostPrice() * 1.05) && !allowSellingLoss)
 			{
-				newPrice = GetAVGCostPrice() * 1.01;
+				newPrice = GetAVGCostPrice() * 1.05;
 			}
 			return Math.Round(newPrice, 2);
 		}
