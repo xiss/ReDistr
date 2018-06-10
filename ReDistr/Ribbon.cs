@@ -12,7 +12,7 @@ namespace ReDistr
 		private void Ribbon_Load(object sender, RibbonUIEventArgs e)
 		{
 #warning Удалить потом, для отладки
-#if(DEBUG)
+#if (DEBUG)
 			// Парсим данные из файлов
 			var parser = new Parser();
 			Globals.ThisWorkbook.items = parser.Parse(true, true, true);
@@ -115,7 +115,7 @@ namespace ReDistr
 		private void buttonMakeTransfersBook_Click(object sender, RibbonControlEventArgs e)
 		{
 			// Архивируем предыдущие перемещения
-			ReDistr.ArchiveBooks(Config.FolderTransfers, Config.FolderArchiveTransfers);
+			ReDistr.ArchiveBooks(Config.Inst.FilesCfg.FolderTransfers, Config.Inst.FilesCfg.FolderArchiveTransfers);
 
 			// Создаем книги для импорта в Excel
 			Globals.Transfers.MakeImportTransfers();
@@ -151,12 +151,6 @@ namespace ReDistr
 			if (Config.StockToTransferSelectedStorageCategory != null)
 			{
 				transfers = ReDistr.GetTransfersIlliuid(items, transfers);
-			}
-
-			// Выводим отчет для тестов если необходимо
-			if (Config.ShowReport)
-			{
-				Globals.Test.FillListTransfers(transfers, items);
 			}
 
 			// Выводим перемещения на лист для перемещений
@@ -197,7 +191,7 @@ namespace ReDistr
 		private void buttonMakeRevaluationBook_Click(object sender, RibbonControlEventArgs e)
 		{
 			// Архивирует предыдущие переоценки
-			ReDistr.ArchiveBooks(Config.FolderRevaluations, Config.FolderArchiveRevaluations);
+			ReDistr.ArchiveBooks(Config.Inst.FilesCfg.FolderRevaluations, Config.Inst.FilesCfg.FolderArchiveRevaluations);
 
 			// Создает книги для импорта в Excel
 			Globals.Revaluations.MakeImportRevaluation();

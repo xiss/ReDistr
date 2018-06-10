@@ -22,12 +22,11 @@ namespace ReDistr
 		private void ThisWorkbook_Startup(object sender, System.EventArgs e)
 		{
 			//TODO /0 Сделать здесь функцию проверяющую и если нужно создающую нужные каталоги
-
 		}
 
 		private void ThisWorkbook_Shutdown(object sender, System.EventArgs e)
 		{
-			
+			Config.Save();
 		}
 		
 
