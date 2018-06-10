@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 
 namespace ReDistr
 {
+	[Serializable]
 	static class  Config
 	{
 		// Дата снятия отчета с остатками
