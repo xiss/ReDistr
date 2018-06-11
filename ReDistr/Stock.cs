@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
+using System.Xml.Serialization;
 
 namespace ReDistr
 {
@@ -14,15 +15,19 @@ namespace ReDistr
 		public string Name;
 
 		// Текущий остаток
+		[XmlIgnore]
 		public double Count = 0;
 
 		// Количество продаж из отчета
+		[XmlIgnore]
 		public double CountSelings = 0;
 
 		// Остаток до работы скрипта
+		[XmlIgnore]
 		public double CountOrigin = 0;
 
 		// Минимальный остаток, кратен inKit
+		[XmlIgnore]
 		public double MinStock = 0;
 
 		// Период для расчета мин остатка по умолчанию
@@ -32,18 +37,22 @@ namespace ReDistr
 		public uint DefaultPeriodMaxStock;
 
 		// Максимальный остаток, кратен inKit
+		[XmlIgnore]
 		public double MaxStock = 0;
 
 		// Процент продаж
+		[XmlIgnore]
 		public double SailPersent = 0;
 
 		// Резерв, количество товара в резерве, всегда положителен
+		[XmlIgnore]
 		public double InReserve = 0;
 
 		// Приоритет, в спорных ситуациях используется для определения реципиента. 
 		public uint Priority;
 
 		// Себестоимость
+		[XmlIgnore]
 		public double CostPrice = 0;
 
 		// Список основных производителей для поддержания остатка
@@ -52,18 +61,22 @@ namespace ReDistr
 		// Свободный остаток, который можно перемещать с данного склада, 
 		// если свободный остаток отличен от 0, склад может быть донором. 
 		// Не может быть меньше 0, если minStock отличен от нуля
+		[XmlIgnore]
 		public double FreeStock;
 
 		// Потребность данного склада в товаре, всегда положительна, 
 		// если need отличен от 0, склад нуждается в товаре и может быть реципиентом. 
 		// TODO Он вроде не нужен, проверить, везде используются спец функции
+		[XmlIgnore]
 		public double Need;
 
 		// Исключить данный склад из распределения
 		// Выставляет свободный остатко равным реальному остатку за вычетом резервов
+		[XmlIgnore]
 		public bool ExcludeFromMoovings;
 
 		// Сигнатура склада, в нижнем регистре
+		[XmlIgnore]
 		private string _signature;
 		public string Signature
 		{

@@ -26,7 +26,7 @@ namespace ReDistr
 
 		private void ThisWorkbook_Shutdown(object sender, System.EventArgs e)
 		{
-			Config.Save();
+			//Config.Save();
 		}
 		
 

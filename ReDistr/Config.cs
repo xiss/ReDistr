@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace ReDistr
 {
@@ -15,14 +16,18 @@ namespace ReDistr
 		public OrdersCfg OrdersCfg = OrdersCfg.Inst;
 		public TransfersCfg TransfersCfg = TransfersCfg.Inst;
 
+		public List<Stock> Stocks;
+
+		private static readonly string  ConfigFile = AppDomain.CurrentDomain.BaseDirectory + "config.xml";
+
 		/// <summary>
 		/// Загрузить настройки 
 		/// </summary>
-		static Config()
+		public static void Load()
 		{
 			try
 			{
-				var serializer = new XmlSerializer(typeof(Config)); using (var stream = File.OpenRead("config.xml"))
+				var serializer = new XmlSerializer(typeof(Config)); using (var stream = File.OpenRead(ConfigFile))
 				{
 					_inst = (Config)serializer.Deserialize(stream);
 				}
@@ -41,10 +46,11 @@ namespace ReDistr
 		{
 			try
 			{
+				//var test = Config.Inst;
 				var serializer = new XmlSerializer(typeof(Config));
-				var i = new Config();
-				Stream writer = new FileStream("config.xml", FileMode.OpenOrCreate);
-				serializer.Serialize(writer, i);
+				//var i = new Config();
+				Stream writer = new FileStream(ConfigFile, FileMode.Create);
+				serializer.Serialize(writer, Inst);
 				writer.Close();
 			}
 			catch (Exception e)
@@ -80,7 +86,7 @@ namespace ReDistr
 		public static int SellingPeriod;
 
 		// Количество складов
-		public static uint StockCount;
+		public static uint StockCount => (uint)Inst.Stocks.Count;
 
 		// Количество возможных перемещений
 		public static int CountPossibleTransfers;
@@ -147,8 +153,8 @@ namespace ReDistr
 		private static FilesCfg _inst;
 		public static FilesCfg Inst => _inst ?? (_inst = new FilesCfg());
 	}
-	[Serializable]
 
+	[Serializable]
 	public class OrdersCfg
 	{
 		// Значение параметра Supplier по умолчанию у ЗЧ
@@ -187,6 +193,7 @@ namespace ReDistr
 		private static TransfersCfg _inst;
 		public static TransfersCfg Inst => _inst ?? (_inst = new TransfersCfg());
 	}
+
 	[Serializable]
 
 	public class RevaluationsCfg

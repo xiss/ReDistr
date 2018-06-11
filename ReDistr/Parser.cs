@@ -108,90 +108,119 @@ namespace ReDistr
 		// Получаем параметры с листа настроек
 		private void MakeConfig()
 		{
+			Config.Load();
+
+#warning Удалить потом, для отладки
+			//var sd = Config.Inst;
+
 			// Выбираем лист с настройками
-			Globals.Control.Activate();
+			//Globals.Control.Activate();
 
 			// Настраиваем фабрику
 			// Обнуляем параметры
 			SimpleStockFactory.CurrentFactory.ClearStockParams();
-			var curentRow = RowStartStockCfg;
-			uint priority = 1; // Приоритет, от большего к меньшему
-			uint count = 0; // Счетчик складов
+			//var curentRow = RowStartStockCfg;
+			//uint priority = 1; // Приоритет, от большего к меньшему
+			//uint count = 0; // Счетчик складов
 
-			while (Globals.Control.Range[ColStockNameCfg + curentRow].Value != null)
+			
+			//while (Globals.Control.Range[ColStockNameCfg + curentRow].Value != null)
+			//{
+				//string name = Globals.Control.Range[ColStockNameCfg + curentRow].Value.ToString();
+				//var minimum = (uint)(Globals.Control.Range[ColStockMinCfg + curentRow].Value);
+				//var maximum = (uint)(Globals.Control.Range[ColStockMaxCfg + curentRow].Value);
+				//string signature = Globals.Control.Range[ColStockSignCfg + curentRow].Value.ToString();
+				//string stringMainManufacturers = Globals.Control.Range[ColStockMainManufacturerCfg + curentRow].Value;
+				//List<string> mainManufacturers = null;
+				//if (stringMainManufacturers != null)
+				//{
+				//	mainManufacturers = stringMainManufacturers.Split(';').ToList();
+				//}
+
+				//var stock = new Stock
+				//{
+				//	Name = name,
+				//	DefaultPeriodMinStock = minimum,
+				//	DefaultPeriodMaxStock = maximum,
+				//	Signature = signature,
+				//	MainManufacturers = mainManufacturers,
+				//	Priority = priority
+				//};
+				//Config.Inst.Stocks.Add(stock);
+
+			foreach (var stock in Config.Inst.Stocks)
 			{
-				string name = Globals.Control.Range[ColStockNameCfg + curentRow].Value.ToString();
-				var minimum = (uint)(Globals.Control.Range[ColStockMinCfg + curentRow].Value);
-				var maximum = (uint)(Globals.Control.Range[ColStockMaxCfg + curentRow].Value);
-				string signature = Globals.Control.Range[ColStockSignCfg + curentRow].Value.ToString();
-				string stringMainManufacturers = Globals.Control.Range[ColStockMainManufacturerCfg + curentRow].Value;
-				List<string> mainManufacturers = null;
-				if (stringMainManufacturers != null)
-				{
-					mainManufacturers = stringMainManufacturers.Split(';').ToList();
-				}
-				
-				SimpleStockFactory.CurrentFactory.SetStockParams(name, minimum, maximum, signature, priority, mainManufacturers);
-				curentRow++;
-				priority++;
-				count++;
+				SimpleStockFactory.CurrentFactory.SetStockParams(
+					stock.Name, 
+					stock.DefaultPeriodMinStock, 
+					stock.DefaultPeriodMaxStock,
+					stock.Signature,
+					stock.Priority,
+					stock.MainManufacturers);
 			}
-			Config.StockCount = count;
+				
+				//curentRow++;
+				//priority++;
+				//count++;
+			//}
+			//Config.StockCount = count;
 			Config.SetPossibleTransfers();
 
-			// Конкуренты-исключения
-			curentRow = RowStartExcludeCompetitors;
-			var list = new List<string>();
-			while (Globals.Control.Range[ColExcludeCompetitors + curentRow].Value != null)
-			{
-				list.Add(Globals.Control.Range[ColExcludeCompetitors + curentRow].Value.ToString());
-				curentRow++;
-			}
-			Config.Inst.RevaluationsCfg.ListExcludeCompetitors = list;
+			//Config.Save();
 
-			// Прописываем в конфиг пути и названия файлов из настроечного листа
-			Config.Inst.FilesCfg.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
-			Config.Inst.FilesCfg.NameOfStocksWb = Globals.Control.Range[RngNameOfStocksWb].Value2;
-			Config.Inst.FilesCfg.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
-			Config.Inst.FilesCfg.NameOfCompetitorsWb = Globals.Control.Range[RngNameOfContributorsWb].Value2;
-			Config.Inst.FilesCfg.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
-			Config.Inst.FilesCfg.FolderArchiveTransfers = Globals.Control.Range[RngNameFolderArchiveTransfers].Value2 + "\\";
-			//Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
-			Config.Inst.TransfersCfg.StockNameOneDonor = Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2;
-			Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
-			Config.Inst.TransfersCfg.StockNameToTransferSelectedStorageCategory = Globals.Control.Range[RngNameStockToTransferSelectedStorageCategory].Value2;
-			Config.Inst.RevaluationsCfg.StockNameWholesaleStock = Globals.Control.Range[RngWholesaleStock].Value2;
-			Config.Inst.RevaluationsCfg.MinStockForCompetitor = Globals.Control.Range[RngMinStockForCompetitor].Value2;
-			Config.Inst.RevaluationsCfg.IdPriceAp = Globals.Control.Range[RngIdPriceAp].Value2;
-			Config.Inst.FilesCfg.FolderArchiveRevaluations = Globals.Control.Range[RngNameFolderArchiveRevaluations].Value2;
-			Config.Inst.FilesCfg.FolderRevaluations = Globals.Control.Range[RngNameFolderRevaluations].Value2;
-            Config.Inst.RevaluationsCfg.OurDeliveryTime = Globals.Control.Range[RngNameOurDeliveryTime].Value2;
-            Config.Inst.RevaluationsCfg.DumpingPersent = Globals.Control.Range[RngNameListPropertyDumpingPersent].Value2;
-            Config.Inst.RevaluationsCfg.DeltaDeliveryTime = Globals.Control.Range[RngNameListPropertyDeltaDeliveryTime].Value2;
-            Config.Inst.RevaluationsCfg.DeltaCompetitorStock = Globals.Control.Range[RngNameListPropertyDeltaCompetitorStock].Value2;
-            Config.Inst.RevaluationsCfg.MaxCompetitorsToMiss = Globals.Control.Range[RngNameListPropertyMaxCompetitorsToMiss].Value2;
-            Config.Inst.RevaluationsCfg.TypeCompetitor = (int)Globals.Control.Range[RngNameListPropertyTypeCompetitor].Value2;
-			// Категории для перемещения на указанный склад полностью
-			Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer = null;
-			string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
-			if (stringSelectedCategory != null)
-			{
-				Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
-			}
-			// Свойства ЗЧ для обязательного перемещения
-			Config.Inst.TransfersCfg.ListPropertyRequiredAvailability = null;
-			string stringPropertyRequiredAvailability = Globals.Control.Range[RngNameListPropertyRequiredAvailability].Value2;
-			if (stringPropertyRequiredAvailability != null)
-			{
-				Config.Inst.TransfersCfg.ListPropertyRequiredAvailability = stringPropertyRequiredAvailability.Split(new[] { ';' }).ToList();
-			}
-			// Категории для перемещения
-			Config.Inst.TransfersCfg.ListStorageCategoryToTransfers = null;
-			string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
-			if (stringCategory != null)
-			{
-				Config.Inst.TransfersCfg.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
-			}
+			// Конкуренты-исключения
+			//curentRow = RowStartExcludeCompetitors;
+			//var list = new List<string>();
+			//while (Globals.Control.Range[ColExcludeCompetitors + curentRow].Value != null)
+			//{
+			//	list.Add(Globals.Control.Range[ColExcludeCompetitors + curentRow].Value.ToString());
+			//	curentRow++;
+			//}
+			//Config.Inst.RevaluationsCfg.ListExcludeCompetitors = list;
+
+			//// Прописываем в конфиг пути и названия файлов из настроечного листа
+			//Config.Inst.FilesCfg.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
+			//Config.Inst.FilesCfg.NameOfStocksWb = Globals.Control.Range[RngNameOfStocksWb].Value2;
+			//Config.Inst.FilesCfg.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
+			//Config.Inst.FilesCfg.NameOfCompetitorsWb = Globals.Control.Range[RngNameOfContributorsWb].Value2;
+			//Config.Inst.FilesCfg.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
+			//Config.Inst.FilesCfg.FolderArchiveTransfers = Globals.Control.Range[RngNameFolderArchiveTransfers].Value2 + "\\";
+			////Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
+			//Config.Inst.TransfersCfg.StockNameOneDonor = Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2;
+			//Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
+			//Config.Inst.TransfersCfg.StockNameToTransferSelectedStorageCategory = Globals.Control.Range[RngNameStockToTransferSelectedStorageCategory].Value2;
+			//Config.Inst.RevaluationsCfg.StockNameWholesaleStock = Globals.Control.Range[RngWholesaleStock].Value2;
+			//Config.Inst.RevaluationsCfg.MinStockForCompetitor = Globals.Control.Range[RngMinStockForCompetitor].Value2;
+			//Config.Inst.RevaluationsCfg.IdPriceAp = Globals.Control.Range[RngIdPriceAp].Value2;
+			//Config.Inst.FilesCfg.FolderArchiveRevaluations = Globals.Control.Range[RngNameFolderArchiveRevaluations].Value2;
+			//Config.Inst.FilesCfg.FolderRevaluations = Globals.Control.Range[RngNameFolderRevaluations].Value2;
+			//Config.Inst.RevaluationsCfg.OurDeliveryTime = Globals.Control.Range[RngNameOurDeliveryTime].Value2;
+			//Config.Inst.RevaluationsCfg.DumpingPersent = Globals.Control.Range[RngNameListPropertyDumpingPersent].Value2;
+			//Config.Inst.RevaluationsCfg.DeltaDeliveryTime = Globals.Control.Range[RngNameListPropertyDeltaDeliveryTime].Value2;
+			//Config.Inst.RevaluationsCfg.DeltaCompetitorStock = Globals.Control.Range[RngNameListPropertyDeltaCompetitorStock].Value2;
+			//Config.Inst.RevaluationsCfg.MaxCompetitorsToMiss = Globals.Control.Range[RngNameListPropertyMaxCompetitorsToMiss].Value2;
+			//Config.Inst.RevaluationsCfg.TypeCompetitor = (int)Globals.Control.Range[RngNameListPropertyTypeCompetitor].Value2;
+			//// Категории для перемещения на указанный склад полностью
+			//Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer = null;
+			//string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
+			//if (stringSelectedCategory != null)
+			//{
+			//	Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
+			//}
+			//// Свойства ЗЧ для обязательного перемещения
+			//Config.Inst.TransfersCfg.ListPropertyRequiredAvailability = null;
+			//string stringPropertyRequiredAvailability = Globals.Control.Range[RngNameListPropertyRequiredAvailability].Value2;
+			//if (stringPropertyRequiredAvailability != null)
+			//{
+			//	Config.Inst.TransfersCfg.ListPropertyRequiredAvailability = stringPropertyRequiredAvailability.Split(new[] { ';' }).ToList();
+			//}
+			//// Категории для перемещения
+			//Config.Inst.TransfersCfg.ListStorageCategoryToTransfers = null;
+			//string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
+			//if (stringCategory != null)
+			//{
+			//	Config.Inst.TransfersCfg.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
+			//}
 		}
 
 		// Получаем остатки по складам из книги с остатками
