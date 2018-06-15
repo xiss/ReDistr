@@ -1,61 +1,102 @@
 ﻿<?xml version="1.0"?>
 <Config xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<!--Настройки путей и файлов-->
 	<FilesCfg>
+		<!--Папка в которую складываются перемещения-->		
 		<FolderTransfers>Перемещения\</FolderTransfers>
+		<!--Папка с архивом перемещений-->
 		<FolderArchiveTransfers>Перемещения\Архив\</FolderArchiveTransfers>
+		<!--Папка в которую складываются переоценки-->
 		<FolderRevaluations>Переоценки</FolderRevaluations>
+		<!--Папка с архивом переоценок-->
 		<FolderArchiveRevaluations>Переоценки\Архив</FolderArchiveRevaluations>
+		<!--Книга с остатками-->
 		<NameOfStocksWb>Склады.xls</NameOfStocksWb>
+		<!--Книга с продажами-->
 		<NameOfSealingsWb>Продажи.xls</NameOfSealingsWb>
+		<!--Книга с конкурентами-->
 		<NameOfCompetitorsWb>Питерплюс.xlsx</NameOfCompetitorsWb>
+		<!--Книга с дополнительными параметрами-->
 		<NameOfParametersWb>Параметры.xlsx</NameOfParametersWb>
 	</FilesCfg>
+	
+	<!--Настройки переоценки-->
 	<RevaluationsCfg>
+		<!--id нашего прайса на П+-->
 		<IdPriceAp>Наш прайс</IdPriceAp>
+		<!--Оптовый склад-->
 		<StockNameWholesaleStock>Попова</StockNameWholesaleStock>
+		<!--Список конкурентов исключений-->
 		<ListExcludeCompetitors>
 			<string>4352</string>
 			<string>5801</string>
 		</ListExcludeCompetitors>
+		<!--Процент от объема остатка для конкурента-->
 		<MinStockForCompetitor>0.2</MinStockForCompetitor>
+		<!--Наш срок поставки-->
 		<OurDeliveryTime>1</OurDeliveryTime>
+		<!--Процент для выявления демпинга-->
 		<DumpingPersent>0.02</DumpingPersent>
+		<!--Допустимая разница в сроке поставки между нами и конкурентом-->
 		<DeltaDeliveryTime>5</DeltaDeliveryTime>
+		<!--Допустимое отношение остатков конкурента к нашему-->
 		<DeltaCompetitorStock>0.03</DeltaCompetitorStock>
+		<!--Пропускать конкурентов:-->
 		<MaxCompetitorsToMiss>1</MaxCompetitorsToMiss>
+		<!--Портал конкурентов 1- Питерплюс 2-Иксора 3-Партком-->
 		<TypeCompetitor>1</TypeCompetitor>
 	</RevaluationsCfg>
+	
+	<!--Настройки для заказов-->
 	<OrdersCfg>
+		<!--Поставщик по умолчанию-->
 		<DefaultSupplierName>none</DefaultSupplierName>
 	</OrdersCfg>
+	
+	<!--Настройки перемещений-->
 	<TransfersCfg>
-		<NameOfStorageCatRequiredAvailability>МинЗапас;Везде</NameOfStorageCatRequiredAvailability>
+		<!--Если параметр указан, то перемещения делать только с этого склада-->
+		<StockNameOneDonor></StockNameOneDonor>
+		<!--Перемещать выбранные категории на этот определенный склад-->
 		<StockNameToTransferSelectedStorageCategory>Попова</StockNameToTransferSelectedStorageCategory>
+		<!--Категория обязательного наличия-->
+		<NameOfStorageCatRequiredAvailability>Везде</NameOfStorageCatRequiredAvailability>
+		<!--Выбранные категории для перемещения на определенный склад-->
 		<ListSelectedStorageCategoryToTransfer>
 			<string>НЛ12</string>
 			<string>НЛ24</string>
-		</ListSelectedStorageCategoryToTransfer>
-		<ListStorageCategoryToTransfers>
 			<string>Попова</string>
+		</ListSelectedStorageCategoryToTransfer>
+		<!--Категории хранения товаров для перемещений-->
+		<ListStorageCategoryToTransfers>
 			<string>Везде</string>
 			<string>Опт</string>
 			<string>МинЗапас</string>
 			<string>Нигде</string>
 		</ListStorageCategoryToTransfers>
+		<!--Минимальный остаток по свойствам (Основное св-во з/ч 1)-->
 		<ListPropertyRequiredAvailability>
-			<string />
 			<string />
 		</ListPropertyRequiredAvailability>
 	</TransfersCfg>
+	
+	<!--Настройки складов-->
 	<Stocks>
 		<Stock>
+			<!--Название-->
 			<Name>Попова</Name>
+			<!--Дней минимального остатка-->
 			<DefaultPeriodMinStock>7</DefaultPeriodMinStock>
+			<!--Дней максимального остатка-->
 			<DefaultPeriodMaxStock>30</DefaultPeriodMaxStock>
+			<!--Приоритет-->
 			<Priority>1</Priority>
+			<!--Основный бренды-->
 			<MainManufacturers>
 				<string>КИТАЙ</string>
 			</MainManufacturers>
+			<!--Сигнатура для поиска в отчетах-->
 			<Signature>попова</Signature>
 		</Stock>
 		<Stock>
@@ -72,6 +113,7 @@
 			<Priority>3</Priority>
 			<MainManufacturers>
 				<string>CHERY</string>
+				<string>GEELY</string>
 			</MainManufacturers>
 			<Signature>симонова</Signature>
 		</Stock>
@@ -80,9 +122,6 @@
 			<DefaultPeriodMinStock>7</DefaultPeriodMinStock>
 			<DefaultPeriodMaxStock>30</DefaultPeriodMaxStock>
 			<Priority>4</Priority>
-			<MainManufacturers>
-				<string>GEELY</string>
-			</MainManufacturers>
 			<Signature>краснопутиловская</Signature>
 		</Stock>
 		<Stock>

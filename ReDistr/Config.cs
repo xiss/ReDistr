@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.InteropServices;
+using NLog;
 
 namespace ReDistr
 {
@@ -18,7 +19,7 @@ namespace ReDistr
 
 		public List<Stock> Stocks;
 
-		private static readonly string  ConfigFile = AppDomain.CurrentDomain.BaseDirectory + "config.xml";
+		private static readonly string ConfigFile = AppDomain.CurrentDomain.BaseDirectory + "config.xml";
 
 		/// <summary>
 		/// Загрузить настройки 
@@ -34,8 +35,7 @@ namespace ReDistr
 			}
 			catch (Exception e)
 			{
-				//TODO логирование
-				//LogManager.GetCurrentClassLogger().Error("Ошибка загрузки настроек. {0}", e.Message);
+				LogManager.GetCurrentClassLogger().Error("Ошибка загрузки настроек. {0}", e.Message);
 				//TODO как закончить выполнение функции, вызваться может где угодно
 			}
 		}
@@ -55,7 +55,7 @@ namespace ReDistr
 			}
 			catch (Exception e)
 			{
-				//LogManager.GetCurrentClassLogger().Error("Ошибка сохранения настроек. {0}", e.Message);
+				LogManager.GetCurrentClassLogger().Error("Ошибка сохранения настроек. {0}", e.Message);
 			}
 		}
 
@@ -68,8 +68,8 @@ namespace ReDistr
 		public static DateTime StockDate;
 
 		// Склад для перемещения выбранных категорий (неликвид)
-		public static Stock StockToTransferSelectedStorageCategory = SimpleStockFactory.CurrentFactory.GetStock(TransfersCfg.Inst.StockNameToTransferSelectedStorageCategory);
-		
+		public  Stock StockToTransferSelectedStorageCategory = SimpleStockFactory.CurrentFactory.GetStock( TransfersCfg. .Inst.StockNameToTransferSelectedStorageCategory);
+
 		// Если параметр указан, то перемещения делать только с этого склада
 		public static Stock OneDonor = SimpleStockFactory.CurrentFactory.GetStock(TransfersCfg.Inst.StockNameOneDonor);
 
@@ -125,28 +125,28 @@ namespace ReDistr
 	public class FilesCfg
 	{
 		// Папка с перемещениями
-		public  string FolderTransfers ;
+		public string FolderTransfers;
 
 		// Папка с архивом перемещений
-		public  string FolderArchiveTransfers ;
+		public string FolderArchiveTransfers;
 
 		// Папка с переоценками
-		public  string FolderRevaluations ;
+		public string FolderRevaluations;
 
 		// Папка с архивом переоценками
-		public  string FolderArchiveRevaluations ;
+		public string FolderArchiveRevaluations;
 
 		// Имя книги с остатками
-		public  string NameOfStocksWb;
+		public string NameOfStocksWb;
 
 		// Имя книги с продажами
-		public  string NameOfSealingsWb;
+		public string NameOfSealingsWb;
 
 		// Имя книги с конкурентами
-		public  string NameOfCompetitorsWb;
+		public string NameOfCompetitorsWb;
 
 		// Имя книги с параметрами
-		public  string NameOfParametersWb;
+		public string NameOfParametersWb;
 
 		//Singleton
 		private FilesCfg() { }
@@ -171,22 +171,22 @@ namespace ReDistr
 	public class TransfersCfg
 	{
 		// Категория обязательного наличия
-		public  string NameOfStorageCatRequiredAvailability = "МинЗапас;Везде";
+		public string NameOfStorageCatRequiredAvailability = "МинЗапас;Везде";
 
 		// имя склада для перемещения выбранных категорий (неликвид)
 		public string StockNameToTransferSelectedStorageCategory;
 
 		// Список категорий для перемещения на выбранный склад
-		public  List<String> ListSelectedStorageCategoryToTransfer;
+		public List<String> ListSelectedStorageCategoryToTransfer;
 
 		// Если параметр указан, то перемещения делать только с этого склада
-		public  string StockNameOneDonor = null;
+		public string StockNameOneDonor = null;
 
 		// Категории хранения товара для перемещения
-		public  List<string> ListStorageCategoryToTransfers;
+		public List<string> ListStorageCategoryToTransfers;
 
 		// Свойства ЗЧ для обязательного наличия, синоним мин. остатка (свойство ЗЧ1)
-		public  List<string> ListPropertyRequiredAvailability;
+		public List<string> ListPropertyRequiredAvailability;
 
 		//Singleton
 		private TransfersCfg() { }
@@ -199,34 +199,34 @@ namespace ReDistr
 	public class RevaluationsCfg
 	{
 		// id нашего прайса на П+
-		public  string IdPriceAp;
+		public string IdPriceAp;
 
 		// Склад для оптовых отгрузок
-		public  string StockNameWholesaleStock;
+		public string StockNameWholesaleStock;
 
 		// Список конкурентов исключений
-		public  List<string> ListExcludeCompetitors;
+		public List<string> ListExcludeCompetitors;
 
 		// Процент остатка от нашего склада для рассмотрения его как конкурента
-		public  double MinStockForCompetitor;
+		public double MinStockForCompetitor;
 
 		// Наш срок поставки
-		public  double OurDeliveryTime;
+		public double OurDeliveryTime;
 
 		// Процент для выявления демпинга
-		public  double DumpingPersent;
+		public double DumpingPersent;
 
 		// Допустимая разница в сроке доставки между нами и конкурентом
-		public  double DeltaDeliveryTime;
+		public double DeltaDeliveryTime;
 
 		// Отношение остатков конкурента к нашему
-		public  double DeltaCompetitorStock;
+		public double DeltaCompetitorStock;
 
 		// Максимально можно пропустить конкурентов
-		public  double MaxCompetitorsToMiss;
+		public double MaxCompetitorsToMiss;
 
 		// типа конкурента
-		public  int TypeCompetitor;
+		public int TypeCompetitor;
 
 		//Singleton
 		private RevaluationsCfg() { }

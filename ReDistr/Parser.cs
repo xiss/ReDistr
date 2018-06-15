@@ -28,7 +28,7 @@ namespace ReDistr
 		private const string RngNameListSelectedStorageCategoryToTransfer = "B22";
 		private const string RngNameStockToTransferSelectedStorageCategory = "B23";
 		private const string RngNameOfContributorsWb = "B24";
-        private const string RngNameOurDeliveryTime = "B31";
+		private const string RngNameOurDeliveryTime = "B31";
 		private const uint RowStartStockCfg = 4; // Строка с которой считываются склады в настройках
 		private const string ColStockNameCfg = "A";
 		private const string ColStockMinCfg = "B";
@@ -42,12 +42,12 @@ namespace ReDistr
 		private const string RngIdPriceAp = "B27";
 		private const string RngNameFolderRevaluations = "B28";
 		private const string RngNameFolderArchiveRevaluations = "B29";
-        private const string RngNameListPropertyRequiredAvailability = "B30";
-        private const string RngNameListPropertyDumpingPersent = "B32";
-        private const string RngNameListPropertyDeltaDeliveryTime = "B35";
-        private const string RngNameListPropertyDeltaCompetitorStock = "B33";
-        private const string RngNameListPropertyMaxCompetitorsToMiss = "B34";
-        private const string RngNameListPropertyTypeCompetitor = "B36";
+		private const string RngNameListPropertyRequiredAvailability = "B30";
+		private const string RngNameListPropertyDumpingPersent = "B32";
+		private const string RngNameListPropertyDeltaDeliveryTime = "B35";
+		private const string RngNameListPropertyDeltaCompetitorStock = "B33";
+		private const string RngNameListPropertyMaxCompetitorsToMiss = "B34";
+		private const string RngNameListPropertyTypeCompetitor = "B36";
 
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
@@ -62,10 +62,10 @@ namespace ReDistr
 		private const string ColManufacturerStocks = "AD"; // Производитель
 		private const string ColPriceStocks = "AB"; // Интерет цена
 		private const string ColPropertyStocks = "AG"; // Свойство
-        private const string ColProperty1Stocks = "AF"; // Свойство
+		private const string ColProperty1Stocks = "AF"; // Свойство
 		private const string ColCostPriceStocks = "V"; // Себестоимость
-        private const string ColInKitStocks = "AH"; // Кратность
-		// Книга с продажами
+		private const string ColInKitStocks = "AH"; // Кратность
+													// Книга с продажами
 		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
 		private const string RngDateSealings = "B3"; // Дата отчета
 		private const string ColStockSignSealings = "B"; // Сигнатура склада
@@ -76,7 +76,7 @@ namespace ReDistr
 		private const string ColStorageCategorySealings = "X"; // Категроия хранения
 		private const string ColNameSealings = "S"; // Название ЗЧ
 		private const string ColPropertySealings = "Y"; // Свойство ЗЧ 2
-		// Книга с дополнительными параметрами
+														// Книга с дополнительными параметрами
 		private const uint ListExcludesParameters = 1; // Исключения из перемещений
 		private const uint ListInKitParameters = 2; // Кратность
 		private const uint ListInBundleParameters = 3; // В упаковке
@@ -88,7 +88,7 @@ namespace ReDistr
 		private const string ColManufacturerParameters = "D";
 		private const string ColNameParameters = "C";
 		private const string ColStartParamsParameters = "E"; // Колонка с которой выводится дополнительная информация
-		// Книга с конкурентами питерплюса
+															 // Книга с конкурентами питерплюса
 		private const uint RowStartContributors = 2; // Строка с которой начинается парсинг остатков
 		private const string ColArticleContributors = "A"; // Артикул
 		private const string ColId1CContributors = "J"; // Код товара
@@ -110,117 +110,20 @@ namespace ReDistr
 		{
 			Config.Load();
 
-#warning Удалить потом, для отладки
-			//var sd = Config.Inst;
-
-			// Выбираем лист с настройками
-			//Globals.Control.Activate();
-
 			// Настраиваем фабрику
 			// Обнуляем параметры
 			SimpleStockFactory.CurrentFactory.ClearStockParams();
-			//var curentRow = RowStartStockCfg;
-			//uint priority = 1; // Приоритет, от большего к меньшему
-			//uint count = 0; // Счетчик складов
-
-			
-			//while (Globals.Control.Range[ColStockNameCfg + curentRow].Value != null)
-			//{
-				//string name = Globals.Control.Range[ColStockNameCfg + curentRow].Value.ToString();
-				//var minimum = (uint)(Globals.Control.Range[ColStockMinCfg + curentRow].Value);
-				//var maximum = (uint)(Globals.Control.Range[ColStockMaxCfg + curentRow].Value);
-				//string signature = Globals.Control.Range[ColStockSignCfg + curentRow].Value.ToString();
-				//string stringMainManufacturers = Globals.Control.Range[ColStockMainManufacturerCfg + curentRow].Value;
-				//List<string> mainManufacturers = null;
-				//if (stringMainManufacturers != null)
-				//{
-				//	mainManufacturers = stringMainManufacturers.Split(';').ToList();
-				//}
-
-				//var stock = new Stock
-				//{
-				//	Name = name,
-				//	DefaultPeriodMinStock = minimum,
-				//	DefaultPeriodMaxStock = maximum,
-				//	Signature = signature,
-				//	MainManufacturers = mainManufacturers,
-				//	Priority = priority
-				//};
-				//Config.Inst.Stocks.Add(stock);
-
 			foreach (var stock in Config.Inst.Stocks)
 			{
 				SimpleStockFactory.CurrentFactory.SetStockParams(
-					stock.Name, 
-					stock.DefaultPeriodMinStock, 
+					stock.Name,
+					stock.DefaultPeriodMinStock,
 					stock.DefaultPeriodMaxStock,
 					stock.Signature,
 					stock.Priority,
 					stock.MainManufacturers);
 			}
-				
-				//curentRow++;
-				//priority++;
-				//count++;
-			//}
-			//Config.StockCount = count;
 			Config.SetPossibleTransfers();
-
-			//Config.Save();
-
-			// Конкуренты-исключения
-			//curentRow = RowStartExcludeCompetitors;
-			//var list = new List<string>();
-			//while (Globals.Control.Range[ColExcludeCompetitors + curentRow].Value != null)
-			//{
-			//	list.Add(Globals.Control.Range[ColExcludeCompetitors + curentRow].Value.ToString());
-			//	curentRow++;
-			//}
-			//Config.Inst.RevaluationsCfg.ListExcludeCompetitors = list;
-
-			//// Прописываем в конфиг пути и названия файлов из настроечного листа
-			//Config.Inst.FilesCfg.NameOfSealingsWb = Globals.Control.Range[RngNameOfSealingsWb].Value2;
-			//Config.Inst.FilesCfg.NameOfStocksWb = Globals.Control.Range[RngNameOfStocksWb].Value2;
-			//Config.Inst.FilesCfg.NameOfParametersWb = Globals.Control.Range[RngNameOfParamWb].Value2;
-			//Config.Inst.FilesCfg.NameOfCompetitorsWb = Globals.Control.Range[RngNameOfContributorsWb].Value2;
-			//Config.Inst.FilesCfg.FolderTransfers = Globals.Control.Range[RngNameFolderTransfer].Value2 + "\\";
-			//Config.Inst.FilesCfg.FolderArchiveTransfers = Globals.Control.Range[RngNameFolderArchiveTransfers].Value2 + "\\";
-			////Config.ShowReport = Globals.Control.Range[RngNameOfShowReport].Value2;
-			//Config.Inst.TransfersCfg.StockNameOneDonor = Globals.Control.Range[RngNameOfOnlyPopovaDonor].Value2;
-			//Config.MinSoldKits = (double)Globals.Control.Range[RngNameOfMinSoldKits].Value2;
-			//Config.Inst.TransfersCfg.StockNameToTransferSelectedStorageCategory = Globals.Control.Range[RngNameStockToTransferSelectedStorageCategory].Value2;
-			//Config.Inst.RevaluationsCfg.StockNameWholesaleStock = Globals.Control.Range[RngWholesaleStock].Value2;
-			//Config.Inst.RevaluationsCfg.MinStockForCompetitor = Globals.Control.Range[RngMinStockForCompetitor].Value2;
-			//Config.Inst.RevaluationsCfg.IdPriceAp = Globals.Control.Range[RngIdPriceAp].Value2;
-			//Config.Inst.FilesCfg.FolderArchiveRevaluations = Globals.Control.Range[RngNameFolderArchiveRevaluations].Value2;
-			//Config.Inst.FilesCfg.FolderRevaluations = Globals.Control.Range[RngNameFolderRevaluations].Value2;
-			//Config.Inst.RevaluationsCfg.OurDeliveryTime = Globals.Control.Range[RngNameOurDeliveryTime].Value2;
-			//Config.Inst.RevaluationsCfg.DumpingPersent = Globals.Control.Range[RngNameListPropertyDumpingPersent].Value2;
-			//Config.Inst.RevaluationsCfg.DeltaDeliveryTime = Globals.Control.Range[RngNameListPropertyDeltaDeliveryTime].Value2;
-			//Config.Inst.RevaluationsCfg.DeltaCompetitorStock = Globals.Control.Range[RngNameListPropertyDeltaCompetitorStock].Value2;
-			//Config.Inst.RevaluationsCfg.MaxCompetitorsToMiss = Globals.Control.Range[RngNameListPropertyMaxCompetitorsToMiss].Value2;
-			//Config.Inst.RevaluationsCfg.TypeCompetitor = (int)Globals.Control.Range[RngNameListPropertyTypeCompetitor].Value2;
-			//// Категории для перемещения на указанный склад полностью
-			//Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer = null;
-			//string stringSelectedCategory = Globals.Control.Range[RngNameListSelectedStorageCategoryToTransfer].Value2;
-			//if (stringSelectedCategory != null)
-			//{
-			//	Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer = stringSelectedCategory.Split(new[] { ';' }).ToList();
-			//}
-			//// Свойства ЗЧ для обязательного перемещения
-			//Config.Inst.TransfersCfg.ListPropertyRequiredAvailability = null;
-			//string stringPropertyRequiredAvailability = Globals.Control.Range[RngNameListPropertyRequiredAvailability].Value2;
-			//if (stringPropertyRequiredAvailability != null)
-			//{
-			//	Config.Inst.TransfersCfg.ListPropertyRequiredAvailability = stringPropertyRequiredAvailability.Split(new[] { ';' }).ToList();
-			//}
-			//// Категории для перемещения
-			//Config.Inst.TransfersCfg.ListStorageCategoryToTransfers = null;
-			//string stringCategory = Globals.Control.Range[RngNameListStorageCategoryToTransfers].Value2;
-			//if (stringCategory != null)
-			//{
-			//	Config.Inst.TransfersCfg.ListStorageCategoryToTransfers = stringCategory.Split(new[] { ';' }).ToList();
-			//}
 		}
 
 		// Получаем остатки по складам из книги с остатками
@@ -241,7 +144,7 @@ namespace ReDistr
 			// Если дата снятия отчета не равна сегодняшней, предлагаем не продолжать
 			if (Config.StockDate != DateTime.Now.Date)
 			{
-#if(!DEBUG)
+#if (!DEBUG)
 				var result = MessageBox.Show(MessegeBoxQuestion, MessegeBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 				if (result == DialogResult.No)
 				{
@@ -282,15 +185,15 @@ namespace ReDistr
 					itemCostPrice = stocksWb.Worksheets[1].Range[ColCostPriceStocks + curentRow].Value / itemCount;
 				}
 
-                // Определяем кратность
-                double itemInKit = 1;
-                if (stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value is string != true )
-                {
-                    if (stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value > 1)
-                    {
-                        itemInKit = stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value;
-                    }
-                }
+				// Определяем кратность
+				double itemInKit = 1;
+				if (stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value is string != true)
+				{
+					if (stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value > 1)
+					{
+						itemInKit = stocksWb.Worksheets[1].Range[ColInKitStocks + curentRow].Value;
+					}
+				}
 
 				// Определяем резерв
 				double reserveCount = 0;
@@ -303,10 +206,10 @@ namespace ReDistr
 				bool requiredAvailability = false;
 				if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value is string)
 				{
-                    // Если категория хранения входит в список обязательных либо если свойство ЗЧ1 входит в список обязательных, но если это не Китай
-                    if ((Config.Inst.TransfersCfg.NameOfStorageCatRequiredAvailability.Split(new[] { ';' }).ToList().Contains(stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString()) 
-                        && stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString() != "Китай" )
-                        || Config.Inst.TransfersCfg.ListPropertyRequiredAvailability.Contains( stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString())) 
+					// Если категория хранения входит в список обязательных либо если свойство ЗЧ1 входит в список обязательных, но если это не Китай
+					if ((Config.Inst.TransfersCfg.NameOfStorageCatRequiredAvailability.Split(new[] { ';' }).ToList().Contains(stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString())
+						&& stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString() != "Китай")
+						|| Config.Inst.TransfersCfg.ListPropertyRequiredAvailability.Contains(stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString()))
 					{
 						requiredAvailability = true;
 					}
@@ -341,15 +244,15 @@ namespace ReDistr
 						StorageCategory = stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString(),
 						Name = stocksWb.Worksheets[1].Range[ColNameStocks + curentRow].Value.ToString(),
 						Manufacturer = stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString(),
-                        // Проверка, если в место цены строка то цена нулевая
-                        Price = stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value is string ? 0 : stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value,
+						// Проверка, если в место цены строка то цена нулевая
+						Price = stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value is string ? 0 : stocksWb.Worksheets[1].Range[ColPriceStocks + curentRow].Value,
 						Property = stocksWb.Worksheets[1].Range[ColPropertyStocks + curentRow].Value,
-                        Property1 = stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value,
+						Property1 = stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value,
 						//CostPrice = itemCostPrice,
 						RequiredAvailability = requiredAvailability,
-                        InKit = itemInKit
+						InKit = itemInKit
 					};
-                    
+
 					// Создаем склады для ЗЧ
 					var newStocks = SimpleStockFactory.CurrentFactory.GetAllStocks();
 					foreach (var newStock in newStocks)
@@ -627,7 +530,7 @@ namespace ReDistr
 			var competitorsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			var curentRow = RowStartContributors;
-		    string region = ""; 
+			string region = "";
 
 			while (competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value != null)
 			{
@@ -654,11 +557,11 @@ namespace ReDistr
 				//{
 				//	item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
 				//}
-                // Проверяем регион на пустое значение
-			    if (competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value != null)
-			    {
-			        region = competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value;
-			    }
+				// Проверяем регион на пустое значение
+				if (competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value != null)
+				{
+					region = competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value;
+				}
 				// Создаем нового конкурента
 				var competitor = new Сompetitor
 				{
@@ -667,7 +570,7 @@ namespace ReDistr
 					Id = competitorsWb.Worksheets[1].Range[ColIdContributorContributors + curentRow].Value.ToString(),
 					PositionNumber = competitorsWb.Worksheets[1].Range[ColPositionNumberContributors + curentRow].Value,
 					PriceWithoutAdd = competitorsWb.Worksheets[1].Range[ColPriceContributors + curentRow].Value,
-                    Region = region,
+					Region = region,
 					Item = item
 				};
 

@@ -146,7 +146,6 @@ namespace ReDistr
 			transfers = ReDistr.GetTransfersSecondLvl(items, transfers);
 			// для обеспечения необходимого запаса, перемещения создаются для уже созданных направлений
 			transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
-
 			// Если необходимо делаем перемещение неликвида на Попова
 			if (Config.StockToTransferSelectedStorageCategory != null)
 			{
