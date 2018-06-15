@@ -7,30 +7,36 @@ using System.IO;
 using System.Runtime.InteropServices;
 using NLog;
 
-namespace ReDistr
+namespace ReDistr.Config
 {
-	[Serializable]
+    [Serializable]
 	public class Config
 	{
-		public FilesCfg FilesCfg = FilesCfg.Inst;
-		public RevaluationsCfg RevaluationsCfg = RevaluationsCfg.Inst;
-		public OrdersCfg OrdersCfg = OrdersCfg.Inst;
-		public TransfersCfg TransfersCfg = TransfersCfg.Inst;
+	    public FilesCfg FilesCfg => _filesCfg;
+		public RevaluationsCfg RevaluationsCfg => _revaluationsCfg;
+		public Orders Orders => _orders;
+		public TransfersCfg TransfersCfg => _transfersCfg;
 
-		public List<Stock> Stocks;
+	    private FilesCfg _filesCfg;
+	    private RevaluationsCfg _revaluationsCfg;
+	    private Orders _orders;
+	    private TransfersCfg _transfersCfg;
+
+        public List<Stock> Stocks;
 
 		private static readonly string ConfigFile = AppDomain.CurrentDomain.BaseDirectory + "config.xml";
 
 		/// <summary>
 		/// Загрузить настройки 
 		/// </summary>
-		public static void Load()
+		protected static Config Load()
 		{
 			try
 			{
-				var serializer = new XmlSerializer(typeof(Config)); using (var stream = File.OpenRead(ConfigFile))
+				var serializer = new XmlSerializer(typeof(Config));
+			    using (var stream = File.OpenRead(ConfigFile))
 				{
-					_inst = (Config)serializer.Deserialize(stream);
+					return (Config)serializer.Deserialize(stream);
 				}
 			}
 			catch (Exception e)
@@ -38,6 +44,8 @@ namespace ReDistr
 				LogManager.GetCurrentClassLogger().Error("Ошибка загрузки настроек. {0}", e.Message);
 				//TODO как закончить выполнение функции, вызваться может где угодно
 			}
+
+		    return null;
 		}
 		/// <summary>
 		/// Сохранить настройки
@@ -62,16 +70,21 @@ namespace ReDistr
 		//Singleton
 		private Config() { }
 		private static Config _inst;
-		public static Config Inst => _inst ?? (_inst = new Config());
 
-		// Дата снятия отчета с остатками
+	    public static Config Inst => _inst;
+		static Config()
+		{
+		    _inst = Load();
+		}
+
+        // Дата снятия отчета с остатками
 		public static DateTime StockDate;
 
 		// Склад для перемещения выбранных категорий (неликвид)
 		public  Stock StockToTransferSelectedStorageCategory = SimpleStockFactory.CurrentFactory.GetStock( TransfersCfg. .Inst.StockNameToTransferSelectedStorageCategory);
 
 		// Если параметр указан, то перемещения делать только с этого склада
-		public static Stock OneDonor = SimpleStockFactory.CurrentFactory.GetStock(TransfersCfg.Inst.StockNameOneDonor);
+		public static Stock OneDonor = SimpleStockFactory.CurrentFactory.GetStock(TransfersCfg.StockNameOneDonor);
 
 		// Склад для оптовых отгрузок
 		public static Stock WholesaleStock = SimpleStockFactory.CurrentFactory.GetStock(RevaluationsCfg.Inst.StockNameWholesaleStock);
@@ -147,23 +160,14 @@ namespace ReDistr
 
 		// Имя книги с параметрами
 		public string NameOfParametersWb;
-
-		//Singleton
-		private FilesCfg() { }
-		private static FilesCfg _inst;
-		public static FilesCfg Inst => _inst ?? (_inst = new FilesCfg());
 	}
 
 	[Serializable]
-	public class OrdersCfg
+	public class Orders
 	{
 		// Значение параметра Supplier по умолчанию у ЗЧ
 		public string DefaultSupplierName = "none";
 
-		//Singleton
-		private OrdersCfg() { }
-		private static OrdersCfg _inst;
-		public static OrdersCfg Inst => _inst ?? (_inst = new OrdersCfg());
 	}
 
 	[Serializable]
@@ -187,11 +191,7 @@ namespace ReDistr
 
 		// Свойства ЗЧ для обязательного наличия, синоним мин. остатка (свойство ЗЧ1)
 		public List<string> ListPropertyRequiredAvailability;
-
-		//Singleton
-		private TransfersCfg() { }
-		private static TransfersCfg _inst;
-		public static TransfersCfg Inst => _inst ?? (_inst = new TransfersCfg());
+		
 	}
 
 	[Serializable]
@@ -227,10 +227,5 @@ namespace ReDistr
 
 		// типа конкурента
 		public int TypeCompetitor;
-
-		//Singleton
-		private RevaluationsCfg() { }
-		private static RevaluationsCfg _inst;
-		public static RevaluationsCfg Inst => _inst ?? (_inst = new RevaluationsCfg());
 	}
 }

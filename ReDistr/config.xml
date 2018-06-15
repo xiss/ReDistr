@@ -49,10 +49,10 @@
 	</RevaluationsCfg>
 	
 	<!--Настройки для заказов-->
-	<OrdersCfg>
+	<Orders>
 		<!--Поставщик по умолчанию-->
 		<DefaultSupplierName>none</DefaultSupplierName>
-	</OrdersCfg>
+	</Orders>
 	
 	<!--Настройки перемещений-->
 	<TransfersCfg>
