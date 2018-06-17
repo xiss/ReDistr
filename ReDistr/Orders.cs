@@ -56,14 +56,14 @@ namespace ReDistr
 
 			var curentRow = StartRow;
 			var firstIteration = true;
-			var resultRangeHeader = new dynamic[1, ItemParametrsCount + Config.StockCount * 4];
+			var resultRangeHeader = new dynamic[1, ItemParametrsCount + Config.Config.StockCount * 4];
 
 			// Перебираем список поставщиков
-			foreach (var supplier in Config.ListSuppliers)
+			foreach (var supplier in Config.Config.ListSuppliers)
 			{
 				// Выбираем ЗЧ с данным поставщиком
 				var supplierOrder = orders.Where(order => order.Item.Supplier == supplier).ToList();
-				var resultRange = new dynamic[supplierOrder.Count + 1, ItemParametrsCount + Config.StockCount * 4];
+				var resultRange = new dynamic[supplierOrder.Count + 1, ItemParametrsCount + Config.Config.StockCount * 4];
 				resultRange[0, 0] = supplier;
 				var i = 1;
 				// Добавляем ЗЧ в массив 
@@ -87,30 +87,30 @@ namespace ReDistr
 						{
 							var shortName = stock.Name.Substring(0, 1);
 							resultRangeHeader[0, y] = shortName;
-							resultRangeHeader[0, y + Config.StockCount] = shortName;
-							resultRangeHeader[0, y + Config.StockCount * 2] = shortName;
-							resultRangeHeader[0, y + Config.StockCount * 3] = shortName;
+							resultRangeHeader[0, y + Config.Config.StockCount] = shortName;
+							resultRangeHeader[0, y + Config.Config.StockCount * 2] = shortName;
+							resultRangeHeader[0, y + Config.Config.StockCount * 3] = shortName;
 						}
 						resultRange[i, y] = stock.CountOrigin;
-						resultRange[i, y + Config.StockCount] = stock.CountSelings;
-						resultRange[i, y + Config.StockCount * 2] = stock.MinStock;
-						resultRange[i, y + Config.StockCount * 3] = stock.MaxStock;
+						resultRange[i, y + Config.Config.StockCount] = stock.CountSelings;
+						resultRange[i, y + Config.Config.StockCount * 2] = stock.MinStock;
+						resultRange[i, y + Config.Config.StockCount * 3] = stock.MaxStock;
 						y++;
 					}
 					firstIteration = false;
 					i++;
 				}
 				// Выводим перемещение на лист
-				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 4]].Value2 = resultRange;
+				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.Config.StockCount * 4]].Value2 = resultRange;
 				// Применяем стили и форматирование
-				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.StockCount * 4]].Style = HeaderNameStyle;
+				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.Config.StockCount * 4]].Style = HeaderNameStyle;
 				Range[Cells[curentRow, ItemParametrsCount], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].Style = CountNameStyle;
 				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].NumberFormat = NumberFormatText;
 				// Границы колонок
-				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount]].Borders(XlEdgeRight).Weight = XlThin;
-				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 2]].Borders(XlEdgeRight).Weight = XlThin;
-				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 3]].Borders(XlEdgeRight).Weight = XlThin;
-				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.StockCount * 4]].Borders(XlEdgeRight).Weight = XlThin;
+				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.Config.StockCount]].Borders(XlEdgeRight).Weight = XlThin;
+				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.Config.StockCount * 2]].Borders(XlEdgeRight).Weight = XlThin;
+				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.Config.StockCount * 3]].Borders(XlEdgeRight).Weight = XlThin;
+				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.Config.StockCount * 4]].Borders(XlEdgeRight).Weight = XlThin;
 
 				curentRow += supplierOrder.Count + 1;
 			}

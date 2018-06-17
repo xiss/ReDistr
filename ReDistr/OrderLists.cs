@@ -55,9 +55,9 @@ namespace ReDistr
 		{
 			var curentRow = ArrayRowFirstFillNumber;
 			var curentColumn = ArrayColumnFirstFillNumber;
-			var stockCount = Config.StockCount;
+			var stockCount = Config.Config.StockCount;
 			// 7 колонок под описание товара 9 колонок под параметры склада
-			var resultRange = new dynamic[orderRequiredItems.Count + ArrayRowFirstFillNumber, ArrayColumnFirstFillNumber + Config.StockCount * StockParametrsCount];
+			var resultRange = new dynamic[orderRequiredItems.Count + ArrayRowFirstFillNumber, ArrayColumnFirstFillNumber + Config.Config.StockCount * StockParametrsCount];
 			Range["A3:AD4000"].ClearContents();
 			Range["A3:E4000"].NumberFormat = NumberFormatText;
 
@@ -130,19 +130,19 @@ namespace ReDistr
 			}
 
 			// Выводим результат на лист
-			Range[Cells[1, 1], Cells[orderRequiredItems.Count + 2, ArrayColumnFirstFillNumber + StockParametrsCount * Config.StockCount]].Value2 = resultRange;
+			Range[Cells[1, 1], Cells[orderRequiredItems.Count + 2, ArrayColumnFirstFillNumber + StockParametrsCount * Config.Config.StockCount]].Value2 = resultRange;
 			// Применяем стили и форматирование
 			//Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + Config.StockCount * 5 + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 6]].Style = OldNameStyle;
 			//Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + Config.StockCount * 6 + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 7]].Style = NewNameStyle;
-			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + Config.StockCount * 3 + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 4]].NumberFormat = NumberFormatPercentage;
+			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + Config.Config.StockCount * 3 + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.Config.StockCount * 4]].NumberFormat = NumberFormatPercentage;
 			// Границы колонок
-			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 2]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 3]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 4]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 5]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 6]].Borders(XlEdgeRight).Weight = XlThin;
-			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.StockCount * 7]].Borders(XlEdgeRight).Weight = XlThin;
+			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.Config.StockCount]].Borders(XlEdgeRight).Weight = XlThin;
+			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.Config.StockCount * 2]].Borders(XlEdgeRight).Weight = XlThin;
+			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.Config.StockCount * 3]].Borders(XlEdgeRight).Weight = XlThin;
+			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.Config.StockCount * 4]].Borders(XlEdgeRight).Weight = XlThin;
+			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.Config.StockCount * 5]].Borders(XlEdgeRight).Weight = XlThin;
+			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.Config.StockCount * 6]].Borders(XlEdgeRight).Weight = XlThin;
+			Range[Cells[ArrayRowFirstFillNumber + 1, ItemParametrsCount + 1], Cells[orderRequiredItems.Count + 2, ItemParametrsCount + Config.Config.StockCount * 7]].Borders(XlEdgeRight).Weight = XlThin;
 
 			Select();
 		}

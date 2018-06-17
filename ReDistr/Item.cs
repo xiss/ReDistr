@@ -32,7 +32,7 @@ namespace ReDistr
 		public string Manufacturer;
 
 		// Поставщик
-		public string Supplier = Config.Inst.OrdersCfg.DefaultSupplierName;
+		public string Supplier = Config.Config.Inst.Orders.DefaultSupplierName;
 
 		// Количество товара в комплекте, не может быть равен 0, больше 0.
 		public double InKit = 1;
@@ -96,11 +96,11 @@ namespace ReDistr
 			}
 
 			// Если задана дериктива одного донора, то оставляем только его в списке
-			if (Config.OneDonor != null)
+			if (Config.Config.OneDonor != null)
 			{
 				for (var i = 0; i < listOfPossibleDonors.Count; i++)
 				{
-					if (listOfPossibleDonors[i] != Config.OneDonor)
+					if (listOfPossibleDonors[i] != Config.Config.OneDonor)
 					{
 						listOfPossibleDonors.Remove(listOfPossibleDonors[i]);
 						i--;
@@ -114,9 +114,9 @@ namespace ReDistr
 		public double GetSumFreeStocks(List<Transfer> existTransfers = null)
 		{
 			// Если задан OneDonor, выдаем свободные остатки только для этого донора
-			if (Config.OneDonor != null)
+			if (Config.Config.OneDonor != null)
 			{
-				return Stocks.Where(stock => stock == Config.OneDonor).Sum(stock => stock.FreeStock);
+				return Stocks.Where(stock => stock == Config.Config.OneDonor).Sum(stock => stock.FreeStock);
 			}
 
 			// Если список не задан, выдаем сумму для всех складов
@@ -227,7 +227,7 @@ namespace ReDistr
 			for (int k = 0 ; k < Сompetitors.Count; k++)
 			{
 				// Проверяем список исключений если конкуреты из этого списка переходим к следующему
-				if (Config.Inst.RevaluationsCfg.ListExcludeCompetitors.Contains(Сompetitors[k].Id) & withExcludes)
+				if (Config.Config.Inst.RevaluationsCfg.ListExcludeCompetitors.Contains(Сompetitors[k].Id) & withExcludes)
 				{
                     NoteReval = NoteReval + k + " В списке исключений " + Сompetitors[k].Id + "\n";
 					continue;
@@ -254,7 +254,7 @@ namespace ReDistr
 				}
 
 				// Проверяем запас, если он меньше необходимого переходим к следующему
-                if (Сompetitors[k].Count < sumStocks * Config.Inst.RevaluationsCfg.DeltaCompetitorStock & withCompetitorsStocks & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
+                if (Сompetitors[k].Count < sumStocks * Config.Config.Inst.RevaluationsCfg.DeltaCompetitorStock & withCompetitorsStocks & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
 				{
                     NoteReval = NoteReval + k + " Остаток " + Сompetitors[k].Id + "\n";
 					continue;

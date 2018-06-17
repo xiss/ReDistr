@@ -30,13 +30,13 @@ namespace ReDistr
 		// Обновить блок с информацией
 		public void UpdateInfo()
 		{
-			labelPeriodSelling.Label = Config.PeriodSellingFrom.ToString("dd.MM.yy") + " - " + Config.PeriodSellingTo.ToString("dd.MM.yy");
-			labelPeriodSellingCount.Label = Config.SellingPeriod.ToString() + " (дни)";
-			labelStockDate.Label = Config.StockDate.ToString("dd.MM.yy");
+			labelPeriodSelling.Label = Config.Config.PeriodSellingFrom.ToString("dd.MM.yy") + " - " + Config.Config.PeriodSellingTo.ToString("dd.MM.yy");
+			labelPeriodSellingCount.Label = Config.Config.SellingPeriod.ToString() + " (дни)";
+			labelStockDate.Label = Config.Config.StockDate.ToString("dd.MM.yy");
 
 			// Включаем/отключаем кнопки в зависимости от результатов парса
 			// TODO Доделать с остальными
-			if (Config.ParsedStocks & Config.ParsedSealings & Config.ParsedAdditionalParameters)
+			if (Config.Config.ParsedStocks & Config.Config.ParsedSealings & Config.Config.ParsedAdditionalParameters)
 			{
 #if(!REVAL)
 				buttonGetOrder.Enabled = true;
@@ -45,7 +45,7 @@ namespace ReDistr
 				buttonMakeTransfersBook.Enabled = true;
 #endif
 			}
-			if (Config.ParsedStocks & Config.ParsedSealings & Config.ParsedAdditionalParameters & Config.ParsedCompetitors)
+			if (Config.Config.ParsedStocks & Config.Config.ParsedSealings & Config.Config.ParsedAdditionalParameters & Config.Config.ParsedCompetitors)
 			{
 				buttonGetRevaluations.Enabled = true;
 				buttonMakeRevaluationBook.Enabled = true;
@@ -115,7 +115,7 @@ namespace ReDistr
 		private void buttonMakeTransfersBook_Click(object sender, RibbonControlEventArgs e)
 		{
 			// Архивируем предыдущие перемещения
-			ReDistr.ArchiveBooks(Config.Inst.FilesCfg.FolderTransfers, Config.Inst.FilesCfg.FolderArchiveTransfers);
+			ReDistr.ArchiveBooks(Config.Config.Inst.FilesCfg.FolderTransfers, Config.Config.Inst.FilesCfg.FolderArchiveTransfers);
 
 			// Создаем книги для импорта в Excel
 			Globals.Transfers.MakeImportTransfers();
@@ -147,7 +147,7 @@ namespace ReDistr
 			// для обеспечения необходимого запаса, перемещения создаются для уже созданных направлений
 			transfers = ReDistr.GetTransfersThirdLvl(items, transfers);
 			// Если необходимо делаем перемещение неликвида на Попова
-			if (Config.StockToTransferSelectedStorageCategory != null)
+			if (Config.Config.StockToTransferSelectedStorageCategory != null)
 			{
 				transfers = ReDistr.GetTransfersIlliuid(items, transfers);
 			}
@@ -190,7 +190,7 @@ namespace ReDistr
 		private void buttonMakeRevaluationBook_Click(object sender, RibbonControlEventArgs e)
 		{
 			// Архивирует предыдущие переоценки
-			ReDistr.ArchiveBooks(Config.Inst.FilesCfg.FolderRevaluations, Config.Inst.FilesCfg.FolderArchiveRevaluations);
+			ReDistr.ArchiveBooks(Config.Config.Inst.FilesCfg.FolderRevaluations, Config.Config.Inst.FilesCfg.FolderArchiveRevaluations);
 
 			// Создает книги для импорта в Excel
 			Globals.Revaluations.MakeImportRevaluation();

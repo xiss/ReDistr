@@ -52,9 +52,9 @@ namespace ReDistr
 		{
 			var curentRow = ArrayRowFirstFillNumber;
 			var curentColumn = ArrayColumnFirstFillNumber;
-			var stockCount = Config.StockCount;
+			var stockCount = Config.Config.StockCount;
 			// 7 колонок под описание товара 9 колонок под параметры склада
-			var resultRange = new dynamic[items.Count + 2, ArrayColumnFirstFillNumber + Config.StockCount * StockParametrsCount];
+			var resultRange = new dynamic[items.Count + 2, ArrayColumnFirstFillNumber + Config.Config.StockCount * StockParametrsCount];
 			Cells.ClearContents();
 
 			// Заполняем заголовки ЗЧ
@@ -131,14 +131,14 @@ namespace ReDistr
 			}
 
 			// Выводим результат на лист
-			Range[Cells[1, 1], Cells[items.Count + 2, ArrayColumnFirstFillNumber + StockParametrsCount * Config.StockCount]].Value2 = resultRange;
+			Range[Cells[1, 1], Cells[items.Count + 2, ArrayColumnFirstFillNumber + StockParametrsCount * Config.Config.StockCount]].Value2 = resultRange;
 		}
 
 		// Выводит информацию о перемещениях на лист
 		public void FillListTransfers(List<Transfer> transfers, Dictionary<string, Item> items)
 		{
 			// Первая колонка после складов
-			var firstColumn = ArrayColumnFirstFillNumber + Config.StockCount * StockParametrsCount + 1;
+			var firstColumn = ArrayColumnFirstFillNumber + Config.Config.StockCount * StockParametrsCount + 1;
 
 			// Список возможных направлений перемещений
 			var possibleTransfers = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks()).ToList();

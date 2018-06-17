@@ -209,7 +209,7 @@ namespace ReDistr
 		// Расчитывает минимальный остаток для склада
 		public void UpdateMinStock(Item item)
 		{
-			var sailsPerDay = CountSelings / Config.SellingPeriod;
+			var sailsPerDay = CountSelings / Config.Config.SellingPeriod;
 			var minStock = Math.Ceiling((sailsPerDay * DefaultPeriodMinStock) / item.InKit) * item.InKit;
 
 			// Если установлена RequiredAvailability и расчитанный минимальный остаток меньше кратности, проставлем кратность остаток равным одному комплекту
@@ -225,7 +225,7 @@ namespace ReDistr
 		// TODO учитывать категории для расчета остатков, подумать нужно ли это делать
 		public void UpdateMaxStock(Item item)
 		{
-			var sailsPerDay = CountSelings / Config.SellingPeriod;
+			var sailsPerDay = CountSelings / Config.Config.SellingPeriod;
 			var maxStock = Math.Ceiling((sailsPerDay * DefaultPeriodMaxStock) / item.InKit) * item.InKit;
 
 			// Если установлена RequiredAvailability и расчитанный максимальный остаток меньше кратности, проставлем остаток равным одному комплекту

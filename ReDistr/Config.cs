@@ -9,7 +9,6 @@ using NLog;
 
 namespace ReDistr.Config
 {
-    [Serializable]
 	public class Config
 	{
 	    public FilesCfg FilesCfg => _filesCfg;
@@ -25,7 +24,7 @@ namespace ReDistr.Config
         public List<Stock> Stocks;
 
 		private static readonly string ConfigFile = AppDomain.CurrentDomain.BaseDirectory + "config.xml";
-
+		
 		/// <summary>
 		/// Загрузить настройки 
 		/// </summary>
@@ -44,7 +43,6 @@ namespace ReDistr.Config
 				LogManager.GetCurrentClassLogger().Error("Ошибка загрузки настроек. {0}", e.Message);
 				//TODO как закончить выполнение функции, вызваться может где угодно
 			}
-
 		    return null;
 		}
 		/// <summary>
@@ -54,9 +52,7 @@ namespace ReDistr.Config
 		{
 			try
 			{
-				//var test = Config.Inst;
 				var serializer = new XmlSerializer(typeof(Config));
-				//var i = new Config();
 				Stream writer = new FileStream(ConfigFile, FileMode.Create);
 				serializer.Serialize(writer, Inst);
 				writer.Close();
@@ -70,7 +66,6 @@ namespace ReDistr.Config
 		//Singleton
 		private Config() { }
 		private static Config _inst;
-
 	    public static Config Inst => _inst;
 		static Config()
 		{
@@ -81,13 +76,13 @@ namespace ReDistr.Config
 		public static DateTime StockDate;
 
 		// Склад для перемещения выбранных категорий (неликвид)
-		public  Stock StockToTransferSelectedStorageCategory = SimpleStockFactory.CurrentFactory.GetStock( TransfersCfg. .Inst.StockNameToTransferSelectedStorageCategory);
+		public static Stock StockToTransferSelectedStorageCategory = SimpleStockFactory.CurrentFactory.GetStock(Inst.TransfersCfg.StockNameToTransferSelectedStorageCategory);
 
 		// Если параметр указан, то перемещения делать только с этого склада
-		public static Stock OneDonor = SimpleStockFactory.CurrentFactory.GetStock(TransfersCfg.StockNameOneDonor);
+		public static Stock OneDonor = SimpleStockFactory.CurrentFactory.GetStock(Inst.TransfersCfg.StockNameOneDonor);
 
 		// Склад для оптовых отгрузок
-		public static Stock WholesaleStock = SimpleStockFactory.CurrentFactory.GetStock(RevaluationsCfg.Inst.StockNameWholesaleStock);
+		public static Stock WholesaleStock = SimpleStockFactory.CurrentFactory.GetStock(Inst.RevaluationsCfg.StockNameWholesaleStock);
 
 		// Дата начала периода продаж
 		public static DateTime PeriodSellingFrom;
@@ -132,9 +127,9 @@ namespace ReDistr.Config
 			PossibleTransfers = ReDistr.GetPossibleTransfers(SimpleStockFactory.CurrentFactory.GetAllStocks()).ToList();
 			CountPossibleTransfers = PossibleTransfers.Count;
 		}
+
 	}
 
-	[Serializable]
 	public class FilesCfg
 	{
 		// Папка с перемещениями
@@ -162,16 +157,6 @@ namespace ReDistr.Config
 		public string NameOfParametersWb;
 	}
 
-	[Serializable]
-	public class Orders
-	{
-		// Значение параметра Supplier по умолчанию у ЗЧ
-		public string DefaultSupplierName = "none";
-
-	}
-
-	[Serializable]
-
 	public class TransfersCfg
 	{
 		// Категория обязательного наличия
@@ -193,8 +178,6 @@ namespace ReDistr.Config
 		public List<string> ListPropertyRequiredAvailability;
 		
 	}
-
-	[Serializable]
 
 	public class RevaluationsCfg
 	{
@@ -227,5 +210,11 @@ namespace ReDistr.Config
 
 		// типа конкурента
 		public int TypeCompetitor;
+	}
+	public class Orders
+	{
+		// Значение параметра Supplier по умолчанию у ЗЧ
+		public string DefaultSupplierName = "none";
+
 	}
 }

@@ -48,7 +48,7 @@ namespace ReDistr
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения и установлен ли у ЗЧ параметр RequiredAvailability, 
 					// в последнем случае перемещение все равно делаем
-					if (!Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !item.Value.RequiredAvailability)
+					if (!Config.Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !item.Value.RequiredAvailability)
 					{
 						continue;
 					}
@@ -127,7 +127,7 @@ namespace ReDistr
 				foreach (var stock in item.Value.Stocks)
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения
-					if (!Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					if (!Config.Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
 					{
 						continue;
 					}
@@ -212,7 +212,7 @@ namespace ReDistr
 				foreach (var stock in item.Value.Stocks)
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения
-					if (!Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					if (!Config.Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
 					{
 						continue;
 					}
@@ -285,7 +285,7 @@ namespace ReDistr
 		// Создает перемещения неликвида на попова если там 0
 		public static List<Transfer> GetTransfersIlliuid(Dictionary<string, Item> items, List<Transfer> transfers)
 		{
-			var stockTo = Config.StockToTransferSelectedStorageCategory;
+			var stockTo = Config.Config.StockToTransferSelectedStorageCategory;
 
 			// Перебираем список ЗЧ
 			foreach (KeyValuePair<string, Item> item in items)
@@ -295,7 +295,7 @@ namespace ReDistr
 				//item.Value.UpdateFreeStocks("kit");
 
 				// Если категория не указана в списке, переходим к следующей ЗЧ
-				if (!Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer.Contains(item.Value.StorageCategory))
+				if (!Config.Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer.Contains(item.Value.StorageCategory))
 				{
 					continue;
 				}
@@ -511,8 +511,8 @@ namespace ReDistr
 							note = "Правило по умолчанию для всего китая";
 							allowSellingLoss = true;
 					        checkDumping = true;
-					        deliveryTime = Config.Inst.RevaluationsCfg.OurDeliveryTime + Config.Inst.RevaluationsCfg.DeltaDeliveryTime;
-					        maxCompetitorsToMiss = Config.Inst.RevaluationsCfg.MaxCompetitorsToMiss;
+					        deliveryTime = Config.Config.Inst.RevaluationsCfg.OurDeliveryTime + Config.Config.Inst.RevaluationsCfg.DeltaDeliveryTime;
+					        maxCompetitorsToMiss = Config.Config.Inst.RevaluationsCfg.MaxCompetitorsToMiss;
                             break;
 					}
 				}
@@ -539,7 +539,7 @@ namespace ReDistr
 							break;
 					}
 				}
-				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime, checkDumping, Config.Inst.RevaluationsCfg.DumpingPersent, maxCompetitorsToMiss);
+				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime, checkDumping, Config.Config.Inst.RevaluationsCfg.DumpingPersent, maxCompetitorsToMiss);
 				note += item.Value.OverStockDaysForAllStocks + "\n" + item.Value.NoteReval;
 				var revaluation = new Revaluation(competitor, item.Value, note, allowSellingLoss);
 				revaluations.Add(revaluation);

@@ -108,12 +108,11 @@ namespace ReDistr
 		// Получаем параметры с листа настроек
 		private void MakeConfig()
 		{
-			Config.Load();
-
 			// Настраиваем фабрику
 			// Обнуляем параметры
+			var a = Config.Config.Inst.TransfersCfg;
 			SimpleStockFactory.CurrentFactory.ClearStockParams();
-			foreach (var stock in Config.Inst.Stocks)
+			foreach (var stock in Config.Config.Inst.Stocks)
 			{
 				SimpleStockFactory.CurrentFactory.SetStockParams(
 					stock.Name,
@@ -123,7 +122,7 @@ namespace ReDistr
 					stock.Priority,
 					stock.MainManufacturers);
 			}
-			Config.SetPossibleTransfers();
+			Config.Config.SetPossibleTransfers();
 		}
 
 		// Получаем остатки по складам из книги с остатками
@@ -134,15 +133,15 @@ namespace ReDistr
 			var items = new Dictionary<string, Item>();
 
 			// Открываем  книгу с остатками
-			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Inst.FilesCfg.NameOfStocksWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.FilesCfg.NameOfStocksWb);
 			var stocksWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Вычисляем дату снятия отчета с остатками
 			string dateString = stocksWb.Worksheets[1].Range[RngDateStocks].Value;
-			Config.StockDate = DateTime.Parse(dateString.Substring(13, 8));
+			Config.Config.StockDate = DateTime.Parse(dateString.Substring(13, 8));
 
 			// Если дата снятия отчета не равна сегодняшней, предлагаем не продолжать
-			if (Config.StockDate != DateTime.Now.Date)
+			if (Config.Config.StockDate != DateTime.Now.Date)
 			{
 #if (!DEBUG)
 				var result = MessageBox.Show(MessegeBoxQuestion, MessegeBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -207,9 +206,9 @@ namespace ReDistr
 				if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value is string)
 				{
 					// Если категория хранения входит в список обязательных либо если свойство ЗЧ1 входит в список обязательных, но если это не Китай
-					if ((Config.Inst.TransfersCfg.NameOfStorageCatRequiredAvailability.Split(new[] { ';' }).ToList().Contains(stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString())
+					if ((Config.Config.Inst.TransfersCfg.NameOfStorageCatRequiredAvailability.Split(new[] { ';' }).ToList().Contains(stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString())
 						&& stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString() != "Китай")
-						|| Config.Inst.TransfersCfg.ListPropertyRequiredAvailability.Contains(stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString()))
+						|| Config.Config.Inst.TransfersCfg.ListPropertyRequiredAvailability.Contains(stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString()))
 					{
 						requiredAvailability = true;
 					}
@@ -286,14 +285,14 @@ namespace ReDistr
 		{
 
 			// Открываем  книгу с продажами
-			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Inst.FilesCfg.NameOfSealingsWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.FilesCfg.NameOfSealingsWb);
 			var sellingsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Вычисляем начальную и конечную дату периода продаж
 			string dateString = sellingsWb.Worksheets[1].Range[RngDateSealings].Value;
-			Config.PeriodSellingFrom = DateTime.Parse(dateString.Substring(12, 8));
-			Config.PeriodSellingTo = DateTime.Parse(dateString.Substring(23, 8));
-			Config.SellingPeriod = (Config.PeriodSellingTo - Config.PeriodSellingFrom).Days;
+			Config.Config.PeriodSellingFrom = DateTime.Parse(dateString.Substring(12, 8));
+			Config.Config.PeriodSellingTo = DateTime.Parse(dateString.Substring(23, 8));
+			Config.Config.SellingPeriod = (Config.Config.PeriodSellingTo - Config.Config.PeriodSellingFrom).Days;
 
 			var curentRow = RowStartSelings;
 			var curentStockSignature = String.Empty;
@@ -365,13 +364,13 @@ namespace ReDistr
 		private void GetAdditionalParameters(Dictionary<string, Item> items)
 		{
 			// Открываем  книгу с параметрами
-			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Inst.FilesCfg.NameOfParametersWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.FilesCfg.NameOfParametersWb);
 			var parametersWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Обязательное наличие (с созданием карточек)
 			// Составляем список складов с листа
 			var stockList = new List<string>();
-			for (var i = 1; i <= Config.StockCount; i++)
+			for (var i = 1; i <= Config.Config.StockCount; i++)
 			{
 				stockList.Add(parametersWb.Worksheets[ListExcludesParameters].Cells[1, 4 + i].Value.ToLower());
 			}
@@ -429,7 +428,7 @@ namespace ReDistr
 			// Исключения из перемещений
 			// Составляем список складов с листа исключений
 			stockList = new List<string>();
-			for (var i = 1; i <= Config.StockCount; i++)
+			for (var i = 1; i <= Config.Config.StockCount; i++)
 			{
 				stockList.Add(parametersWb.Worksheets[ListExcludesParameters].Cells[1, 4 + i].Value2.ToLower());
 			}
@@ -526,7 +525,7 @@ namespace ReDistr
 		private void GetCompetitorsFromAP(Dictionary<string, Item> items)
 		{
 			// Открываем  книгу с конкурентами
-			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Inst.FilesCfg.NameOfCompetitorsWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.FilesCfg.NameOfCompetitorsWb);
 			var competitorsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			var curentRow = RowStartContributors;
@@ -587,7 +586,7 @@ namespace ReDistr
 		public void SetConfig(Dictionary<string, Item> items)
 		{
 			// Составляем список производителей
-			Config.ListSuppliers = items.Values.Select(item => item.Supplier).Distinct().ToList();
+			Config.Config.ListSuppliers = items.Values.Select(item => item.Supplier).Distinct().ToList();
 		}
 
 		// Основной метод парсера, из него вызываются все остальные
@@ -601,7 +600,7 @@ namespace ReDistr
 			// Создаем список ЗЧ и указываем тукущие остатки
 			bool _continue;
 			var items = GetItems(out _continue);
-			Config.ParsedStocks = true;
+			Config.Config.ParsedStocks = true;
 
 			// Если отчет не подходит, выходим
 			if (!_continue) return null;
@@ -610,21 +609,21 @@ namespace ReDistr
 			if (includeSellings)
 			{
 				GetSellings(items);
-				Config.ParsedSealings = true;
+				Config.Config.ParsedSealings = true;
 			}
 
 			// Добавляем Кратность и исключения
 			if (includeAdditionalParameters)
 			{
 				GetAdditionalParameters(items);
-				Config.ParsedAdditionalParameters = true;
+				Config.Config.ParsedAdditionalParameters = true;
 			}
 
 			// Добавляем конкурентов
 			if (includeCompetitorsFromAp)
 			{
 				GetCompetitorsFromAP(items);
-				Config.ParsedCompetitors = true;
+				Config.Config.ParsedCompetitors = true;
 			}
 
 			// Настраиваем конфиг
