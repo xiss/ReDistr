@@ -413,10 +413,10 @@ namespace ReDistr
 				//}
 
 				// Делаем заказ только для запчастей имеющих директиву RequiredAvailability
-				if (!item.Value.RequiredAvailability)
-				{
-					continue;
-				}
+				//if (!item.Value.RequiredAvailability)
+				//{
+				//	continue;
+				//}
 
 				// Если общий остаток меньше общего минимального остатка и максимального, делаем заказ
 				if (sumStocks <= sumMinStocks && sumStocks < sumMaxStocks)
@@ -429,15 +429,15 @@ namespace ReDistr
 					orders.Add(order);
 				}
 				// Иначе добавляем в заказ с нулевым количеством
-				else
-				{
-					var order = new Order
-					{
-						Item = item.Value,
-						Count = 0
-					};
-					orders.Add(order);
-				}
+				//else
+				//{
+				//	var order = new Order
+				//	{
+				//		Item = item.Value,
+				//		Count = 0
+				//	};
+				//	orders.Add(order);
+				//}
 			}
 			return orders;
 		}
