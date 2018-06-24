@@ -48,7 +48,7 @@ namespace ReDistr
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения и установлен ли у ЗЧ параметр RequiredAvailability, 
 					// в последнем случае перемещение все равно делаем
-					if (!Config.Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !item.Value.RequiredAvailability)
+					if (!Config.Config.Inst.Transfers.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory) && !item.Value.RequiredAvailability)
 					{
 						continue;
 					}
@@ -127,7 +127,7 @@ namespace ReDistr
 				foreach (var stock in item.Value.Stocks)
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения
-					if (!Config.Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					if (!Config.Config.Inst.Transfers.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
 					{
 						continue;
 					}
@@ -212,7 +212,7 @@ namespace ReDistr
 				foreach (var stock in item.Value.Stocks)
 				{
 					// Определяем, требуется ли перемещения для данной категории хранения
-					if (!Config.Config.Inst.TransfersCfg.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
+					if (!Config.Config.Inst.Transfers.ListStorageCategoryToTransfers.Contains(item.Value.StorageCategory))
 					{
 						continue;
 					}
@@ -295,7 +295,7 @@ namespace ReDistr
 				//item.Value.UpdateFreeStocks("kit");
 
 				// Если категория не указана в списке, переходим к следующей ЗЧ
-				if (!Config.Config.Inst.TransfersCfg.ListSelectedStorageCategoryToTransfer.Contains(item.Value.StorageCategory))
+				if (!Config.Config.Inst.Transfers.ListSelectedStorageCategoryToTransfer.Contains(item.Value.StorageCategory))
 				{
 					continue;
 				}
@@ -402,18 +402,23 @@ namespace ReDistr
 				// Определяем суммарный мин остаток и суммарный остаток
 				var sumMinStocks = item.Value.GetSumMinStocks();
 				var sumMaxStocks = item.Value.GetSumMaxStocks();
-				var sumStocks = item.Value.GetSumStocks(false);
+				var sumStocks = item.Value.GetSumStocks();
 				var sumSelingKits = item.Value.GetSumSelings(true);
 
-				// Если продалось меньше 3х комплектов, переходим к следующей зч
-				// TODO временно, для тестов
-				//if (sumSelingKits < 3)
-				//{
-				//	continue;
-				//}
+				// Исключаем производителей по которым заказ не нужен
+				if (Config.Config.Inst.Orders.IgnoreToOrderList.Contains(item.Value.Manufacturer))
+				{
+					continue;
+				}
 
-				// Делаем заказ только для запчастей имеющих директиву RequiredAvailability
-				if (!item.Value.RequiredAvailability)
+				// Исключаем поставщиков по которым заказ не нужен
+				if (Config.Config.Inst.Orders.IgnoreSupplierToOrderList.Contains(item.Value.Supplier))
+				{
+					continue;
+				}
+
+				// Делаем заказ только для указанных категорий
+				if (!Config.Config.Inst.Orders.StorageCategorysToOrder.Contains(item.Value.StorageCategory))
 				{
 					continue;
 				}
@@ -425,16 +430,6 @@ namespace ReDistr
 					{
 						Item = item.Value,
 						Count = Math.Floor((sumMaxStocks - sumStocks) / item.Value.InBundle) * item.Value.InBundle
-					};
-					orders.Add(order);
-				}
-				// Иначе добавляем в заказ с нулевым количеством
-				else
-				{
-					var order = new Order
-					{
-						Item = item.Value,
-						Count = 0
 					};
 					orders.Add(order);
 				}
@@ -511,8 +506,8 @@ namespace ReDistr
 							note = "Правило по умолчанию для всего китая";
 							allowSellingLoss = true;
 					        checkDumping = true;
-					        deliveryTime = Config.Config.Inst.RevaluationsCfg.OurDeliveryTime + Config.Config.Inst.RevaluationsCfg.DeltaDeliveryTime;
-					        maxCompetitorsToMiss = Config.Config.Inst.RevaluationsCfg.MaxCompetitorsToMiss;
+					        deliveryTime = Config.Config.Inst.Revaluations.OurDeliveryTime + Config.Config.Inst.Revaluations.DeltaDeliveryTime;
+					        maxCompetitorsToMiss = Config.Config.Inst.Revaluations.MaxCompetitorsToMiss;
                             break;
 					}
 				}
@@ -539,7 +534,7 @@ namespace ReDistr
 							break;
 					}
 				}
-				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime, checkDumping, Config.Config.Inst.RevaluationsCfg.DumpingPersent, maxCompetitorsToMiss);
+				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime, checkDumping, Config.Config.Inst.Revaluations.DumpingPersent, maxCompetitorsToMiss);
 				note += item.Value.OverStockDaysForAllStocks + "\n" + item.Value.NoteReval;
 				var revaluation = new Revaluation(competitor, item.Value, note, allowSellingLoss);
 				revaluations.Add(revaluation);

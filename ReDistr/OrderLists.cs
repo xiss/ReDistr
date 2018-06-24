@@ -78,14 +78,14 @@ namespace ReDistr
 			resultRange[0, curentColumn += stockCount] = "SelCount";
 			resultRange[0, curentColumn += stockCount] = "SailPers";
 			resultRange[0, curentColumn += stockCount] = "Exclude";
-			resultRange[0, curentColumn += stockCount] ="Old";
+			resultRange[0, curentColumn += stockCount] = "Old";
 			resultRange[0, curentColumn += stockCount] = "Recomend";
 
 			// Выводим заголовки складов
 			curentColumn = ArrayColumnFirstFillNumber;
 			for (var i = 0; i < StockParametrsCount; i++)
 			{
-				foreach (var stock in orderRequiredItems.First().Item.Stocks)
+				foreach (var stock in Config.Config.Inst.Stocks)
 				{
 					resultRange[1, curentColumn] = stock.Name.Substring(0, 1);
 					curentColumn++;

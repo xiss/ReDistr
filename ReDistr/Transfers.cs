@@ -189,7 +189,7 @@ namespace ReDistr
 					// Если список не пустой, создаем книгу
 					if (selectionRange != null)
 					{
-						ReDistr.MakeImpot1CBook(selectionRange, bookName, Config.Config.Inst.FilesCfg.FolderTransfers);
+						ReDistr.MakeImpot1CBook(selectionRange, bookName, Config.Config.Inst.Files.FolderTransfers);
 						selectionRange = null;
 					}
 				}

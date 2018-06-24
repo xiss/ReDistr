@@ -15,40 +15,6 @@ namespace ReDistr
 {
 	class Parser
 	{
-		// Указываем ячейки с настройками для парсера
-		private const string RngNameOfSealingsWb = "B14";
-		private const string RngNameOfStocksWb = "B13";
-		private const string RngNameListStorageCategoryToTransfers = "B15";
-		private const string RngNameOfParamWb = "B16";
-		private const string RngNameOfShowReport = "B17";
-		private const string RngNameOfMinSoldKits = "B18";
-		private const string RngNameOfOnlyPopovaDonor = "B19";
-		private const string RngNameFolderTransfer = "B20";
-		private const string RngNameFolderArchiveTransfers = "B21";
-		private const string RngNameListSelectedStorageCategoryToTransfer = "B22";
-		private const string RngNameStockToTransferSelectedStorageCategory = "B23";
-		private const string RngNameOfContributorsWb = "B24";
-		private const string RngNameOurDeliveryTime = "B31";
-		private const uint RowStartStockCfg = 4; // Строка с которой считываются склады в настройках
-		private const string ColStockNameCfg = "A";
-		private const string ColStockMinCfg = "B";
-		private const string ColStockMaxCfg = "C";
-		private const string ColStockSignCfg = "D";
-		private const string ColStockMainManufacturerCfg = "E";
-		private const uint RowStartExcludeCompetitors = 4;
-		private const string ColExcludeCompetitors = "G";
-		private const string RngMinStockForCompetitor = "B25";
-		private const string RngWholesaleStock = "B26";
-		private const string RngIdPriceAp = "B27";
-		private const string RngNameFolderRevaluations = "B28";
-		private const string RngNameFolderArchiveRevaluations = "B29";
-		private const string RngNameListPropertyRequiredAvailability = "B30";
-		private const string RngNameListPropertyDumpingPersent = "B32";
-		private const string RngNameListPropertyDeltaDeliveryTime = "B35";
-		private const string RngNameListPropertyDeltaCompetitorStock = "B33";
-		private const string RngNameListPropertyMaxCompetitorsToMiss = "B34";
-		private const string RngNameListPropertyTypeCompetitor = "B36";
-
 		// Книга с остатками
 		private const uint RowStartStocks = 7; // Строка с которой начинается парсинг остатков
 		private const string RngDateStocks = "B3"; // Ячейка содержащая дату отчета
@@ -110,7 +76,7 @@ namespace ReDistr
 		{
 			// Настраиваем фабрику
 			// Обнуляем параметры
-			var a = Config.Config.Inst.TransfersCfg;
+			//var a = Config.Config.Inst.Transfers;
 			SimpleStockFactory.CurrentFactory.ClearStockParams();
 			foreach (var stock in Config.Config.Inst.Stocks)
 			{
@@ -133,7 +99,7 @@ namespace ReDistr
 			var items = new Dictionary<string, Item>();
 
 			// Открываем  книгу с остатками
-			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.FilesCfg.NameOfStocksWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.Files.NameOfStocksWb);
 			var stocksWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Вычисляем дату снятия отчета с остатками
@@ -206,9 +172,9 @@ namespace ReDistr
 				if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value is string)
 				{
 					// Если категория хранения входит в список обязательных либо если свойство ЗЧ1 входит в список обязательных, но если это не Китай
-					if ((Config.Config.Inst.TransfersCfg.NameOfStorageCatRequiredAvailability.Split(new[] { ';' }).ToList().Contains(stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString())
+					if ((Config.Config.Inst.Transfers.NameOfStorageCatRequiredAvailability.Split(new[] { ';' }).ToList().Contains(stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value.ToString())
 						&& stocksWb.Worksheets[1].Range[ColManufacturerStocks + curentRow].Value.ToString() != "Китай")
-						|| Config.Config.Inst.TransfersCfg.ListPropertyRequiredAvailability.Contains(stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString()))
+						|| Config.Config.Inst.Transfers.ListPropertyRequiredAvailability.Contains(stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value.ToString()))
 					{
 						requiredAvailability = true;
 					}
@@ -285,7 +251,7 @@ namespace ReDistr
 		{
 
 			// Открываем  книгу с продажами
-			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.FilesCfg.NameOfSealingsWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.Files.NameOfSealingsWb);
 			var sellingsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Вычисляем начальную и конечную дату периода продаж
@@ -364,7 +330,7 @@ namespace ReDistr
 		private void GetAdditionalParameters(Dictionary<string, Item> items)
 		{
 			// Открываем  книгу с параметрами
-			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.FilesCfg.NameOfParametersWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.Files.NameOfParametersWb);
 			var parametersWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			// Обязательное наличие (с созданием карточек)
@@ -525,7 +491,7 @@ namespace ReDistr
 		private void GetCompetitorsFromAP(Dictionary<string, Item> items)
 		{
 			// Открываем  книгу с конкурентами
-			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.FilesCfg.NameOfCompetitorsWb);
+			var fullPath = System.IO.Path.Combine(Globals.ThisWorkbook.Path, "..\\", Config.Config.Inst.Files.NameOfCompetitorsWb);
 			var competitorsWb = Globals.ThisWorkbook.Application.Workbooks.Open(fullPath);
 
 			var curentRow = RowStartContributors;

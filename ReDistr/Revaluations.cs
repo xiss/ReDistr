@@ -107,7 +107,7 @@ namespace ReDistr
 			var lastRow = i;
 
 			var selectionRange = Application.Union(Range["A" + firstRow + ":" + "A" + lastRow], Range["F" + firstRow + ":" + "F" + lastRow], Range["J" + firstRow + ":" + "J" + lastRow]);
-			ReDistr.MakeImpot1CBook(selectionRange, bookName, Config.Config.Inst.FilesCfg.FolderRevaluations);
+			ReDistr.MakeImpot1CBook(selectionRange, bookName, Config.Config.Inst.Files.FolderRevaluations);
 		}
 	}
 }

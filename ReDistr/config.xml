@@ -2,7 +2,7 @@
 <Config xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	
 	<!--Настройки путей и файлов-->
-	<FilesCfg>
+	<Files>
 		<!--Папка в которую складываются перемещения-->		
 		<FolderTransfers>Перемещения\</FolderTransfers>
 		<!--Папка с архивом перемещений-->
@@ -19,10 +19,10 @@
 		<NameOfCompetitorsWb>Питерплюс.xlsx</NameOfCompetitorsWb>
 		<!--Книга с дополнительными параметрами-->
 		<NameOfParametersWb>Параметры.xlsx</NameOfParametersWb>
-	</FilesCfg>
+	</Files>
 	
 	<!--Настройки переоценки-->
-	<RevaluationsCfg>
+	<Revaluations>
 		<!--id нашего прайса на П+-->
 		<IdPriceAp>Наш прайс</IdPriceAp>
 		<!--Оптовый склад-->
@@ -46,22 +46,50 @@
 		<MaxCompetitorsToMiss>1</MaxCompetitorsToMiss>
 		<!--Портал конкурентов 1- Питерплюс 2-Иксора 3-Партком-->
 		<TypeCompetitor>1</TypeCompetitor>
-	</RevaluationsCfg>
+	</Revaluations>
 	
 	<!--Настройки для заказов-->
 	<Orders>
 		<!--Поставщик по умолчанию-->
 		<DefaultSupplierName>none</DefaultSupplierName>
+		<!--Категории хранения для заказа-->
+		<StorageCategorysToOrder>
+			<string>Везде</string>
+		</StorageCategorysToOrder>
+		<!--Список производителей для игнорирования при заказе-->
+	<IgnoreToOrderList>
+		<string>Китай</string>
+		<string>MaxMeyer</string>
+		<string>ММ-КОЛОР</string>
+		<string>Неизвестный производитель</string>
+		<string>PRIM</string>
+		<string>NOVLINE</string>
+		<string>АКОМ</string>
+		<string>Sher-Khan</string>
+		<string>НЕВА-СТАНДАРТ</string>
+		<string>SATURN</string>
+		<string>SkyLine</string>
+		<string>GT RADIAL</string>
+		<string>DINITROL</string>
+		<string>NANOPROTECH</string>
+		<string></string>
+		<string></string>
+		<string></string>
+	</IgnoreToOrderList>
+		<!--Список поставщиков для игнорирования при заказе-->
+	<IgnoreSupplierToOrderList>
+		<string>Не Заказываем</string>
+	</IgnoreSupplierToOrderList>
 	</Orders>
 	
 	<!--Настройки перемещений-->
-	<TransfersCfg>
+	<Transfers>
 		<!--Если параметр указан, то перемещения делать только с этого склада-->
 		<StockNameOneDonor></StockNameOneDonor>
 		<!--Перемещать выбранные категории на этот определенный склад-->
 		<StockNameToTransferSelectedStorageCategory>Попова</StockNameToTransferSelectedStorageCategory>
 		<!--Категория обязательного наличия-->
-		<NameOfStorageCatRequiredAvailability>Везде</NameOfStorageCatRequiredAvailability>
+		<NameOfStorageCatRequiredAvailability></NameOfStorageCatRequiredAvailability>
 		<!--Выбранные категории для перемещения на определенный склад-->
 		<ListSelectedStorageCategoryToTransfer>
 			<string>НЛ12</string>
@@ -79,7 +107,7 @@
 		<ListPropertyRequiredAvailability>
 			<string />
 		</ListPropertyRequiredAvailability>
-	</TransfersCfg>
+	</Transfers>
 	
 	<!--Настройки складов-->
 	<Stocks>

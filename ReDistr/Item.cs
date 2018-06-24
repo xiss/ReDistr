@@ -227,7 +227,7 @@ namespace ReDistr
 			for (int k = 0 ; k < Сompetitors.Count; k++)
 			{
 				// Проверяем список исключений если конкуреты из этого списка переходим к следующему
-				if (Config.Config.Inst.RevaluationsCfg.ListExcludeCompetitors.Contains(Сompetitors[k].Id) & withExcludes)
+				if (Config.Config.Inst.Revaluations.ListExcludeCompetitors.Contains(Сompetitors[k].Id) & withExcludes)
 				{
                     NoteReval = NoteReval + k + " В списке исключений " + Сompetitors[k].Id + "\n";
 					continue;
@@ -254,7 +254,7 @@ namespace ReDistr
 				}
 
 				// Проверяем запас, если он меньше необходимого переходим к следующему
-                if (Сompetitors[k].Count < sumStocks * Config.Config.Inst.RevaluationsCfg.DeltaCompetitorStock & withCompetitorsStocks & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
+                if (Сompetitors[k].Count < sumStocks * Config.Config.Inst.Revaluations.DeltaCompetitorStock & withCompetitorsStocks & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
 				{
                     NoteReval = NoteReval + k + " Остаток " + Сompetitors[k].Id + "\n";
 					continue;

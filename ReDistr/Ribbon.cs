@@ -115,7 +115,7 @@ namespace ReDistr
 		private void buttonMakeTransfersBook_Click(object sender, RibbonControlEventArgs e)
 		{
 			// Архивируем предыдущие перемещения
-			ReDistr.ArchiveBooks(Config.Config.Inst.FilesCfg.FolderTransfers, Config.Config.Inst.FilesCfg.FolderArchiveTransfers);
+			ReDistr.ArchiveBooks(Config.Config.Inst.Files.FolderTransfers, Config.Config.Inst.Files.FolderArchiveTransfers);
 
 			// Создаем книги для импорта в Excel
 			Globals.Transfers.MakeImportTransfers();
@@ -190,7 +190,7 @@ namespace ReDistr
 		private void buttonMakeRevaluationBook_Click(object sender, RibbonControlEventArgs e)
 		{
 			// Архивирует предыдущие переоценки
-			ReDistr.ArchiveBooks(Config.Config.Inst.FilesCfg.FolderRevaluations, Config.Config.Inst.FilesCfg.FolderArchiveRevaluations);
+			ReDistr.ArchiveBooks(Config.Config.Inst.Files.FolderRevaluations, Config.Config.Inst.Files.FolderArchiveRevaluations);
 
 			// Создает книги для импорта в Excel
 			Globals.Revaluations.MakeImportRevaluation();

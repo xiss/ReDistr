@@ -54,7 +54,7 @@
 				//price = _price / ratio;
 
 				// Вариант с порогами
-				switch (Config.Config.Inst.RevaluationsCfg.TypeCompetitor)
+				switch (Config.Config.Inst.Revaluations.TypeCompetitor)
 				{
 					// Автопитер
 					case 1:
