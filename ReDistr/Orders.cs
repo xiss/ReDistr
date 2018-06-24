@@ -37,13 +37,18 @@ namespace ReDistr
 
 		#endregion
 		// Определяем настройки
-		private const int StartRow = 3;
 		private const int ItemParametrsCount = 8;
+		private const uint StockParametrsCount = 4;
 		private const Excel.XlBordersIndex XlEdgeRight = Excel.XlBordersIndex.xlEdgeRight;
 		private const Excel.XlBorderWeight XlThin = Excel.XlBorderWeight.xlThin;
 		private const string CountNameStyle = "Хороший";
 		private const string HeaderNameStyle = "Заголовок 1";
 		private const string NumberFormatText = "@";
+		// Строка с которой начинается заполненеие данными
+		private const int ArrayRowFirstFillNumber = 3;
+		// Первая колонка с которой выводятся параметры складов
+		private const uint ArrayColumnFirstFillNumber = 8;
+
 
 		// Выводит на лист заказы сгруппированные по поставщику
 		public void FillList(List<Order> orders)
@@ -51,12 +56,43 @@ namespace ReDistr
 			// Очищаем лист
 			// TODO /5 Подумать как сделать это проще, сейчас становятся активными лишние ячейки
 			//Cells.Clear();
-			Range["A3:Z1500"].Clear();
+			Range["A3:AB1500"].Clear();
 			//Range["A3:E1500"].NumberFormat = NumberFormatText;
 
-			var curentRow = StartRow;
-			var firstIteration = true;
-			var resultRangeHeader = new dynamic[1, ItemParametrsCount + Config.Config.StockCount * 4];
+			var curentRow = ArrayRowFirstFillNumber;
+			var resultRangeHeader = new dynamic[2, ItemParametrsCount + Config.Config.StockCount * 4];
+			var curentColumn = ArrayColumnFirstFillNumber;
+			var stockCount = Config.Config.StockCount;
+
+			// Заполняем заголовки
+			resultRangeHeader[1, 0] = "Id1C";
+			resultRangeHeader[1, 1] = "Название";
+			resultRangeHeader[1, 2] = "Артикул";
+			resultRangeHeader[1, 3] = "Производитель";
+			resultRangeHeader[1, 4] = "Кат. хранения";
+			resultRangeHeader[1, 5] = "Упак.";
+			resultRangeHeader[1, 6] = "Комплект";
+			resultRangeHeader[1, 7] = "Кол.";
+
+			// Выводим заголовки для параметров
+			resultRangeHeader[0, curentColumn] = "Остатки";
+			resultRangeHeader[0, curentColumn += stockCount] = "Продажи";
+			resultRangeHeader[0, curentColumn += stockCount] = "Мин.";
+			resultRangeHeader[0, curentColumn += stockCount] = "Макс.";
+
+			// Выводим заголовки складов
+			curentColumn = ArrayColumnFirstFillNumber;
+			for (var i = 0; i < StockParametrsCount; i++)
+			{
+				foreach (var stock in Config.Config.Inst.Stocks)
+				{
+					//TODO /2 добавить короткое имя для склада
+					resultRangeHeader[1, curentColumn] = stock.Name.Substring(0, 1);
+					curentColumn++;
+				}
+			}
+			// Заголовки выводим на лист
+			Range[Cells[1, 1], Cells[2, ItemParametrsCount + Config.Config.StockCount * 4]].Value2 = resultRangeHeader;
 
 			// Перебираем список поставщиков
 			foreach (var supplier in Config.Config.ListSuppliers)
@@ -70,8 +106,8 @@ namespace ReDistr
 				foreach (var order in supplierOrder)
 				{
 					resultRange[i, 0] = order.Item.Id1C;
-					resultRange[i, 1] = order.Item.Article;
-					resultRange[i, 2] = order.Item.Name;
+					resultRange[i, 1] = order.Item.Name;
+					resultRange[i, 2] = order.Item.Article;
 					resultRange[i, 3] = order.Item.Manufacturer;
 					resultRange[i, 4] = order.Item.StorageCategory;
 					resultRange[i, 5] = order.Item.InBundle;
@@ -82,30 +118,21 @@ namespace ReDistr
 					var y = ItemParametrsCount;
 					foreach (var stock in order.Item.Stocks)
 					{
-						// Выводим заголовек склада
-						if (firstIteration)
-						{
-							var shortName = stock.Name.Substring(0, 1);
-							resultRangeHeader[0, y] = shortName;
-							resultRangeHeader[0, y + Config.Config.StockCount] = shortName;
-							resultRangeHeader[0, y + Config.Config.StockCount * 2] = shortName;
-							resultRangeHeader[0, y + Config.Config.StockCount * 3] = shortName;
-						}
 						resultRange[i, y] = stock.CountOrigin;
 						resultRange[i, y + Config.Config.StockCount] = stock.CountSelings;
 						resultRange[i, y + Config.Config.StockCount * 2] = stock.MinStock;
 						resultRange[i, y + Config.Config.StockCount * 3] = stock.MaxStock;
 						y++;
 					}
-					firstIteration = false;
 					i++;
 				}
-				// Выводим перемещение на лист
+				
+				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].NumberFormat = NumberFormatText;
+				// Данные
 				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.Config.StockCount * 4]].Value2 = resultRange;
 				// Применяем стили и форматирование
 				Range[Cells[curentRow, 1], Cells[curentRow, ItemParametrsCount + Config.Config.StockCount * 4]].Style = HeaderNameStyle;
 				Range[Cells[curentRow, ItemParametrsCount], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].Style = CountNameStyle;
-				Range[Cells[curentRow, 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount]].NumberFormat = NumberFormatText;
 				// Границы колонок
 				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.Config.StockCount]].Borders(XlEdgeRight).Weight = XlThin;
 				Range[Cells[curentRow + 1, ItemParametrsCount + 1], Cells[curentRow + supplierOrder.Count, ItemParametrsCount + Config.Config.StockCount * 2]].Borders(XlEdgeRight).Weight = XlThin;

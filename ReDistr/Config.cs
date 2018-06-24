@@ -18,7 +18,7 @@ namespace ReDistr.Config
 
 	    public List<Stock> Stocks;
 
-		private static readonly string ConfigFile = AppDomain.CurrentDomain.BaseDirectory + "config.xml";
+		private static readonly string ConfigFile = AppDomain.CurrentDomain.BaseDirectory + "../config.xml";
 		
 		/// <summary>
 		/// Загрузить настройки 

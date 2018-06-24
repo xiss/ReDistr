@@ -15,7 +15,7 @@ namespace ReDistr
 #if (DEBUG)
 			// Парсим данные из файлов
 			var parser = new Parser();
-			Globals.ThisWorkbook.items = parser.Parse(true, true, true);
+			Globals.ThisWorkbook.items = parser.Parse(true, true, false);
 
 			////var revaluation = ReDistr.GetRevaluations(Globals.ThisWorkbook.items);
 			//// Заполняем лист с переоценкой
@@ -23,7 +23,7 @@ namespace ReDistr
 			////Globals.Test.FillListStocks(Globals.ThisWorkbook.items);
 
 			//// Обновляем параметры
-			//UpdateInfo();
+			UpdateInfo();
 #endif
 		}
 
@@ -108,7 +108,7 @@ namespace ReDistr
 			// Выводим заказы на страницу заказов
 			Globals.Orders.FillList(orders);
 
-			// Выбираем лист с pfrfpfvb
+			// Выбираем лист с заказами
 			Globals.Orders.Select();
 		}
 		// Архивирует старый книги с перемещениями, и создает новые

@@ -50,7 +50,7 @@ namespace ReDistr
 		private const string NumberFormatText = "@";
 		private const string NumberFormatPercentage = "0%";
 
-		// Метод заполняет лист Test данными из словоря запчастей
+		// Метод заполняет лист данными из словоря запчастей
 		public void FillList(List<OrderRequiredItem> orderRequiredItems)
 		{
 			var curentRow = ArrayRowFirstFillNumber;
