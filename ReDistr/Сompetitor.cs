@@ -58,47 +58,47 @@
 				{
 					// Автопитер
 					case 1:
-						if (_price > 0 & _price <= 15)
+						if (_price > 0 & _price < 15)
 						{
 							price = _price / 1.3;
 						}
-						if (_price > 16 & _price <= 60)
+						if (_price > 15 & _price < 60)
 						{
 							price = _price / 1.231;
 						}
-						else if (_price >= 61 & _price <= 129)
+						else if (_price > 60 & _price < 129)
 						{
 							price = _price / 1.196;
 						}
-						else if (_price >= 130 & _price <= 1172)
+						else if (_price > 129 & _price < 1172)
 						{
 							price = _price / 1.182;
 						}
-						else if (_price >= 1173 & _price <= 2328)
+						else if (_price > 1172 & _price < 2328)
 						{
 							price = _price / 1.173;
 						}
-						else if (_price >= 2329 & _price <= 4624)
+						else if (_price >= 2328 & _price <= 4624)
 						{
 							price = _price / 1.165;
 						}
-						else if (_price >= 4625 & _price <= 5760)
+						else if (_price >= 4624 & _price <= 5760)
 						{
 							price = _price / 1.156;
 						}
-						else if (_price >= 5761 & _price <= 6888)
+						else if (_price >= 5760 & _price <= 6888)
 						{
 							price = _price / 1.152;
 						}
-						else if (_price >= 6889 & _price <= 8008)
+						else if (_price >= 6888 & _price <= 8008)
 						{
 							price = _price / 1.148;
 						}
-						else if (_price >= 8009 & _price <= 9120)
+						else if (_price >= 8008 & _price <= 9120)
 						{
 							price = _price / 1.144;
 						}
-						else if (_price >= 6960 & _price <= 1000000)
+						else if (_price >= 9120 & _price <= 1000000)
 						{
 							price = _price / 1.14;
 						}
@@ -164,19 +164,19 @@
 						{
 							price = _price / 3.4;
 						}
-						else if (_price >= 69 & _price <= 100)
+						else if (_price >= 68 & _price <= 100)
 						{
 							price = _price / 2.04;
 						}
-						else if (_price >= 101 & _price <= 136)
+						else if (_price >= 100 & _price <= 136)
 						{
 							price = _price / 1.9;
 						}
-						else if (_price >= 137 & _price <= 5634)
+						else if (_price >= 136 & _price <= 5634)
 						{
 							price = _price / 1.14;
 						}
-						else if (_price >= 5635 & _price <= 100000000)
+						else if (_price >= 5634 & _price <= 100000000)
 						{
 							price = _price / 1.1;
 						}

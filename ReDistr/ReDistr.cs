@@ -290,10 +290,6 @@ namespace ReDistr
 			// Перебираем список ЗЧ
 			foreach (KeyValuePair<string, Item> item in items)
 			{
-				// Расчитываем свободные остатки на складах
-				// TODO наверное убрать, не помню
-				//item.Value.UpdateFreeStocks("kit");
-
 				// Если категория не указана в списке, переходим к следующей ЗЧ
 				if (!Config.Config.Inst.Transfers.ListSelectedStorageCategoryToTransfer.Contains(item.Value.StorageCategory))
 				{
@@ -402,7 +398,7 @@ namespace ReDistr
 				// Определяем суммарный мин остаток и суммарный остаток
 				var sumMinStocks = item.Value.GetSumMinStocks();
 				var sumMaxStocks = item.Value.GetSumMaxStocks();
-				var sumStocks = item.Value.GetSumStocks();
+				var sumStocks = item.Value.GetSumStocks(false);
 				var sumSelingKits = item.Value.GetSumSelings(true);
 
 				// Исключаем производителей по которым заказ не нужен
@@ -455,6 +451,11 @@ namespace ReDistr
 				{
 					continue;
 				}
+                // Если устновлена деректива не  переоценивать китай, проверяем на китай
+                if(item.Value.Manufacturer == "Китай" && Config.Config.Inst.Revaluations.IgnoreChina)
+                {
+                    continue;
+                }
 
 				//// Переоценка
 				var competitor = new Сompetitor();
@@ -464,77 +465,46 @@ namespace ReDistr
 				double deliveryTime = 7;
 				var withDeliveryTime = true;
 			    var checkDumping = false;
-                double maxCompetitorsToMiss = 0;
+                
 
-				// Если производитель "Китай"
+				// Китай
 				if (item.Value.Manufacturer == "Китай")
 				{
 					switch (item.Value.Property)
 					{
-                        //case "Норма":
-                        //case "НП":
-                        //    withCopmetitorsStock = true;
-                        //    note = "Новый приход, Норма (остатки, срок доставки(7))";
-                        //    allowSellingLoss = false;
-                        //    deliveryTime = 7;
-                        //    withDeliveryTime = true;
-                        //    break;
-                        //case "БП 2 мес":
-                        //case "НЛ 12":
-                        //case "НЛ 24":
-                        //    withCopmetitorsStock = false;
-                        //    withDeliveryTime = false;
-                        //    note = "БП 2 мес, НЛ 24, НЛ 12, (в минус)";
-                        //    allowSellingLoss = true;
-                        //    break;
-                        //case "БП 1 мес":
-                        //    withCopmetitorsStock = false;
-                        //    withDeliveryTime = false;
-                        //    note = "БП 1 мес";
-                        //    allowSellingLoss = false;
-                        //    break;
-                        //case "ОС 2":
-                        //case "ОС 3":
-                        //    withCopmetitorsStock = true;
-                        //    withDeliveryTime = true;
-                        //    note = "ОС 2, ОС 3";
-                        //    allowSellingLoss = false;
-                        //    break;
                         default:
                             withCopmetitorsStock = true;
 							withDeliveryTime = true;
 							note = "Правило по умолчанию для всего китая";
 							allowSellingLoss = true;
 					        checkDumping = true;
-					        deliveryTime = Config.Config.Inst.Revaluations.OurDeliveryTime + Config.Config.Inst.Revaluations.DeltaDeliveryTime;
-					        maxCompetitorsToMiss = Config.Config.Inst.Revaluations.MaxCompetitorsToMiss;
                             break;
 					}
 				}
+                // Не китай
 				else
 				{
 					switch (item.Value.StorageCategory)
 					{
-						case "Попова":
-						case "Везде":
-						case "Нигде":
-						case "МинЗапас":
+						case "НЛ12":
+						case "НЛ24":
+                        case "Попова":
 							withCopmetitorsStock = false;
-							note = "Попова, Везде, Нигде, МинЗапас (срок доставки(7))";
+							note = "НЛ 12, НЛ 24 НЛ6(в минус)";
+							allowSellingLoss = true;
+							withDeliveryTime = false;
+							checkDumping = false;
+							break;
+						default:
+							withCopmetitorsStock = false;
+							note = "Везде, Нигде, МинЗапас (срок доставки(7))";
 							allowSellingLoss = false;
 							withDeliveryTime = true;
 							deliveryTime = 7;
-							break;
-						case "НЛ12":
-						case "НЛ24":
-							withCopmetitorsStock = false;
-							note = "НЛ 12, НЛ 24 (в минус)";
-							allowSellingLoss = true;
-							withDeliveryTime = false;
-							break;
+							break;	
 					}
 				}
-				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, deliveryTime, checkDumping, Config.Config.Inst.Revaluations.DumpingPersent, maxCompetitorsToMiss);
+				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, checkDumping);
 				note += item.Value.OverStockDaysForAllStocks + "\n" + item.Value.NoteReval;
 				var revaluation = new Revaluation(competitor, item.Value, note, allowSellingLoss);
 				revaluations.Add(revaluation);

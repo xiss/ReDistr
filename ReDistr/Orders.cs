@@ -84,7 +84,7 @@ namespace ReDistr
 			curentColumn = ArrayColumnFirstFillNumber;
 			for (var i = 0; i < StockParametrsCount; i++)
 			{
-				foreach (var stock in Config.Config.Inst.Stocks)
+				foreach (var stock in orders.First().Item.Stocks)
 				{
 					//TODO /2 добавить короткое имя для склада
 					resultRangeHeader[1, curentColumn] = stock.Name.Substring(0, 1);

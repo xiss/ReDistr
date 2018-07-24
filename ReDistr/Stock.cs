@@ -237,12 +237,16 @@ namespace ReDistr
 			MaxStock = maxStock;
 		}
 
-		// Расчитывает максимальный остаток с учетом основнх брендов, расчитывать после расчета максимальных остатков по уходимости
+		// Расчитывает максимальный остаток с учетом основных брендов, расчитывать после расчета максимальных остатков по уходимости
 		// Переносит излишки на склад бренда
 		public void UpdateMaxStockWithMainManufacturer(Item item)
 		{
+			// Если у склада нет обызательных производителей, выходим
 			if (MainManufacturers == null) return;
+			// Если запчасть не входит в список обязательных производителей, выходим
 			if (!MainManufacturers.Contains(item.Manufacturer)) return;
+
+			//var a = item.GetSumFreeStocks();
 
 			var newMaxStock = item.GetSumStocks(false) - item.GetSumMaxStocks();
 			if (newMaxStock > MaxStock)
@@ -250,7 +254,7 @@ namespace ReDistr
 				MaxStock = MaxStock + newMaxStock;
 			}
 			// Если мин остаток 0 то ставим еденицу чтобы спровоцировать перемещение
-			if (MinStock == 0)
+			if (MinStock == 0 && newMaxStock >0)
 			{
 				MinStock = 1;
 			}
@@ -282,6 +286,19 @@ namespace ReDistr
 						freeStock = Count - MinStock - InReserve;
 					}
 					// Если мин остаток равен 0
+					else
+					{
+						freeStock = Count - InReserve;
+					}
+					break;
+
+				case "maxStock":
+					// Если макс остаток отличен от нуля
+					if (MaxStock > 0)
+					{
+						freeStock = Count - MaxStock - InReserve;
+					}
+					// Если макс остаток равен 0
 					else
 					{
 						freeStock = Count - InReserve;

@@ -205,6 +205,12 @@ namespace ReDistr.Config
 
 		// типа конкурента
 		public int TypeCompetitor;
+
+		// Коэффециент корректировки лучшей цены на портале
+		public double Correct;
+
+        // Не переоценивать китай
+        public bool IgnoreChina;
 	}
 	public class Orders
 	{
