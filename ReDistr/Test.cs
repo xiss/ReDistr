@@ -59,27 +59,27 @@ namespace ReDistr
 
 			// Заполняем заголовки ЗЧ
 			resultRange[1, 0] = "Id1C";
-			resultRange[1, 1] = "Name";
-			resultRange[1, 2] = "Article";
-			resultRange[1, 3] = "Manufacturer";
-			resultRange[1, 4] = "Supplier";
-			resultRange[1, 5] = "StorageCat";
-			resultRange[1, 6] = "inBundle";
-			resultRange[1, 7] = "inKit";
-			resultRange[1, 8] = "CostPrice";
-			resultRange[1, 9] = "PriceWithoutAdd";
-            resultRange[1, 10] = "Property1";
+			resultRange[1, 1] = "Название";
+			resultRange[1, 2] = "Артикул";
+			resultRange[1, 3] = "Производитель";
+			resultRange[1, 4] = "Поставщик";
+			resultRange[1, 5] = "Кат.хран";
+			resultRange[1, 6] = "В упаковке";
+			resultRange[1, 7] = "В комплекте";
+			resultRange[1, 8] = "Сбест";
+			resultRange[1, 9] = "Цена без наценки";
+            resultRange[1, 10] = "Свойство1";
 
 			// Выводим заголовки для параметров
-			resultRange[0, curentColumn] = "Count";
-			resultRange[0, curentColumn += stockCount] = "InReserve";
-			resultRange[0, curentColumn += stockCount] = "SelCount";
-			resultRange[0, curentColumn += stockCount] = "SailPers";
-			resultRange[0, curentColumn += stockCount] = "MinStock";
-			resultRange[0, curentColumn += stockCount] = "MaxStock";
-			resultRange[0, curentColumn += stockCount] = "Priority";
-			resultRange[0, curentColumn += stockCount] = "Exclude";
-			resultRange[0, curentColumn += stockCount] = "ReqAv";
+			resultRange[0, curentColumn] = "Кол.";
+			resultRange[0, curentColumn += stockCount] = "Резерв";
+			resultRange[0, curentColumn += stockCount] = "Продано";
+			resultRange[0, curentColumn += stockCount] = "Продажи%";
+			resultRange[0, curentColumn += stockCount] = "Мин.ост";
+			resultRange[0, curentColumn += stockCount] = "Макс.ост";
+			resultRange[0, curentColumn += stockCount] = "Приоритет";
+			resultRange[0, curentColumn += stockCount] = "Исключить";
+			resultRange[0, curentColumn += stockCount] = "Об-е нал.";
 
 			// Выводим заголовки складов
 			curentColumn = ArrayColumnFirstFillNumber;

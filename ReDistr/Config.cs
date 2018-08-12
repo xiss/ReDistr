@@ -211,6 +211,9 @@ namespace ReDistr.Config
 
         // Не переоценивать китай
         public bool IgnoreChina;
+
+        // Если запрещена продажа в минус, ниже этой границы переоценитьвать не дает
+        public double LowerLimit;
 	}
 	public class Orders
 	{

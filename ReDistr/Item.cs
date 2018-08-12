@@ -312,7 +312,7 @@ namespace ReDistr
             // Если конкурент есть
             if (сompetitor != null)
             {
-                //не Китай
+                //Не Китай
                 if (Manufacturer != "Китай")
                 {
                     switch (StorageCategory)
@@ -349,28 +349,28 @@ namespace ReDistr
                             NoteReval = NoteReval + "\n Наценка (" + markup + ")";
                             break;
                         case "НЛ12":
-                            if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.95)
+                            if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.85)
                             {
-                                newPrice = GetAVGCostPrice() * 0.95;
+                                newPrice = GetAVGCostPrice() * 0.85;
                             }
                             else
                             {
                                 newPrice = сompetitor.PriceWithoutAdd * correct;
                             }
-                            NoteReval = NoteReval + "\n Наценка (НЛ12) (" + 0.95 + ")";
+                            NoteReval = NoteReval + "\n Наценка (НЛ12) (" + 0.85 + ")";
                             break;
                         case "НЛ24":
-                            if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.7)
+                            if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.6)
                             {
-                                newPrice = GetAVGCostPrice() * 0.7;
+                                newPrice = GetAVGCostPrice() * 0.6;
                             }
                             else
                             {
                                 newPrice = сompetitor.PriceWithoutAdd * correct;
                             }
-                            NoteReval = NoteReval + "\n Наценка (НЛ24) (" + 0.7 + ")";
+                            NoteReval = NoteReval + "\n Наценка (НЛ24) (" + 0.6 + ")";
                             break;
-                        case "Попова":
+                        case "НЛ6":
                             if (сompetitor.PriceWithoutAdd < GetAVGCostPrice())
                             {
                                 newPrice = GetAVGCostPrice();
@@ -391,11 +391,20 @@ namespace ReDistr
                 {
                     switch (Property)
                     {
+                        case "НЛ12":
+                        case "НЛ6":
+                        case "НЛ24":
+                            if (newPrice > GetAVGCostPrice() * 1.2)
+                            {
+                                newPrice = GetAVGCostPrice() * 1.2;
+                            }
+                            NoteReval = NoteReval + "\n Наценка (НЛ) не больше (" + 1.2 + ")";
+                            break;
                         default:
-                            newPrice = сompetitor.PriceWithoutAdd * 0.995;
+                            newPrice = сompetitor.PriceWithoutAdd * correct;
                             if (newPrice < GetAVGCostPrice() * 1.05)
                             {
-                                newPrice = GetAVGCostPrice() * 1.05;
+                                //newPrice = GetAVGCostPrice() * 1.05;
                             }
                             if (newPrice > GetAVGCostPrice() * 2)
                             {
@@ -477,12 +486,12 @@ namespace ReDistr
                             newPrice = GetAVGCostPrice() * markup;
                             break;
                         case "НЛ12":
-                            newPrice = GetAVGCostPrice() * 0.95;
+                            newPrice = GetAVGCostPrice() * 0.85;
                             break;
                         case "НЛ24":
-                            newPrice = GetAVGCostPrice() * 0.7;
+                            newPrice = GetAVGCostPrice() * 0.6;
                             break;
-                        case "Попова":
+                        case "НЛ6":
                             newPrice = GetAVGCostPrice();
                             break;
                         default:
@@ -492,9 +501,9 @@ namespace ReDistr
                 }
             }
             // Если новая цена ниже себестоимости, возвращаем себестоимость
-            if (newPrice < (GetAVGCostPrice() * 1.05) && !allowSellingLoss)
+            if (newPrice < (GetAVGCostPrice() * Config.Config.Inst.Revaluations.LowerLimit) && !allowSellingLoss)
             {
-                newPrice = GetAVGCostPrice() * 1.05;
+                newPrice = GetAVGCostPrice() * Config.Config.Inst.Revaluations.LowerLimit;
             }
             return Math.Round(newPrice, 2);
         }

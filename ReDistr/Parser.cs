@@ -505,8 +505,16 @@ namespace ReDistr
 					curentRow++;
 					continue;
 				}
-				// Ищем запчасть по 1С коду в массиве запчастей, 
-				Item item = null;
+
+                // Если остатка нет, переходим  к следующей строке
+                if (competitorsWb.Worksheets[1].Range[ColCountContributors + curentRow].Value == null)
+                {
+                    curentRow++;
+                    continue;
+                }
+
+                // Ищем запчасть по 1С коду в массиве запчастей, 
+                Item item = null;
 				if (items.ContainsKey(competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value.ToString()) == true)
 				{
 					item = items[competitorsWb.Worksheets[1].Range[ColId1CContributors + curentRow].Value.ToString()];
@@ -516,12 +524,7 @@ namespace ReDistr
 				{
 					curentRow++;
 					continue;
-				}
-				// Если себестоимость еще не установлена, устанавливаем
-				//if (item.CostPrice == 0)
-				//{
-				//	item.CostPrice = competitorsWb.Worksheets[1].Range[ColCostPriceContributors + curentRow].Value;
-				//}
+				}				
 				// Проверяем регион на пустое значение
 				if (competitorsWb.Worksheets[1].Range[ColRegionContributors + curentRow].Value != null)
 				{

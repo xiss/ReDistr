@@ -472,11 +472,20 @@ namespace ReDistr
 				{
 					switch (item.Value.Property)
 					{
+                        case "НЛ12":
+                        case "НЛ24":
+                        case "НЛ6":
+                            withCopmetitorsStock = false;
+                            note = "НЛ 12, НЛ 24 НЛ6(в минус)";
+                            allowSellingLoss = true;
+                            withDeliveryTime = false;
+                            checkDumping = false;
+                            break;
                         default:
                             withCopmetitorsStock = true;
 							withDeliveryTime = true;
 							note = "Правило по умолчанию для всего китая";
-							allowSellingLoss = true;
+							allowSellingLoss = false;
 					        checkDumping = true;
                             break;
 					}
@@ -488,7 +497,7 @@ namespace ReDistr
 					{
 						case "НЛ12":
 						case "НЛ24":
-                        case "Попова":
+                        case "НЛ6":
 							withCopmetitorsStock = false;
 							note = "НЛ 12, НЛ 24 НЛ6(в минус)";
 							allowSellingLoss = true;

@@ -49,7 +49,7 @@
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
       <Visible>False</Visible>
-      <ProductName>Среда выполнения Microsoft Visual Studio 2010 Tools for Office %28x86 и x64%29</ProductName>
+      <ProductName>Microsoft Visual Studio 2010 Tools for Office Runtime %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
@@ -208,11 +208,7 @@
     <None Include="ReDistr.xlsx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReDistr_1_TemporaryKey.pfx" />
-    <None Include="ReDistr_2_TemporaryKey.pfx" />
-    <None Include="ReDistr_3_TemporaryKey.pfx" />
-    <None Include="ReDistr_4_TemporaryKey.pfx" />
-    <None Include="ReDistr_TemporaryKey.pfx" />
+    <None Include="ReDistr_5_TemporaryKey.pfx" />
     <None Include="ThisWorkbook.Designer.xml">
       <DependentUpon>ThisWorkbook.cs</DependentUpon>
     </None>
@@ -242,6 +238,9 @@
       <DependentUpon>Revaluations.cs</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.xml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -250,10 +249,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ReDistr_4_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ReDistr_5_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>40337180E9A22A4BAA8F70638FE643C88E617B20</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>37A52F04833FE9EAB00ACD8A6D8040191B5B75FD</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Reval|AnyCPU' ">
     <OutputPath>bin\Revaluation\</OutputPath>
