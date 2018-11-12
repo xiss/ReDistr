@@ -398,7 +398,7 @@ namespace ReDistr
 				// Определяем суммарный мин остаток и суммарный остаток
 				var sumMinStocks = item.Value.GetSumMinStocks();
 				var sumMaxStocks = item.Value.GetSumMaxStocks();
-				var sumStocks = item.Value.GetSumStocks(false);
+				var sumStocks = item.Value.GetSumStocks(false,true);
 				var sumSelingKits = item.Value.GetSumSelings(true);
 
 				// Исключаем производителей по которым заказ не нужен
@@ -447,7 +447,7 @@ namespace ReDistr
 					//continue;
 				}
 				// Если остатка нет, берем следующую
-				if (item.Value.GetSumStocks() == 0)
+				if (item.Value.GetSumStocks(false) == 0)
 				{
 					continue;
 				}

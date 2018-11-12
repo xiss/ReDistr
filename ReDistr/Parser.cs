@@ -31,8 +31,10 @@ namespace ReDistr
 		private const string ColProperty1Stocks = "AF"; // Свойство
 		private const string ColCostPriceStocks = "V"; // Себестоимость
 		private const string ColInKitStocks = "AH"; // Кратность
-													// Книга с продажами
-		private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
+        private const string ColInTransfer = "AU"; // В пути (заказано)
+
+        // Книга с продажами
+        private const uint RowStartSelings = 7; // Строка с которой начинается парсинг продаж
 		private const string RngDateSealings = "B3"; // Дата отчета
 		private const string ColStockSignSealings = "B"; // Сигнатура склада
 		private const string ColArticleSealings = "C"; // Артикул
@@ -42,7 +44,8 @@ namespace ReDistr
 		private const string ColStorageCategorySealings = "X"; // Категроия хранения
 		private const string ColNameSealings = "S"; // Название ЗЧ
 		private const string ColPropertySealings = "Y"; // Свойство ЗЧ 2
-														// Книга с дополнительными параметрами
+
+		// Книга с дополнительными параметрами
 		private const uint ListExcludesParameters = 1; // Исключения из перемещений
 		private const uint ListInKitParameters = 2; // Кратность
 		private const uint ListInBundleParameters = 3; // В упаковке
@@ -54,7 +57,8 @@ namespace ReDistr
 		private const string ColManufacturerParameters = "D";
 		private const string ColNameParameters = "C";
 		private const string ColStartParamsParameters = "E"; // Колонка с которой выводится дополнительная информация
-															 // Книга с конкурентами питерплюса
+
+		// Книга с конкурентами питерплюса
 		private const uint RowStartContributors = 2; // Строка с которой начинается парсинг остатков
 		private const string ColArticleContributors = "A"; // Артикул
 		private const string ColId1CContributors = "J"; // Код товара
@@ -165,10 +169,27 @@ namespace ReDistr
 				if (stocksWb.Worksheets[1].Range[ColInReserveStocks + curentRow].Value is string != true)
 				{
 					reserveCount = stocksWb.Worksheets[1].Range[ColInReserveStocks + curentRow].Value;
-				}
+                    // Если резерв отрицателен, округляем его до 0
+                    if (reserveCount < 0)
+                    {
+                        reserveCount = 0;
+                    }
+                }
 
-				// Определяем обязательное наличие
-				bool requiredAvailability = false;
+                // Определяем количество в пути
+                double inTransfer = 0;
+                if (stocksWb.Worksheets[1].Range[ColInTransfer + curentRow].Value is string != true)
+                {
+                    inTransfer = stocksWb.Worksheets[1].Range[ColInTransfer + curentRow].Value;
+                    // Если в пути отрицательно, округляем его до 0
+                    if (inTransfer < 0)
+                    {
+                        inTransfer = 0;
+                    }
+                }
+
+                // Определяем обязательное наличие
+                bool requiredAvailability = false;
 				if (stocksWb.Worksheets[1].Range[ColStorageCategoryStocks + curentRow].Value is string)
 				{
 					// Если категория хранения входит в список обязательных либо если свойство ЗЧ1 входит в список обязательных, но если это не Китай
@@ -178,26 +199,15 @@ namespace ReDistr
 					{
 						requiredAvailability = true;
 					}
-				}
+				}              
 
-				// Если резерв отрицателен, округляем его до 0
-				if (reserveCount < 0)
-				{
-					reserveCount = 0;
-				}
-
-				// Ищем запчасть по 1С коду в массиве запчастей
-				Item item = null;
+                // Ищем запчасть по 1С коду в массиве запчастей
+                Item item = null;
 				if (items.ContainsKey(stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value.ToString()))
 				{
 					item = items[stocksWb.Worksheets[1].Range[ColId1CStocks + curentRow].Value.ToString()];
-
-					// Если СС не установлена, устанавливаем
-					//if (item.CostPrice == 0)
-					//{
-					//	item.CostPrice = itemCostPrice;
-					//}
-				}
+                    item.InTransfer = inTransfer;
+                }
 
 				// Если не находим, создаем ее
 				if (item == null)
@@ -215,7 +225,8 @@ namespace ReDistr
 						Property1 = stocksWb.Worksheets[1].Range[ColProperty1Stocks + curentRow].Value,
 						//CostPrice = itemCostPrice,
 						RequiredAvailability = requiredAvailability,
-						InKit = itemInKit
+						InKit = itemInKit,
+                        InTransfer = inTransfer
 					};
 
 					// Создаем склады для ЗЧ

@@ -32,9 +32,7 @@
 			<string>4352</string>
 			<string>5801</string>
 			<string>Наш прайс</string>			
-		</ListExcludeCompetitors>
-		<!--Процент от объема остатка для конкурента-->
-		<MinStockForCompetitor>0.2</MinStockForCompetitor>
+		</ListExcludeCompetitors>		
 		<!--Наш срок поставки-->
 		<OurDeliveryTime>1</OurDeliveryTime>
 		<!--Процент для выявления демпинга-->
@@ -104,7 +102,7 @@
 		<ListSelectedStorageCategoryToTransfer>
 			<string>НЛ12</string>
 			<string>НЛ24</string>
-			<string>Попова</string>
+			<string>НЛ6</string>
 		</ListSelectedStorageCategoryToTransfer>
 		<!--Категории хранения товаров для перемещений-->
 		<ListStorageCategoryToTransfers>

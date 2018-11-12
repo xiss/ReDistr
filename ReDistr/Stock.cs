@@ -245,6 +245,8 @@ namespace ReDistr
 			if (MainManufacturers == null) return;
 			// Если запчасть не входит в список обязательных производителей, выходим
 			if (!MainManufacturers.Contains(item.Manufacturer)) return;
+            // Если у ЗЧ категория харенения относится к неликвиду, выходим
+            if (Config.Config.Inst.Transfers.ListSelectedStorageCategoryToTransfer.Contains(item.StorageCategory)) return;
 
 			//var a = item.GetSumFreeStocks();
 

@@ -69,6 +69,9 @@ namespace ReDistr
         // Признак обязательного наличия ЗЧ на данном складе
         public bool RequiredAvailability;
 
+        // В пути (заказано у поставщика)
+        public double InTransfer;
+
         // Возвращает список всех возможных доноров, отсортированный по убыванию. Если задан список перемещений, то доноры выдаются из этого списка
         public List<Stock> GetListOfPossibleDonors(List<Transfer> existTransfers = null)
         {
@@ -142,7 +145,7 @@ namespace ReDistr
         }
 
         // Возвращает общее количество ЗЧ без учета резервов
-        public double GetSumStocks(bool withReserve = true)
+        public double GetSumStocks(bool withReserve = true, bool withInTransfer = false)
         {
             double sumStocks;
 
@@ -154,6 +157,12 @@ namespace ReDistr
             else
             {
                 sumStocks = Stocks.Sum(stock => stock.Count);
+            }
+
+            // Если нужно добавляем количество в пути
+            if (withInTransfer)
+            {
+                sumStocks = sumStocks + InTransfer;
             }
 
             if (sumStocks < 0)
@@ -349,26 +358,26 @@ namespace ReDistr
                             NoteReval = NoteReval + "\n Наценка (" + markup + ")";
                             break;
                         case "НЛ12":
-                            if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.85)
+                            if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.75)
                             {
-                                newPrice = GetAVGCostPrice() * 0.85;
+                                newPrice = GetAVGCostPrice() * 0.75;
                             }
                             else
                             {
                                 newPrice = сompetitor.PriceWithoutAdd * correct;
                             }
-                            NoteReval = NoteReval + "\n Наценка (НЛ12) (" + 0.85 + ")";
+                            NoteReval = NoteReval + "\n Наценка (НЛ12) (" + 0.75 + ")";
                             break;
                         case "НЛ24":
-                            if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.6)
+                            if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.5)
                             {
-                                newPrice = GetAVGCostPrice() * 0.6;
+                                newPrice = GetAVGCostPrice() * 0.5;
                             }
                             else
                             {
                                 newPrice = сompetitor.PriceWithoutAdd * correct;
                             }
-                            NoteReval = NoteReval + "\n Наценка (НЛ24) (" + 0.6 + ")";
+                            NoteReval = NoteReval + "\n Наценка (НЛ24) (" + 0.5 + ")";
                             break;
                         case "НЛ6":
                             if (сompetitor.PriceWithoutAdd < GetAVGCostPrice())

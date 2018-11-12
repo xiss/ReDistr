@@ -186,7 +186,7 @@ namespace ReDistr.Config
 		public List<string> ListExcludeCompetitors;
 
 		// Процент остатка от нашего склада для рассмотрения его как конкурента
-		public double MinStockForCompetitor;
+		//public double MinStockForCompetitor;
 
 		// Наш срок поставки
 		public double OurDeliveryTime;

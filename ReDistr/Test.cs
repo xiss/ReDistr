@@ -43,7 +43,7 @@ namespace ReDistr
 		// Строка с которой начинается заполненеие данными
 		private const uint ArrayRowFirstFillNumber = 2;
 		// Первая колонка с которой выводятся параметры складов
-		private const uint ArrayColumnFirstFillNumber = 11;
+		private const uint ArrayColumnFirstFillNumber = 12;
 		// Количество параметров для склада
 		private const uint StockParametrsCount = 9;
 
@@ -66,12 +66,13 @@ namespace ReDistr
 			resultRange[1, 5] = "Кат.хран";
 			resultRange[1, 6] = "В упаковке";
 			resultRange[1, 7] = "В комплекте";
-			resultRange[1, 8] = "Сбест";
+			resultRange[1, 8] = "Сбст";
 			resultRange[1, 9] = "Цена без наценки";
             resultRange[1, 10] = "Свойство1";
+            resultRange[1, 11] = "В пути";
 
-			// Выводим заголовки для параметров
-			resultRange[0, curentColumn] = "Кол.";
+            // Выводим заголовки для параметров
+            resultRange[0, curentColumn] = "Кол.";
 			resultRange[0, curentColumn += stockCount] = "Резерв";
 			resultRange[0, curentColumn += stockCount] = "Продано";
 			resultRange[0, curentColumn += stockCount] = "Продажи%";
@@ -106,10 +107,11 @@ namespace ReDistr
 				resultRange[curentRow, 8] = item.Value.GetAVGCostPrice();
 				resultRange[curentRow, 9] = item.Value.Price;
                 resultRange[curentRow, 10] = item.Value.Property1;
+                resultRange[curentRow, 11] = item.Value.InTransfer;
 
 
-				// Выводим информацию по складам
-				curentColumn = ArrayColumnFirstFillNumber;
+                // Выводим информацию по складам
+                curentColumn = ArrayColumnFirstFillNumber;
 				uint curentStock = 1;
 				foreach (var stock in item.Value.Stocks)
 				{
