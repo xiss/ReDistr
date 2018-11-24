@@ -30,12 +30,12 @@ namespace ReDistr
 			// Если нет конкурента
 			if (competitor == null)
 			{
-				Note = "Нет конкурента";
+				Note = item.NoteReval + "Нет конкурента \n";
 			}
 			// Если конкурент есть
 			else
 			{
-				Note = note + Item.NoteReval;
+                Note = item.NoteReval; // + Item.NoteReval;
 				Competitor = competitor;
 			}
 		}

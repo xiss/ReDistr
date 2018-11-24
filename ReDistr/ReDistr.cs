@@ -470,13 +470,13 @@ namespace ReDistr
 				// Китай
 				if (item.Value.Manufacturer == "Китай")
 				{
-					switch (item.Value.Property)
+					switch (item.Value.StorageCategory)
 					{
                         case "НЛ12":
                         case "НЛ24":
                         case "НЛ6":
                             withCopmetitorsStock = false;
-                            note = "НЛ 12, НЛ 24 НЛ6(в минус)";
+                            note = "НЛ12, НЛ24, НЛ6: Без учета остатков у конкурента, Разрешить продажи в минус, Без учета времени доставки, Без учета демпинга";
                             allowSellingLoss = true;
                             withDeliveryTime = false;
                             checkDumping = false;
@@ -484,7 +484,7 @@ namespace ReDistr
                         default:
                             withCopmetitorsStock = true;
 							withDeliveryTime = true;
-							note = "Правило по умолчанию для всего китая";
+							note = "Правило для китая кроме НЛ: С учетом остатков, С учетом времени доставки, Запретить продажи в минус, Проверять на демпинг";
 							allowSellingLoss = false;
 					        checkDumping = true;
                             break;
@@ -514,8 +514,8 @@ namespace ReDistr
 					}
 				}
 				competitor = item.Value.GetСompetitor(withDeliveryTime, withCopmetitorsStock, true, checkDumping);
-				note += item.Value.OverStockDaysForAllStocks + "\n" + item.Value.NoteReval;
-				var revaluation = new Revaluation(competitor, item.Value, note, allowSellingLoss);
+                item.Value.NoteReval += note + "\n";
+				var revaluation = new Revaluation(competitor, item.Value, item.Value.NoteReval, allowSellingLoss);
 				revaluations.Add(revaluation);
 			}
 			return revaluations;

@@ -224,6 +224,7 @@ namespace ReDistr
             var sumStocks = GetSumStocks();
             var dumpingPersent = Config.Config.Inst.Revaluations.DumpingPersent;
             var maxCompetitorsToMiss = Config.Config.Inst.Revaluations.MaxCompetitorsToMiss;
+            NoteReval = "";
             double deliveryTime = Config.Config.Inst.Revaluations.OurDeliveryTime + Config.Config.Inst.Revaluations.DeltaDeliveryTime;
 
 
@@ -236,7 +237,7 @@ namespace ReDistr
                 // Проверяем список исключений если конкуреты из этого списка переходим к следующему
                 if (Config.Config.Inst.Revaluations.ListExcludeCompetitors.Contains(Сompetitors[k].Id) & withExcludes)
                 {
-                    NoteReval = NoteReval + k + " В списке исключений " + Сompetitors[k].Id + "\n";
+                    NoteReval = NoteReval + "Конкурент " + (k + 1)  + " id (" + Сompetitors[k].Id + ") В списке исключений \n";
                     continue;
                 }
                 i++;
@@ -248,7 +249,7 @@ namespace ReDistr
                     //только первого конкурента
                     if (checkDumping & i == 1 & Сompetitors[k].PriceWithAdd * (1 + dumpingPersent) < Сompetitors[k + 1].PriceWithAdd & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
                     {
-                        NoteReval = NoteReval + k + " Демпинг " + Сompetitors[k].Id + "\n";
+                        NoteReval = NoteReval + "Конкурент " + (k + 1) + " id (" + Сompetitors[k].Id + ") Демпенгует \n";
                         continue;
                     }
                 }
@@ -256,20 +257,20 @@ namespace ReDistr
                 // Проверяем срок поставки, если не соответствует переходим к следующему
                 if (Сompetitors[k].DeliveryTime > deliveryTime & withDeliveryTime & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
                 {
-                    NoteReval = NoteReval + k + " Большой срок поставки " + Сompetitors[k].Id + "\n";
+                    NoteReval = NoteReval + "Конкурент " + (k + 1) + " id (" + Сompetitors[k].Id + ") Большой срок поставки \n";
                     continue;
                 }
 
                 // Проверяем запас, если он меньше необходимого переходим к следующему
                 if (Сompetitors[k].Count < sumStocks * Config.Config.Inst.Revaluations.DeltaCompetitorStock & withCompetitorsStocks & maxCompetitorsToMiss != 0 & maxCompetitorsToMiss >= i)
                 {
-                    NoteReval = NoteReval + k + " Остаток " + Сompetitors[k].Id + "\n";
+                    NoteReval = NoteReval + "Конкурент " + (k + 1) + " id (" + Сompetitors[k].Id + ") Остаток конкурента меньше необходимого \n";
                     continue;
                 }
                 // Проверяем чтобы регион не содержал слово уценка
                 if (Сompetitors[k].Region.Contains("Уценка"))
                 {
-                    NoteReval = NoteReval + k + " Регион содержит слово (Уценка) " + Сompetitors[k].Id + "\n";
+                    NoteReval = NoteReval + "Конкурент " + (k + 1) + " id (" + Сompetitors[k].Id + ") Регион содержит слово (Уценка) \n";
                     continue;
                 }
                 // Проверяем чтобы он не был первым
@@ -314,7 +315,7 @@ namespace ReDistr
             // Если есть предустановленная цена, используем ее
             if (PrePrice != 0)
             {
-                NoteReval = NoteReval + "\n Предустановленная цена (" + PrePrice + ")";
+                NoteReval = NoteReval + "Предустановленная цена (" + PrePrice + ") \n";
                 return PrePrice;
             }
 
@@ -355,7 +356,7 @@ namespace ReDistr
                             {
                                 newPrice = сompetitor.PriceWithoutAdd * correct;
                             }
-                            NoteReval = NoteReval + "\n Наценка (" + markup + ")";
+                            NoteReval = NoteReval + "Наценка (" + markup + ")\n";
                             break;
                         case "НЛ12":
                             if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.75)
@@ -366,7 +367,7 @@ namespace ReDistr
                             {
                                 newPrice = сompetitor.PriceWithoutAdd * correct;
                             }
-                            NoteReval = NoteReval + "\n Наценка (НЛ12) (" + 0.75 + ")";
+                            NoteReval = NoteReval + "Наценка (НЛ12) (" + 0.75 + ")\n";
                             break;
                         case "НЛ24":
                             if (сompetitor.PriceWithoutAdd > GetAVGCostPrice() * 0.5)
@@ -377,7 +378,7 @@ namespace ReDistr
                             {
                                 newPrice = сompetitor.PriceWithoutAdd * correct;
                             }
-                            NoteReval = NoteReval + "\n Наценка (НЛ24) (" + 0.5 + ")";
+                            NoteReval = NoteReval + "Наценка (НЛ24) (" + 0.5 + ")\n";
                             break;
                         case "НЛ6":
                             if (сompetitor.PriceWithoutAdd < GetAVGCostPrice())
@@ -388,7 +389,7 @@ namespace ReDistr
                             {
                                 newPrice = сompetitor.PriceWithoutAdd * correct;
                             }
-                            NoteReval = NoteReval + "\n Наценка (Попова) (" + 1 + ")";
+                            NoteReval = NoteReval + "Наценка (Попова) (" + 1 + ")\n";
                             break;
                         default:
                             newPrice = сompetitor.PriceWithoutAdd * correct;
@@ -398,19 +399,40 @@ namespace ReDistr
                 //Китай
                 else
                 {
-                    switch (Property)
+                    newPrice = сompetitor.PriceWithoutAdd * correct;
+                    switch (StorageCategory)
                     {
-                        case "НЛ12":
                         case "НЛ6":
-                        case "НЛ24":
-                            if (newPrice > GetAVGCostPrice() * 1.2)
+                            // Демпинг
+                            newPrice = newPrice * 0.9;
+                            // Ограничение на продажу в минус
+                            if (newPrice < GetAVGCostPrice() * 1)
                             {
-                                newPrice = GetAVGCostPrice() * 1.2;
+                                newPrice = GetAVGCostPrice() * 1;
                             }
-                            NoteReval = NoteReval + "\n Наценка (НЛ) не больше (" + 1.2 + ")";
+                            NoteReval = NoteReval + "Для категории НЛ6 демпинг 10%, ограничение на продажу в минус не более -0%\n";
                             break;
-                        default:
-                            newPrice = сompetitor.PriceWithoutAdd * correct;
+                        case "НЛ12":
+                            // Демпинг
+                            newPrice = newPrice * 0.8;
+                            // Ограничение на продажу в минус
+                            if (newPrice < GetAVGCostPrice() * 0.8)
+                            {
+                                newPrice = GetAVGCostPrice() * 0.8;
+                            }
+                            NoteReval = NoteReval + "Для категории НЛ12 демпинг 20%, ограничение на продажу в минус не более -20%\n";
+                            break;
+                        case "НЛ24":
+                            // Демпинг
+                            newPrice = newPrice * 0.7;
+                            // Ограничение на продажу в минус
+                            if (newPrice < GetAVGCostPrice() * 0.5)
+                            {
+                                newPrice = GetAVGCostPrice() * 0.5;
+                            }
+                            NoteReval = NoteReval + "Для категории НЛ24 демпинг 30%, ограничение на продажу в минус не более -50%\n";
+                            break;
+                        default:                            
                             if (newPrice < GetAVGCostPrice() * 1.05)
                             {
                                 //newPrice = GetAVGCostPrice() * 1.05;
@@ -418,7 +440,7 @@ namespace ReDistr
                             if (newPrice > GetAVGCostPrice() * 2)
                             {
                                 //newPrice = GetAVGCostPrice() * 2;
-                            }
+                            }                            
                             break;
                     }
                 }
@@ -429,43 +451,65 @@ namespace ReDistr
                 // Китай
                 if (Manufacturer == "Китай")
                 {
-                    // Вариант с лесницей по себестоимости
-                    if (GetAVGCostPrice() > 0 & GetAVGCostPrice() < 80)
+                    switch (StorageCategory)
                     {
-                        newPrice = GetAVGCostPrice() * 4;
+                        case "НЛ6":                            
+                            newPrice = GetAVGCostPrice() * 1;
+                            NoteReval = NoteReval + "Для категории НЛ6 цена без конкурента себест * 1\n";
+                            break;
+
+                        case "НЛ12":
+                            newPrice = GetAVGCostPrice() * 1;
+                            NoteReval = NoteReval + "Для категории НЛ12 цена без конкурента себест * 1\n";
+                            break;
+
+                        case "НЛ24":
+                            newPrice = GetAVGCostPrice() * 0.5;
+                            NoteReval = NoteReval + "Для категории НЛ24 цена без конкурента себест * 0.5\n";
+                            break;
+
+                        default:
+                            // Вариант с лесницей по себестоимости
+                            if (GetAVGCostPrice() > 0 & GetAVGCostPrice() < 80)
+                            {
+                                newPrice = GetAVGCostPrice() * 4;
+                            }
+                            else if (GetAVGCostPrice() > 80 & GetAVGCostPrice() < 200)
+                            {
+                                newPrice = GetAVGCostPrice() * 3;
+                            }
+                            else if (GetAVGCostPrice() > 201 & GetAVGCostPrice() < 500)
+                            {
+                                newPrice = GetAVGCostPrice() * 2;
+                            }
+                            else if (GetAVGCostPrice() > 501 & GetAVGCostPrice() < 1000)
+                            {
+                                newPrice = GetAVGCostPrice() * 1.9;
+                            }
+                            else if (GetAVGCostPrice() > 1001 & GetAVGCostPrice() < 2000)
+                            {
+                                newPrice = GetAVGCostPrice() * 1.7;
+                            }
+                            else if (GetAVGCostPrice() > 2001 & GetAVGCostPrice() < 4000)
+                            {
+                                newPrice = GetAVGCostPrice() * 1.5;
+                            }
+                            else if (GetAVGCostPrice() > 4001 & GetAVGCostPrice() < 8000)
+                            {
+                                newPrice = GetAVGCostPrice() * 1.2;
+                            }
+                            else if (GetAVGCostPrice() > 8001 & GetAVGCostPrice() < 15000)
+                            {
+                                newPrice = GetAVGCostPrice() * 1.15;
+                            }
+                            else if (GetAVGCostPrice() > 15001 & GetAVGCostPrice() < 1000000000)
+                            {
+                                newPrice = GetAVGCostPrice() * 1.1;
+                            }
+                            NoteReval = NoteReval + "Для категории кроме НЛ при отсутствии конкурента применяется леснитца по себестоимости\n";
+                            break;
                     }
-                    else if (GetAVGCostPrice() > 80 & GetAVGCostPrice() < 200)
-                    {
-                        newPrice = GetAVGCostPrice() * 3;
-                    }
-                    else if (GetAVGCostPrice() > 201 & GetAVGCostPrice() < 500)
-                    {
-                        newPrice = GetAVGCostPrice() * 2;
-                    }
-                    else if (GetAVGCostPrice() > 501 & GetAVGCostPrice() < 1000)
-                    {
-                        newPrice = GetAVGCostPrice() * 1.9;
-                    }
-                    else if (GetAVGCostPrice() > 1001 & GetAVGCostPrice() < 2000)
-                    {
-                        newPrice = GetAVGCostPrice() * 1.7;
-                    }
-                    else if (GetAVGCostPrice() > 2001 & GetAVGCostPrice() < 4000)
-                    {
-                        newPrice = GetAVGCostPrice() * 1.5;
-                    }
-                    else if (GetAVGCostPrice() > 4001 & GetAVGCostPrice() < 8000)
-                    {
-                        newPrice = GetAVGCostPrice() * 1.2;
-                    }
-                    else if (GetAVGCostPrice() > 8001 & GetAVGCostPrice() < 15000)
-                    {
-                        newPrice = GetAVGCostPrice() * 1.15;
-                    }
-                    else if (GetAVGCostPrice() > 15001 & GetAVGCostPrice() < 1000000000)
-                    {
-                        newPrice = GetAVGCostPrice() * 1.1;
-                    }
+                    
                 }
                 // Не китай
                 else
@@ -495,10 +539,10 @@ namespace ReDistr
                             newPrice = GetAVGCostPrice() * markup;
                             break;
                         case "НЛ12":
-                            newPrice = GetAVGCostPrice() * 0.85;
+                            newPrice = GetAVGCostPrice() * 0.75;
                             break;
                         case "НЛ24":
-                            newPrice = GetAVGCostPrice() * 0.6;
+                            newPrice = GetAVGCostPrice() * 0.5;
                             break;
                         case "НЛ6":
                             newPrice = GetAVGCostPrice();
