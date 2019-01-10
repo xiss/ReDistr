@@ -481,10 +481,17 @@ namespace ReDistr
                             withDeliveryTime = false;
                             checkDumping = false;
                             break;
+                        case "Нигде":
+                            withCopmetitorsStock = true;
+                            note = "Нигде С остатками конкурента, Разрешить в минус, Учитывать время доставки конкурента, проверять демпинг";
+                            allowSellingLoss = true;
+                            withDeliveryTime = true;
+                            checkDumping = true;
+                            break;
                         default:
                             withCopmetitorsStock = true;
 							withDeliveryTime = true;
-							note = "Правило для китая кроме НЛ: С учетом остатков, С учетом времени доставки, Запретить продажи в минус, Проверять на демпинг";
+							note = "Правило для китая кроме НЛ и Нигде: С учетом остатков, С учетом времени доставки, Запретить продажи в минус, Проверять на демпинг";
 							allowSellingLoss = false;
 					        checkDumping = true;
                             break;

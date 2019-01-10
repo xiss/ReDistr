@@ -402,25 +402,35 @@ namespace ReDistr
                     newPrice = сompetitor.PriceWithoutAdd * correct;
                     switch (StorageCategory)
                     {
-                        case "НЛ6":
+                        case "Нигде":
                             // Демпинг
-                            newPrice = newPrice * 0.9;
-                            // Ограничение на продажу в минус
-                            if (newPrice < GetAVGCostPrice() * 1)
-                            {
-                                newPrice = GetAVGCostPrice() * 1;
-                            }
-                            NoteReval = NoteReval + "Для категории НЛ6 демпинг 10%, ограничение на продажу в минус не более -0%\n";
-                            break;
-                        case "НЛ12":
-                            // Демпинг
-                            newPrice = newPrice * 0.8;
+                            newPrice = newPrice * 1;
                             // Ограничение на продажу в минус
                             if (newPrice < GetAVGCostPrice() * 0.8)
                             {
                                 newPrice = GetAVGCostPrice() * 0.8;
                             }
-                            NoteReval = NoteReval + "Для категории НЛ12 демпинг 20%, ограничение на продажу в минус не более -20%\n";
+                            NoteReval = NoteReval + "Для категории Нигде демпинг 0%, ограничение на продажу в минус не более -20%\n";
+                            break;
+                        case "НЛ6":
+                            // Демпинг
+                            newPrice = newPrice * 0.9;
+                            // Ограничение на продажу в минус
+                            if (newPrice < GetAVGCostPrice() * 0.7)
+                            {
+                                newPrice = GetAVGCostPrice() * 0.7;
+                            }
+                            NoteReval = NoteReval + "Для категории НЛ6 демпинг 10%, ограничение на продажу в минус не более -30%\n";
+                            break;
+                        case "НЛ12":
+                            // Демпинг
+                            newPrice = newPrice * 0.8;
+                            // Ограничение на продажу в минус
+                            if (newPrice < GetAVGCostPrice() * 0.6)
+                            {
+                                newPrice = GetAVGCostPrice() * 0.6;
+                            }
+                            NoteReval = NoteReval + "Для категории НЛ12 демпинг 20%, ограничение на продажу в минус не более -40%\n";
                             break;
                         case "НЛ24":
                             // Демпинг
