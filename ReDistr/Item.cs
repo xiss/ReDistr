@@ -403,44 +403,59 @@ namespace ReDistr
                     switch (StorageCategory)
                     {
                         case "Нигде":
-                            // Демпинг
-                            newPrice = newPrice * 1;
-                            // Ограничение на продажу в минус
-                            if (newPrice < GetAVGCostPrice() * 0.8)
+                        case "Везде":                            
+                            if (Property1 == "НП3")
                             {
-                                newPrice = GetAVGCostPrice() * 0.8;
+                                // Демпинг
+                                newPrice = newPrice * 0.95;
+                                // Ограничение на продажу в минус
+                                if (newPrice < GetAVGCostPrice() * 0.4)
+                                {
+                                    newPrice = GetAVGCostPrice() * 0.4;
+                                }
+                                NoteReval = NoteReval + "Для Свойства НП3 демпинг 5%, ограничение на продажу в минус не более -60%\n";
                             }
-                            NoteReval = NoteReval + "Для категории Нигде демпинг 0%, ограничение на продажу в минус не более -20%\n";
+                            else
+                            {
+                                // Демпинг
+                                newPrice = newPrice * 1;
+                                // Ограничение на продажу в минус
+                                if (newPrice < GetAVGCostPrice() * 0.4)
+                                {
+                                    newPrice = GetAVGCostPrice() * 0.4;
+                                }
+                                NoteReval = NoteReval + "Для Нигде, Везде, ограничение на продажу в минус не более 60%\n";
+                            }
                             break;
                         case "НЛ6":
                             // Демпинг
                             newPrice = newPrice * 0.9;
                             // Ограничение на продажу в минус
-                            if (newPrice < GetAVGCostPrice() * 0.7)
+                            if (newPrice < GetAVGCostPrice() * 0.4)
                             {
-                                newPrice = GetAVGCostPrice() * 0.7;
+                                newPrice = GetAVGCostPrice() * 0.4;
                             }
-                            NoteReval = NoteReval + "Для категории НЛ6 демпинг 10%, ограничение на продажу в минус не более -30%\n";
+                            NoteReval = NoteReval + "Для категории НЛ6 демпинг 10%, ограничение на продажу в минус не более -60%\n";
                             break;
                         case "НЛ12":
                             // Демпинг
                             newPrice = newPrice * 0.8;
                             // Ограничение на продажу в минус
-                            if (newPrice < GetAVGCostPrice() * 0.6)
+                            if (newPrice < GetAVGCostPrice() * 0.4)
                             {
-                                newPrice = GetAVGCostPrice() * 0.6;
+                                newPrice = GetAVGCostPrice() * 0.4;
                             }
-                            NoteReval = NoteReval + "Для категории НЛ12 демпинг 20%, ограничение на продажу в минус не более -40%\n";
+                            NoteReval = NoteReval + "Для категории НЛ12 демпинг 20%, ограничение на продажу в минус не более -60%\n";
                             break;
                         case "НЛ24":
                             // Демпинг
                             newPrice = newPrice * 0.7;
                             // Ограничение на продажу в минус
-                            if (newPrice < GetAVGCostPrice() * 0.5)
+                            if (newPrice < GetAVGCostPrice() * 0.4)
                             {
-                                newPrice = GetAVGCostPrice() * 0.5;
+                                newPrice = GetAVGCostPrice() * 0.4;
                             }
-                            NoteReval = NoteReval + "Для категории НЛ24 демпинг 30%, ограничение на продажу в минус не более -50%\n";
+                            NoteReval = NoteReval + "Для категории НЛ24 демпинг 30%, ограничение на продажу в минус не более -60%\n";
                             break;
                         default:                            
                             if (newPrice < GetAVGCostPrice() * 1.05)
@@ -450,7 +465,8 @@ namespace ReDistr
                             if (newPrice > GetAVGCostPrice() * 2)
                             {
                                 //newPrice = GetAVGCostPrice() * 2;
-                            }                            
+                            }
+                            NoteReval = NoteReval + "Не указано правило\n";
                             break;
                     }
                 }
@@ -464,13 +480,13 @@ namespace ReDistr
                     switch (StorageCategory)
                     {
                         case "НЛ6":                            
-                            newPrice = GetAVGCostPrice() * 1;
-                            NoteReval = NoteReval + "Для категории НЛ6 цена без конкурента себест * 1\n";
+                            newPrice = GetAVGCostPrice() * 0.7;
+                            NoteReval = NoteReval + "Для категории НЛ6 цена без конкурента себест * 0,7\n";
                             break;
 
                         case "НЛ12":
-                            newPrice = GetAVGCostPrice() * 1;
-                            NoteReval = NoteReval + "Для категории НЛ12 цена без конкурента себест * 1\n";
+                            newPrice = GetAVGCostPrice() * 0.6;
+                            NoteReval = NoteReval + "Для категории НЛ12 цена без конкурента себест * 0,6\n";
                             break;
 
                         case "НЛ24":
@@ -479,45 +495,54 @@ namespace ReDistr
                             break;
 
                         default:
-                            // Вариант с лесницей по себестоимости
-                            if (GetAVGCostPrice() > 0 & GetAVGCostPrice() < 80)
+                            if (Property1 == "НП3")
                             {
-                                newPrice = GetAVGCostPrice() * 4;
+                                newPrice = GetAVGCostPrice() * 0.7;
+                                NoteReval = NoteReval + "Для свойства НП3 цена без конкурента себест * 0,8\n";
+                                break;
                             }
-                            else if (GetAVGCostPrice() > 80 & GetAVGCostPrice() < 200)
+                            else
                             {
-                                newPrice = GetAVGCostPrice() * 3;
-                            }
-                            else if (GetAVGCostPrice() > 201 & GetAVGCostPrice() < 500)
-                            {
-                                newPrice = GetAVGCostPrice() * 2;
-                            }
-                            else if (GetAVGCostPrice() > 501 & GetAVGCostPrice() < 1000)
-                            {
-                                newPrice = GetAVGCostPrice() * 1.9;
-                            }
-                            else if (GetAVGCostPrice() > 1001 & GetAVGCostPrice() < 2000)
-                            {
-                                newPrice = GetAVGCostPrice() * 1.7;
-                            }
-                            else if (GetAVGCostPrice() > 2001 & GetAVGCostPrice() < 4000)
-                            {
-                                newPrice = GetAVGCostPrice() * 1.5;
-                            }
-                            else if (GetAVGCostPrice() > 4001 & GetAVGCostPrice() < 8000)
-                            {
-                                newPrice = GetAVGCostPrice() * 1.2;
-                            }
-                            else if (GetAVGCostPrice() > 8001 & GetAVGCostPrice() < 15000)
-                            {
-                                newPrice = GetAVGCostPrice() * 1.15;
-                            }
-                            else if (GetAVGCostPrice() > 15001 & GetAVGCostPrice() < 1000000000)
-                            {
-                                newPrice = GetAVGCostPrice() * 1.1;
-                            }
-                            NoteReval = NoteReval + "Для категории кроме НЛ при отсутствии конкурента применяется леснитца по себестоимости\n";
-                            break;
+                                // Вариант с лесницей по себестоимости
+                                if (GetAVGCostPrice() > 0 & GetAVGCostPrice() < 80)
+                                {
+                                    newPrice = GetAVGCostPrice() * 4;
+                                }
+                                else if (GetAVGCostPrice() > 80 & GetAVGCostPrice() < 200)
+                                {
+                                    newPrice = GetAVGCostPrice() * 3;
+                                }
+                                else if (GetAVGCostPrice() > 201 & GetAVGCostPrice() < 500)
+                                {
+                                    newPrice = GetAVGCostPrice() * 2;
+                                }
+                                else if (GetAVGCostPrice() > 501 & GetAVGCostPrice() < 1000)
+                                {
+                                    newPrice = GetAVGCostPrice() * 1.9;
+                                }
+                                else if (GetAVGCostPrice() > 1001 & GetAVGCostPrice() < 2000)
+                                {
+                                    newPrice = GetAVGCostPrice() * 1.7;
+                                }
+                                else if (GetAVGCostPrice() > 2001 & GetAVGCostPrice() < 4000)
+                                {
+                                    newPrice = GetAVGCostPrice() * 1.5;
+                                }
+                                else if (GetAVGCostPrice() > 4001 & GetAVGCostPrice() < 8000)
+                                {
+                                    newPrice = GetAVGCostPrice() * 1.2;
+                                }
+                                else if (GetAVGCostPrice() > 8001 & GetAVGCostPrice() < 15000)
+                                {
+                                    newPrice = GetAVGCostPrice() * 1.15;
+                                }
+                                else if (GetAVGCostPrice() > 15001 & GetAVGCostPrice() < 1000000000)
+                                {
+                                    newPrice = GetAVGCostPrice() * 1.1;
+                                }
+                                NoteReval = NoteReval + "Для категории кроме НЛ при отсутствии конкурента применяется леснитца по себестоимости\n";
+                                break;
+                            }                            
                     }
                     
                 }
